@@ -34,6 +34,7 @@
     service:
       name: rt
       state: restarted
+      enabled: yes
 
   - name: Wait for api to come up
     uri:
