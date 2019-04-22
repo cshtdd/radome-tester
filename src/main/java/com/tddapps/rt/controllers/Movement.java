@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @EnableAutoConfiguration
-public class Hello {
-    @RequestMapping("/")
+public class Movement {
+    @RequestMapping("/api/movement")
     String Get() {
-        return "Hello World!";
+        return "Movement World!";
     }
 }
