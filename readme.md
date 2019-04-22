@@ -26,3 +26,9 @@ Create the `hosts.ini` inventory file
 ```bash
 sh deploy.sh
 ```
+
+## Application logs  
+
+```bash
+grep "radome-tester" /var/log/syslog
+```
