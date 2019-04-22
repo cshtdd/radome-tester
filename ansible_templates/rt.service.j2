@@ -1,0 +1,14 @@
+[Unit]
+Description=Radome Tester Service
+After=network.target
+
+[Service]
+ExecStart=/var/rt/radome-tester-{{app_version}}.jar
+WorkingDirectory=/var/rt/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

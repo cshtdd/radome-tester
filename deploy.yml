@@ -2,6 +2,8 @@
 - name: Install the application
   hosts: all
   become: true
+  vars:
+    app_version: 1.0.0
 
   tasks:
   - name: Update packages
@@ -22,13 +24,22 @@
     with_fileglob:
       - target/radome-tester-*.jar
 
-  - name: Create service symbolic link
-    file:
-      src: /var/rt/radome-tester-1.0.0.jar
-      dest: /etc/init.d/rt
-      state: link
+  # Docs https://www.raspberrypi.org/documentation/linux/usage/systemd.md
+  - name: Create the service template
+    template:
+      src: ansible_templates/rt.service.j2
+      dest: /etc/systemd/system/rt.service
 
-  - name: Start service if not started
+  - name: Start service
     service:
       name: rt
       state: restarted
+
+  - name: Wait for api to come up
+    uri:
+      url: "http://localhost:8080/"
+      status_code: 200
+    register: result
+    until: result.status == 200
+    retries: 60
+    delay: 1
