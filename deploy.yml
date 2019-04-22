@@ -8,3 +8,16 @@
     apt:
       update_cache: true
     tags: [ 'never' ]
+
+  - name: Create installation directory
+    file:
+      path: /var/rt
+      state: directory
+
+  - name: Copy the application package
+    copy:
+      src: "{{ item }}"
+      dest: /var/rt
+      mode: +x
+    with_fileglob:
+      - target/radome-tester-*.jar
