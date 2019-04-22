@@ -1,0 +1,9 @@
+---
+- name: Install the application
+  hosts: all
+  become: true
+
+  tasks:
+  - name: Update Packages
+    apt:
+      update_cache: true

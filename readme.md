@@ -11,3 +11,18 @@ mvn clean package
 ```bash
 ./target/radome-tester-*.jar
 ```
+
+## Deployment Prerequisite  
+
+Create the `hosts.ini` inventory file  
+
+```
+[all]
+192.168.1.2  ansible_connection=ssh  ansible_user=pi  become_user=pi
+```
+
+## Deploy the application  
+
+```bash
+sh deploy.sh
+```
