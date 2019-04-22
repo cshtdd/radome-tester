@@ -21,3 +21,14 @@
       mode: +x
     with_fileglob:
       - target/radome-tester-*.jar
+
+  - name: Create service symbolic link
+    file:
+      src: /var/rt/radome-tester-1.0.0.jar
+      dest: /etc/init.d/rt
+      state: link
+
+  - name: Start service if not started
+    service:
+      name: rt
+      state: restarted
