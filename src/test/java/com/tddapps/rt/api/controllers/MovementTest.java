@@ -1,5 +1,6 @@
 package com.tddapps.rt.api.controllers;
 
+import com.tddapps.rt.ioc.IocContainer;
 import com.tddapps.rt.model.SettingsReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -22,12 +24,16 @@ public class MovementTest {
     private MockMvc web;
 
     @MockBean
-    private SettingsReader settingsReaderMock;
+    private IocContainer containerMock;
 
     @Test
     public void ReturnsHelloWorldAndTheEnvironment() throws Exception {
+        var settingsReaderMock = mock(SettingsReader.class);
         when(settingsReaderMock.Read("app_env", "dev"))
                 .thenReturn("lab");
+
+        when(containerMock.Resolve(SettingsReader.class))
+                .thenReturn(settingsReaderMock);
 
         web.perform(get("/api/movement"))
                 .andExpect(status().isOk())
