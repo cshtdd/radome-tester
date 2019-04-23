@@ -42,10 +42,15 @@
   </div>
   <script src="/js/lib/jquery-3.4.0.min.js"></script>
   <script src="/js/lib/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="/js/lib/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <script type="text/javascript">
+  <script src="/js/lib/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script><!-- <script src="/js/send-position.js"></script> -->
+
+  <script type="module">
+  import sendPositionModule from '/js/send-position.js';
+
   $(document).ready(function() {
-    console.log('aaaa');
+    console.log('Starting Frontend');
+
+    sendPositionModule($).configure('#formMovement');
   });
   </script>
 </body>
