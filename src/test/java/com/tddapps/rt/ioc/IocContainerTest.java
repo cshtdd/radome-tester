@@ -3,6 +3,8 @@ package com.tddapps.rt.ioc;
 import com.tddapps.rt.ProgramStartup;
 import com.tddapps.rt.api.ApiInitializer;
 import com.tddapps.rt.hardware.HardwareInitializer;
+import com.tddapps.rt.hardware.internal.PinConverter;
+import com.tddapps.rt.hardware.internal.pi.PinConverterPi3BPlus;
 import com.tddapps.rt.model.SettingsReader;
 import com.tddapps.rt.model.internal.SettingsReaderEnvironment;
 import org.junit.Test;
@@ -22,6 +24,7 @@ public class IocContainerTest {
     @Test
     public void RegistersDependencies(){
         assertTrue(IocContainer.getInstance().Resolve(SettingsReader.class) instanceof SettingsReaderEnvironment);
+        assertTrue(IocContainer.getInstance().Resolve(PinConverter.class) instanceof PinConverterPi3BPlus);
     }
 
     @Test
