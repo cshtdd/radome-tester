@@ -4,7 +4,12 @@ export default function(jQuery){
             console.log('Configure send position');
 
             jQuery(`${formId} button`).click(function(e){
-                console.log('button clicked');
+                e.preventDefault();
+
+                var theta = jQuery(`${formId} #inputTheta`).val();
+                var phi = jQuery(`${formId} #inputPhi`).val();
+
+                console.log(`Button Set Position Clicked; theta: ${theta}; phi: ${phi};`);
             });
         }
     };
