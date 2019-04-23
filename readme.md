@@ -3,8 +3,8 @@
 ## Design Considerations  
 
 The system moves two motors:
-- Theta (X coordinates): Rotates the radeon horizontally. This motor is oriented vertically. It is glued to the floor. Values should range from 180 to 360 degrees.  
-- Phi (Y coordinates): Rotates the radeon vertically. This motor is oriented horizontally. It is glued to a columnt. Values should range from 0 to 180 degrees.  
+- Theta (X coordinates): Rotates the Radome horizontally. This motor is oriented vertically. It is glued to the floor. Values should range from 180 to 360 degrees.  
+- Phi (Y coordinates): Rotates the Radome vertically. This motor is oriented horizontally. It is glued to a column. Values should range from 0 to 180 degrees.  
 
 ## Development  
 
