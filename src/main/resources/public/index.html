@@ -1,27 +1,53 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="/css/bootstrap.min.css" >
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <title>Radome Tester</title>
+</head>
 
-    <title>Radome Tester</title>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Radome Tester</h1>
+<body>
+  <div class="container">
+    <h1>Radome Tester</h1>
+    <a href="/api/movement">Api Movement</a>
 
-      <a href="/api/movement">Api Movement</a>
-    </div>
+    <h1>Movement</h1>
+    <form id="formMovement">
+      <div class="form-row align-items-center">
+        <div class="col-auto">
+          <label class="sr-only" for="inputTheta">Theta</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">θ</div>
+            </div>
+            <input type="text" class="form-control" id="inputTheta" placeholder="Theta in degrees">
+          </div>
+        </div>
+        <div class="col-auto">
+          <label class="sr-only" for="inputPhi">Username</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">φ</div>
+            </div>
+            <input type="text" class="form-control" id="inputPhi" placeholder="Phi in degrees">
+          </div>
+        </div>
+        <div class="col-auto">
+          <button type="button" class="btn btn-primary mb-2">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script src="/js/lib/jquery-3.4.0.min.js"></script>
+  <script src="/js/lib/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="/js/lib/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+  $(document).ready(function() {
+    console.log('aaaa');
+  });
+  </script>
+</body>
 
-    <script src="/js/lib/jquery-3.4.0.min.js"></script>
-    <script src="/js/lib/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="/js/lib/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            console.log('aaaa');
-        });
-    </script>
-  </body>
 </html>
