@@ -1,11 +1,13 @@
 package com.tddapps.rt;
 
-import org.springframework.boot.SpringApplication;
+import com.tddapps.rt.ioc.IocContainer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication()
 public class Program {
     public static void main(String[] args){
-        SpringApplication.run(Program.class, args);
+        IocContainer.getInstance()
+                .Resolve(ProgramStartup.class)
+                .Run(args);
     }
 }

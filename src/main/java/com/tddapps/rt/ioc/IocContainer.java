@@ -1,5 +1,8 @@
 package com.tddapps.rt.ioc;
 
+import com.tddapps.rt.ProgramStartup;
+import com.tddapps.rt.api.ApiInitializer;
+import com.tddapps.rt.hardware.HardwareInitializer;
 import com.tddapps.rt.model.SettingsReader;
 import com.tddapps.rt.model.internal.SettingsReaderEnvironment;
 import org.picocontainer.DefaultPicoContainer;
@@ -24,6 +27,9 @@ public class IocContainer {
 
     private PicoContainer RegisterBindings() {
         return new DefaultPicoContainer()
+                .addComponent(ApiInitializer.class)
+                .addComponent(HardwareInitializer.class)
+                .addComponent(ProgramStartup.class)
                 .addComponent(SettingsReader.class, SettingsReaderEnvironment.class);
     }
 }

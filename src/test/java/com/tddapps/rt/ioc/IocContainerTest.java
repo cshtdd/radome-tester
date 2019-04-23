@@ -1,11 +1,13 @@
 package com.tddapps.rt.ioc;
 
+import com.tddapps.rt.ProgramStartup;
+import com.tddapps.rt.api.ApiInitializer;
+import com.tddapps.rt.hardware.HardwareInitializer;
 import com.tddapps.rt.model.SettingsReader;
 import com.tddapps.rt.model.internal.SettingsReaderEnvironment;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class IocContainerTest {
 
@@ -20,5 +22,14 @@ public class IocContainerTest {
     @Test
     public void RegistersDependencies(){
         assertTrue(IocContainer.getInstance().Resolve(SettingsReader.class) instanceof SettingsReaderEnvironment);
+    }
+
+    @Test
+    public void RegistersStartupServices(){
+        var program = IocContainer.getInstance().Resolve(ProgramStartup.class);
+
+        assertEquals(2, program.services.length);
+        assertTrue(program.services[0] instanceof ApiInitializer);
+        assertTrue(program.services[1] instanceof HardwareInitializer);
     }
 }
