@@ -1,4 +1,4 @@
-package com.tddapps.model.internal;
+package com.tddapps.rt.model.internal;
 
 import com.tddapps.rt.model.SettingsReader;
 import com.tddapps.rt.model.internal.SettingsReaderEnvironment;
