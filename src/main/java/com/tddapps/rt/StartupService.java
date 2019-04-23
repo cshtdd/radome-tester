@@ -1,5 +1,5 @@
 package com.tddapps.rt;
 
 public interface StartupService {
-    void Run(String[] args);
+    void RunAsync(String[] args);
 }
