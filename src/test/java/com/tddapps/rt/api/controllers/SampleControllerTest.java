@@ -18,8 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(StatusController.class)
-public class StatusControllerTest {
+@WebMvcTest(SampleController.class)
+public class SampleControllerTest {
     @Autowired
     private MockMvc web;
 
@@ -35,7 +35,7 @@ public class StatusControllerTest {
         when(containerMock.Resolve(SettingsReader.class))
                 .thenReturn(settingsReaderMock);
 
-        web.perform(get("/api/status"))
+        web.perform(get("/api/sample"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Hello World!")))
                 .andExpect(content().string(containsString("env: lab")));

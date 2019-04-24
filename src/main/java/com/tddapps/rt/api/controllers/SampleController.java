@@ -10,14 +10,14 @@ import java.util.Date;
 
 @Log4j2
 @RestController
-public class StatusController {
+public class SampleController {
     private final IocContainer container;
 
-    public StatusController(IocContainer container) {
+    public SampleController(IocContainer container) {
         this.container = container;
     }
 
-    @GetMapping(value = "/api/status")
+    @GetMapping(value = "/api/sample")
     String Get() {
         var settingsReader = container.Resolve(SettingsReader.class);
 
