@@ -13,6 +13,13 @@
     <h1>Radome Tester</h1>
     <a href="/api/status">System Status</a>
 
+    <div class="alert alert-danger alert-dismissible show fade" role="alert" id="errorMessage">
+      <strong>Error:</strong> <span class="message">sample message</span>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
     <h1>Movement</h1>
     <form id="formMovement">
       <div class="form-row align-items-center">
@@ -43,14 +50,15 @@
   <script src="/js/lib/jquery-3.4.0.min.js"></script>
   <script src="/js/lib/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="/js/lib/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script><!-- <script src="/js/send-position.js"></script> -->
-
   <script type="module">
-  import sendPositionModule from '/js/send-position.js';
+    import sendPositionModule from '/js/send-position.js';
 
   $(document).ready(function() {
     console.log('Starting Frontend');
 
-    sendPositionModule($).configure('#formMovement');
+    $('.alert').hide();
+
+    sendPositionModule($).configure('#formMovement', '#errorMessage');
   });
   </script>
 </body>

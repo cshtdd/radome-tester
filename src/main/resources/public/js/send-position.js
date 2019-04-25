@@ -1,6 +1,6 @@
 export default function(jQuery){
     return {
-        configure: function(formId){
+        configure: function(formId, errorMessageId){
             console.log('Configure send position');
 
             jQuery(`${formId} button`).click(function(e){
@@ -21,6 +21,12 @@ export default function(jQuery){
                     console.log('position sent; response: ', r);
                 }).fail(function(e) {
                     console.log('transmission error: ', e);
+                    var errorMessage = `[${e.status}] - ${e.statusText}`;
+                    jQuery(`${errorMessageId} .message`).text(errorMessage);
+                    jQuery(errorMessageId).show();
+                    setTimeout(function(){
+                        jQuery(errorMessageId).hide();
+                    }, 3000);
                 });
             });
         }
