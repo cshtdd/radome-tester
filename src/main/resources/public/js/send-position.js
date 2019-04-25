@@ -34,14 +34,6 @@ export default function(jQuery){
 
                 console.log(`Button Set Position Clicked; theta: ${theta}; phi: ${phi};`);
 
-                // //TODO validate input values
-                // if (isNaN(theta)){
-                //     setCustomValidity('Invalid Theta');
-                // }
-                // else {
-                //     setCustomValidity('');
-                // }
-
                 jQuery.ajax('/api/movement', {
                     data: JSON.stringify({ thetaDegrees: theta, phiDegrees: phi }),
                     contentType: 'application/json',
