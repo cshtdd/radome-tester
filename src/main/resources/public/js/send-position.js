@@ -21,8 +21,8 @@ export default function(jQuery){
             jQuery(`${config.formId} button`).click(function(e){
                 e.preventDefault();
 
-                var theta = jQuery(`${config.formId} #inputTheta`).val();
-                var phi = jQuery(`${config.formId} #inputPhi`).val();
+                var theta = parseInt(jQuery(`${config.formId} #inputTheta`).val());
+                var phi = parseInt(jQuery(`${config.formId} #inputPhi`).val());
 
                 console.log(`Button Set Position Clicked; theta: ${theta}; phi: ${phi};`);
 
