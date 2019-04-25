@@ -12,6 +12,8 @@ import com.tddapps.rt.model.internal.StatusRepositoryInMemory;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.PicoContainer;
 
+import static org.picocontainer.Characteristics.CACHE;
+
 public class IocContainer {
     private static final IocContainer sharedInstance = new IocContainer();
 
@@ -35,7 +37,7 @@ public class IocContainer {
                 .addComponent(HardwareInitializer.class)
                 .addComponent(ProgramStartup.class)
                 .addComponent(PinConverter.class, PinConverterPi3BPlus.class)
-                .addComponent(StatusRepository.class, StatusRepositoryInMemory.class)
+                .as(CACHE).addComponent(StatusRepository.class, StatusRepositoryInMemory.class)
                 .addComponent(SettingsReader.class, SettingsReaderEnvironment.class);
     }
 }

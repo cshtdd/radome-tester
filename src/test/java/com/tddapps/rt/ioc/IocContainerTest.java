@@ -15,12 +15,19 @@ import static org.junit.Assert.*;
 
 public class IocContainerTest {
 
+    private static <T> void assertSingleton(Class<T> type){
+        var object1 = IocContainer.getInstance().Resolve(type);
+        var object2 = IocContainer.getInstance().Resolve(type);
+
+        assertSame(object1, object2);
+    }
+
     @Test
     public void DependenciesAreNotSingletonByDefault(){
         var repository1 = IocContainer.getInstance().Resolve(SettingsReader.class);
         var repository2 = IocContainer.getInstance().Resolve(SettingsReader.class);
 
-        assertFalse(repository1 == repository2);
+        assertNotSame(repository1, repository2);
     }
 
     @Test
@@ -28,6 +35,11 @@ public class IocContainerTest {
         assertTrue(IocContainer.getInstance().Resolve(SettingsReader.class) instanceof SettingsReaderEnvironment);
         assertTrue(IocContainer.getInstance().Resolve(PinConverter.class) instanceof PinConverterPi3BPlus);
         assertTrue(IocContainer.getInstance().Resolve(StatusRepository.class) instanceof StatusRepositoryInMemory);
+    }
+
+    @Test
+    public void RegisterSingletons(){
+        assertSingleton(StatusRepository.class);
     }
 
     @Test
