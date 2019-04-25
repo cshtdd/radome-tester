@@ -20,6 +20,13 @@
       </button>
     </div>
 
+    <div class="alert alert-warning alert-dismissible show fade" role="alert" id="warnMessage">
+      <strong>Warning:</strong> <span class="message">sample message</span>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
     <h1>Movement</h1>
     <form id="formMovement">
       <div class="form-row align-items-center">
@@ -60,7 +67,8 @@
 
     sendPositionModule($).configure({
       formId: '#formMovement',
-      errorMessageId: '#errorMessage'
+      errorMessageId: '#errorMessage',
+      warnMessageId: '#warnMessage'
     });
   });
   </script>
