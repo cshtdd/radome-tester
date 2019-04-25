@@ -4,8 +4,7 @@ import com.tddapps.rt.model.Status;
 import com.tddapps.rt.model.StatusRepository;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.*;
 
 public class StatusRepositoryInMemoryTest {
     /*
@@ -22,18 +21,34 @@ public class StatusRepositoryInMemoryTest {
 
     @Test
     public void SavesStatus(){
-        var seededFirst = new Status();
-        seededFirst.setDegreesPhi(90);
-        seededFirst.setMoving(false);
+        var seededFirst = Status.builder()
+                .degreesPhi(90)
+                .isMoving(false)
+                .build();
         repository.Save(seededFirst);
 
-        var seededLast = new Status();
-        seededLast.setDegreesPhi(100);
-        seededLast.setMoving(true);
+        var seededLast = Status.builder()
+                .degreesPhi(100)
+                .isMoving(true)
+                .build();
         repository.Save(seededLast);
 
         var readStatus = repository.CurrentStatus();
 
         assertEquals(seededLast, readStatus);
+    }
+
+    @Test
+    public void ReturnsACloneOfTheStatus(){
+        var seeded = Status.builder()
+                .degreesPhi(100)
+                .isMoving(true)
+                .build();
+        repository.Save(seeded);
+
+        var readStatus = repository.CurrentStatus();
+
+        assertEquals(seeded, readStatus);
+        assertNotSame(seeded, readStatus);
     }
 }

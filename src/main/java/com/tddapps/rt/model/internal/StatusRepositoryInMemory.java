@@ -13,6 +13,6 @@ public class StatusRepositoryInMemory implements StatusRepository {
 
     @Override
     public void Save(Status currentStatus) {
-        status = currentStatus;
+        status = currentStatus.toBuilder().build();
     }
 }
