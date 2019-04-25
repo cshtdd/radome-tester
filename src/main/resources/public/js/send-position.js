@@ -1,13 +1,20 @@
 export default function(jQuery){
     return {
-        configure: function(formId, errorMessageId){
+        configure: function(config){
+            /*
+            {
+                formId,
+                errorMessageId
+            }
+            */
+
             console.log('Configure send position');
 
-            jQuery(`${formId} button`).click(function(e){
+            jQuery(`${config.formId} button`).click(function(e){
                 e.preventDefault();
 
-                var theta = jQuery(`${formId} #inputTheta`).val();
-                var phi = jQuery(`${formId} #inputPhi`).val();
+                var theta = jQuery(`${config.formId} #inputTheta`).val();
+                var phi = jQuery(`${config.formId} #inputPhi`).val();
 
                 console.log(`Button Set Position Clicked; theta: ${theta}; phi: ${phi};`);
 
@@ -22,10 +29,10 @@ export default function(jQuery){
                 }).fail(function(e) {
                     console.log('transmission error: ', e);
                     var errorMessage = `[${e.status}] - ${e.statusText}`;
-                    jQuery(`${errorMessageId} .message`).text(errorMessage);
-                    jQuery(errorMessageId).show();
+                    jQuery(`${config.errorMessageId} .message`).text(errorMessage);
+                    jQuery(config.errorMessageId).show();
                     setTimeout(function(){
-                        jQuery(errorMessageId).hide();
+                        jQuery(config.errorMessageId).hide();
                     }, 3000);
                 });
             });

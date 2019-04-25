@@ -58,7 +58,10 @@
 
     $('.alert').hide();
 
-    sendPositionModule($).configure('#formMovement', '#errorMessage');
+    sendPositionModule($).configure({
+      formId: '#formMovement',
+      errorMessageId: '#errorMessage'
+    });
   });
   </script>
 </body>
