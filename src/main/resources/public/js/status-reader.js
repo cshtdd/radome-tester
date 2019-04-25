@@ -1,21 +1,21 @@
 export default function(jQuery){
-    function displayOutput(id, message){
-        var updatedString = `Updated: ${new Date().toISOString()}`
-        var finalOutput = `${message} <br /> ${updatedString}`;
-        jQuery(id).html(finalOutput);
-    }
-
     function readStatus(config, completedCallback){
+        function displayOutput(message){
+            var updatedString = `Updated: ${new Date().toISOString()}`
+            var finalOutput = `${message} <br /> ${updatedString}`;
+            jQuery(config.containerId).html(finalOutput);
+        }
+
         jQuery.ajax('/api/status', {
             contentType: 'application/json',
             type: 'GET'
         }).done(function(r){
             // console.log('Status read; response: ', r);
-            displayOutput(config.containerId, r);
+            displayOutput(r);
         }).fail(function(e) {
             // console.log('transmission error: ', e);
             var errorMessage = `[${e.status}] - ${e.statusText}`;
-            displayOutput(config.containerId, errorMessage);
+            displayOutput(errorMessage);
         }).always(function(){
             completedCallback();
         });
