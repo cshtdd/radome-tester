@@ -7,11 +7,6 @@ import org.junit.Test;
 import static junit.framework.TestCase.*;
 
 public class StatusRepositoryInMemoryTest {
-    /*
-    TODO make sure it is thread safe
-    TODO make sure the returned status is a clone
-     */
-
     private final StatusRepository repository = new StatusRepositoryInMemory();
 
     @Test
