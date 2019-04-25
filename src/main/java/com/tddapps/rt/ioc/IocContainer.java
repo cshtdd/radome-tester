@@ -5,6 +5,7 @@ import com.tddapps.rt.api.ApiInitializer;
 import com.tddapps.rt.hardware.HardwareInitializer;
 import com.tddapps.rt.hardware.internal.PinConverter;
 import com.tddapps.rt.hardware.internal.pi.PinConverterPi3BPlus;
+import com.tddapps.rt.model.ModelInitializer;
 import com.tddapps.rt.model.SettingsReader;
 import com.tddapps.rt.model.StatusRepository;
 import com.tddapps.rt.model.internal.SettingsReaderEnvironment;
@@ -35,6 +36,7 @@ public class IocContainer {
         return new DefaultPicoContainer()
                 .addComponent(ApiInitializer.class)
                 .addComponent(HardwareInitializer.class)
+                .addComponent(ModelInitializer.class)
                 .addComponent(ProgramStartup.class)
                 .addComponent(PinConverter.class, PinConverterPi3BPlus.class)
                 .as(CACHE).addComponent(StatusRepository.class, StatusRepositoryInMemory.class)

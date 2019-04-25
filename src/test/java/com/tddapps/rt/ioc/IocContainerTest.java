@@ -5,6 +5,7 @@ import com.tddapps.rt.api.ApiInitializer;
 import com.tddapps.rt.hardware.HardwareInitializer;
 import com.tddapps.rt.hardware.internal.PinConverter;
 import com.tddapps.rt.hardware.internal.pi.PinConverterPi3BPlus;
+import com.tddapps.rt.model.ModelInitializer;
 import com.tddapps.rt.model.SettingsReader;
 import com.tddapps.rt.model.StatusRepository;
 import com.tddapps.rt.model.internal.SettingsReaderEnvironment;
@@ -46,8 +47,9 @@ public class IocContainerTest {
     public void RegistersStartupServices(){
         var program = IocContainer.getInstance().Resolve(ProgramStartup.class);
 
-        assertEquals(2, program.services.length);
+        assertEquals(3, program.services.length);
         assertTrue(program.services[0] instanceof ApiInitializer);
         assertTrue(program.services[1] instanceof HardwareInitializer);
+        assertTrue(program.services[2] instanceof ModelInitializer);
     }
 }
