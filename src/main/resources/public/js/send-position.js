@@ -20,13 +20,27 @@ export default function(jQuery){
 
             jQuery(`${config.formId} button`).click(function(e){
                 e.preventDefault();
+                e.stopPropagation();
+
+                jQuery(config.formId).addClass('was-validated');
+
+                if (jQuery(config.formId)[0].checkValidity() === false) {
+                    console.log('invalid input');
+                    return;
+                }
 
                 var theta = parseInt(jQuery(`${config.formId} #inputTheta`).val());
                 var phi = parseInt(jQuery(`${config.formId} #inputPhi`).val());
 
                 console.log(`Button Set Position Clicked; theta: ${theta}; phi: ${phi};`);
 
-                //TODO validate input values
+                // //TODO validate input values
+                // if (isNaN(theta)){
+                //     setCustomValidity('Invalid Theta');
+                // }
+                // else {
+                //     setCustomValidity('');
+                // }
 
                 jQuery.ajax('/api/movement', {
                     data: JSON.stringify({ thetaDegrees: theta, phiDegrees: phi }),
