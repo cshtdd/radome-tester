@@ -15,8 +15,8 @@ public class MappingTest {
     public void StatusToStatusControllerStatusResponse(){
         var expected = new StatusController.StatusResponse();
         expected.setMoving(true);
-        expected.setDegreesTheta(102.25);
-        expected.setDegreesPhi(103.23);
+        expected.setTheta(102.25);
+        expected.setPhi(103.23);
 
         var status = Status.builder()
                 .currentPosition(new Position(102.25333, 103.2333))

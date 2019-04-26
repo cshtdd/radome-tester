@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class StatusController {
     @Data
     public static class StatusResponse {
-        private double degreesTheta;
-        private double degreesPhi;
+        private double theta;
+        private double phi;
         @JsonProperty("isMoving")
         private boolean isMoving;
     }

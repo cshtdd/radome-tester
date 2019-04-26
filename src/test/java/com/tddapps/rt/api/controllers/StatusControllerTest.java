@@ -49,7 +49,7 @@ public class StatusControllerTest {
                 .build();
         SeedStatus(seededStatus);
 
-        var expected = "{\"degreesTheta\": 34.63, \"degreesPhi\": 12.25, \"isMoving\": true}";
+        var expected = "{\"theta\": 34.63, \"phi\": 12.25, \"isMoving\": true}";
 
         web.perform(get("/api/status"))
                 .andExpect(status().isOk())
