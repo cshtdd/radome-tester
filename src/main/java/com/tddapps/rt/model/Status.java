@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder(toBuilder = true)
 public class Status {
-    private int degreesTheta;
-    private int degreesPhi;
+    private Position currentPosition;
+    private Position commandedPosition;
     private boolean isMoving;
 }

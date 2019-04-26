@@ -14,8 +14,8 @@ public class ModelInitializerTest {
     public void InitializesAStatus(){
         var defaultStatus = Status.builder()
                 .isMoving(false)
-                .degreesTheta(270)
-                .degreesPhi(90)
+                .currentPosition(new Position(270, 90))
+                .commandedPosition(new Position(270, 90))
                 .build();
 
         service.RunAsync(new String[0]);

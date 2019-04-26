@@ -19,10 +19,11 @@ public class ModelInitializer implements StartupService {
     }
 
     private Status buildDefaultStatus() {
+        var defaultPosition = new Position(270, 90);
         return Status.builder()
                 .isMoving(false)
-                .degreesTheta(270)
-                .degreesPhi(90)
+                .currentPosition(defaultPosition)
+                .commandedPosition(defaultPosition)
                 .build();
     }
 }

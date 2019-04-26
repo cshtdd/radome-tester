@@ -3,6 +3,7 @@ package com.tddapps.rt.api.controllers;
 import com.tddapps.rt.ioc.IocContainer;
 import com.tddapps.rt.mapping.Mapper;
 import com.tddapps.rt.mapping.internal.AutoMapper;
+import com.tddapps.rt.model.Position;
 import com.tddapps.rt.model.Status;
 import com.tddapps.rt.model.StatusRepository;
 import org.junit.Before;
@@ -45,8 +46,7 @@ public class StatusControllerTest {
     @Test
     public void ReturnsTheMappedStatus() throws Exception {
         var seededStatus = Status.builder()
-                .degreesTheta(34)
-                .degreesPhi(12)
+                .currentPosition(new Position(34, 12))
                 .isMoving(true)
                 .build();
         SeedStatus(seededStatus);

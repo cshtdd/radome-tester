@@ -1,5 +1,6 @@
 package com.tddapps.rt.model.internal;
 
+import com.tddapps.rt.model.Position;
 import com.tddapps.rt.model.Status;
 import com.tddapps.rt.model.StatusRepository;
 import org.junit.Test;
@@ -17,13 +18,15 @@ public class StatusRepositoryInMemoryTest {
     @Test
     public void SavesStatus(){
         var seededFirst = Status.builder()
-                .degreesPhi(90)
+                .currentPosition(new Position(270, 90))
+                .commandedPosition(new Position(270, 90))
                 .isMoving(false)
                 .build();
         repository.Save(seededFirst);
 
         var seededLast = Status.builder()
-                .degreesPhi(100)
+                .currentPosition(new Position(270, 100))
+                .commandedPosition(new Position(270, 90))
                 .isMoving(true)
                 .build();
         repository.Save(seededLast);
@@ -36,7 +39,8 @@ public class StatusRepositoryInMemoryTest {
     @Test
     public void ReturnsACloneOfTheStatus(){
         var seeded = Status.builder()
-                .degreesPhi(100)
+                .currentPosition(new Position(270, 90))
+                .commandedPosition(new Position(270, 90))
                 .isMoving(true)
                 .build();
         repository.Save(seeded);
