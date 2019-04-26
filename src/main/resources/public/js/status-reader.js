@@ -2,7 +2,7 @@ export default function(jQuery){
     function readStatus(config, completedCallback){
         function displayOutput(message){
             var updatedString = `Updated: ${new Date().toISOString()}`
-            var finalOutput = `${message} <br /> ${updatedString}`;
+            var finalOutput = `<pre>${message}</pre><p>${updatedString}</p>`;
             jQuery(config.containerId).html(finalOutput);
         }
 
@@ -11,7 +11,8 @@ export default function(jQuery){
             type: 'GET'
         }).done(function(r){
             // console.log('Status read; response: ', r);
-            displayOutput(r);
+            var responseText = JSON.stringify(r, null, 2);
+            displayOutput(responseText);
         }).fail(function(e) {
             // console.log('transmission error: ', e);
             var errorMessage = `[${e.status}] - ${e.statusText}`;
