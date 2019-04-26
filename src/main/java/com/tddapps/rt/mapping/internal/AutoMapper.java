@@ -8,6 +8,8 @@ import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 
+import static com.tddapps.rt.utils.Round.ToPrecision;
+
 public class AutoMapper implements Mapper {
     private final MapperFactory mapperFactory;
 
@@ -23,11 +25,8 @@ public class AutoMapper implements Mapper {
 
                         var currentPosition = status.getCurrentPosition();
                         if (currentPosition != null){
-                            var thetaDegrees = Math.round(currentPosition.getThetaDegrees() * 100.0) / 100.0;
-                            statusResponse.setDegreesTheta(thetaDegrees);
-
-                            double phiDegrees = Math.round(currentPosition.getPhiDegrees() * 100.0) / 100.0;
-                            statusResponse.setDegreesPhi(phiDegrees);
+                            statusResponse.setDegreesTheta(ToPrecision(currentPosition.getThetaDegrees(), 2));
+                            statusResponse.setDegreesPhi(ToPrecision(currentPosition.getPhiDegrees(), 2));
                         }
                     }
                 })
