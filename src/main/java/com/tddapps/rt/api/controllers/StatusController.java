@@ -2,6 +2,7 @@ package com.tddapps.rt.api.controllers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tddapps.rt.ioc.IocContainer;
+import com.tddapps.rt.mapping.Mapper;
 import com.tddapps.rt.model.StatusRepository;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -27,14 +28,10 @@ public class StatusController {
 
     @GetMapping(value = "/api/status", produces = "application/json")
     StatusResponse Get() {
+        var mapper = container.Resolve(Mapper.class);
         var statusRepository = container.Resolve(StatusRepository.class);
+
         var currentStatus = statusRepository.CurrentStatus();
-
-        StatusResponse result = new StatusResponse();
-        result.degreesTheta = currentStatus.getDegreesTheta();
-        result.degreesPhi = currentStatus.getDegreesPhi();
-        result.isMoving = currentStatus.isMoving();
-
-        return result;
+        return mapper.map(currentStatus, StatusResponse.class);
     }
 }
