@@ -1,8 +1,6 @@
 package com.tddapps.rt.api.controllers;
 
 import com.tddapps.rt.ioc.IocContainer;
-import com.tddapps.rt.mapping.Mapper;
-import com.tddapps.rt.mapping.internal.AutoMapper;
 import com.tddapps.rt.model.Position;
 import com.tddapps.rt.model.Status;
 import com.tddapps.rt.model.StatusRepository;
