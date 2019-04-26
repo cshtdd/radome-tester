@@ -20,4 +20,19 @@ public class PositionTest {
             assertFalse(new Position(theta, 90).isValid());
         }
     }
+
+    @Test
+    public void ValidatesPhiRanges(){
+        for (double phi = -45; phi <= -0.1; phi += 0.1) {
+            assertFalse(new Position(270, phi).isValid());
+        }
+
+        for (double phi = 0; phi <= 180; phi += 0.1) {
+            assertTrue(new Position(270, phi).isValid());
+        }
+
+        for (double phi = 180.1; phi <= 450; phi += 0.1) {
+            assertFalse(new Position(270, phi).isValid());
+        }
+    }
 }
