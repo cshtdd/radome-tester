@@ -17,5 +17,11 @@ public class StatusToStatusControllerStatusResponse extends CustomMapper<Status,
             statusResponse.setTheta(ToPrecision(currentPosition.getThetaDegrees(), 2));
             statusResponse.setPhi(ToPrecision(currentPosition.getPhiDegrees(), 2));
         }
+
+        var commandedPosition = status.getCommandedPosition();
+        if (commandedPosition != null){
+            statusResponse.setCommandedTheta(ToPrecision(commandedPosition.getThetaDegrees(), 2));
+            statusResponse.setCommandedPhi(ToPrecision(commandedPosition.getPhiDegrees(), 2));
+        }
     }
 }

@@ -17,6 +17,8 @@ public class MappingTest {
         expected.setMoving(true);
         expected.setTheta(102.25);
         expected.setPhi(103.23);
+        expected.setCommandedTheta(100.21);
+        expected.setCommandedPhi(101.33);
 
         var status = Status.builder()
                 .currentPosition(new Position(102.25333, 103.2333))

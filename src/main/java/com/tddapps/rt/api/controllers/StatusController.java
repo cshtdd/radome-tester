@@ -14,10 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class StatusController {
     @Data
     public static class StatusResponse {
-        private double theta;
-        private double phi;
         @JsonProperty("isMoving")
         private boolean isMoving;
+
+        private double theta;
+        private double phi;
+
+        private double commandedTheta;
+        private double commandedPhi;
     }
 
     private final IocContainer container;
