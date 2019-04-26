@@ -46,12 +46,12 @@ public class StatusControllerTest {
     @Test
     public void ReturnsTheMappedStatus() throws Exception {
         var seededStatus = Status.builder()
-                .currentPosition(new Position(34, 12))
+                .currentPosition(new Position(34.6333333, 12.25))
                 .isMoving(true)
                 .build();
         SeedStatus(seededStatus);
 
-        var expected = "{\"degreesTheta\": 34, \"degreesPhi\": 12, \"isMoving\": true}";
+        var expected = "{\"degreesTheta\": 34.63, \"degreesPhi\": 12.25, \"isMoving\": true}";
 
         web.perform(get("/api/status"))
                 .andExpect(status().isOk())

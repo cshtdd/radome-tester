@@ -23,8 +23,11 @@ public class AutoMapper implements Mapper {
 
                         var currentPosition = status.getCurrentPosition();
                         if (currentPosition != null){
-                            statusResponse.setDegreesTheta((int)currentPosition.getThetaDegrees());
-                            statusResponse.setDegreesPhi((int)currentPosition.getPhiDegrees());
+                            var thetaDegrees = Math.round(currentPosition.getThetaDegrees() * 100.0) / 100.0;
+                            statusResponse.setDegreesTheta(thetaDegrees);
+
+                            double phiDegrees = Math.round(currentPosition.getPhiDegrees() * 100.0) / 100.0;
+                            statusResponse.setDegreesPhi(phiDegrees);
                         }
                     }
                 })
