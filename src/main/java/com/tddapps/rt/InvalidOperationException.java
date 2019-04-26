@@ -1,4 +1,4 @@
-package com.tddapps.rt.hardware;
+package com.tddapps.rt;
 
 public class InvalidOperationException extends Exception {
     public InvalidOperationException() {
