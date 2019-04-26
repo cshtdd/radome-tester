@@ -5,6 +5,8 @@ import com.tddapps.rt.api.ApiInitializer;
 import com.tddapps.rt.hardware.HardwareInitializer;
 import com.tddapps.rt.hardware.internal.PinConverter;
 import com.tddapps.rt.hardware.internal.pi.PinConverterPi3BPlus;
+import com.tddapps.rt.mapping.Mapper;
+import com.tddapps.rt.mapping.internal.AutoMapper;
 import com.tddapps.rt.model.ModelInitializer;
 import com.tddapps.rt.model.SettingsReader;
 import com.tddapps.rt.model.StatusRepository;
@@ -40,6 +42,7 @@ public class IocContainer {
                 .addComponent(ProgramStartup.class)
                 .addComponent(PinConverter.class, PinConverterPi3BPlus.class)
                 .as(CACHE).addComponent(StatusRepository.class, StatusRepositoryInMemory.class)
+                .as(CACHE).addComponent(Mapper.class, AutoMapper.class)
                 .addComponent(SettingsReader.class, SettingsReaderEnvironment.class);
     }
 }

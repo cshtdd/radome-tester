@@ -5,6 +5,8 @@ import com.tddapps.rt.api.ApiInitializer;
 import com.tddapps.rt.hardware.HardwareInitializer;
 import com.tddapps.rt.hardware.internal.PinConverter;
 import com.tddapps.rt.hardware.internal.pi.PinConverterPi3BPlus;
+import com.tddapps.rt.mapping.Mapper;
+import com.tddapps.rt.mapping.internal.AutoMapper;
 import com.tddapps.rt.model.ModelInitializer;
 import com.tddapps.rt.model.SettingsReader;
 import com.tddapps.rt.model.StatusRepository;
@@ -36,11 +38,13 @@ public class IocContainerTest {
         assertTrue(IocContainer.getInstance().Resolve(SettingsReader.class) instanceof SettingsReaderEnvironment);
         assertTrue(IocContainer.getInstance().Resolve(PinConverter.class) instanceof PinConverterPi3BPlus);
         assertTrue(IocContainer.getInstance().Resolve(StatusRepository.class) instanceof StatusRepositoryInMemory);
+        assertTrue(IocContainer.getInstance().Resolve(Mapper.class) instanceof AutoMapper);
     }
 
     @Test
     public void RegisterSingletons(){
         assertSingleton(StatusRepository.class);
+        assertSingleton(Mapper.class);
     }
 
     @Test
