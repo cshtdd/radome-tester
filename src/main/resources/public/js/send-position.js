@@ -44,7 +44,7 @@ export default function(jQuery){
                     showAlert(config.successMessageId, 'Position Sent');
                 }).fail(function(e) {
                     console.log('transmission error: ', e);
-                    var errorMessage = `[${e.status}] - ${e.statusText}`;
+                    var errorMessage = `[${e.status}] - ${e.responseText}`;
                     showAlert(config.errorMessageId, errorMessage);
                 });
             });

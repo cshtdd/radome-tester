@@ -15,7 +15,7 @@ export default function(jQuery){
             displayOutput(responseText);
         }).fail(function(e) {
             // console.log('transmission error: ', e);
-            var errorMessage = `[${e.status}] - ${e.statusText}`;
+            var errorMessage = `[${e.status}] - ${e.responseText}`;
             displayOutput(errorMessage);
         }).always(function(){
             completedCallback();
