@@ -14,6 +14,7 @@ public class MappingTest {
     @Test
     public void StatusToStatusControllerStatusResponse(){
         var expected = new StatusController.StatusResponse();
+        expected.setCalibrating(true);
         expected.setMoving(true);
         expected.setTheta(102.25);
         expected.setPhi(103.23);
@@ -24,6 +25,7 @@ public class MappingTest {
                 .currentPosition(new Position(102.25333, 103.2333))
                 .commandedPosition(new Position(100.212222, 101.33333))
                 .isMoving(true)
+                .isCalibrating(true)
                 .build();
 
         var actual = mapper.map(status, StatusController.StatusResponse.class);

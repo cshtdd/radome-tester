@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class StatusController {
     @Data
     public static class StatusResponse {
+        @JsonProperty("isCalibrating")
+        private boolean isCalibrating;
+
         @JsonProperty("isMoving")
         private boolean isMoving;
 

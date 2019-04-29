@@ -47,10 +47,11 @@ public class StatusControllerTest {
                 .currentPosition(new Position(34.6333333, 12.253))
                 .commandedPosition(new Position(134.6333333, 112.2544))
                 .isMoving(true)
+                .isCalibrating(true)
                 .build();
         SeedStatus(seededStatus);
 
-        var expected = "{\"isMoving\": true, \"theta\": 34.63, \"phi\": 12.25, \"commandedTheta\": 134.63, \"commandedPhi\": 112.25}";
+        var expected = "{\"isCalibrating\": true, \"isMoving\": true, \"theta\": 34.63, \"phi\": 12.25, \"commandedTheta\": 134.63, \"commandedPhi\": 112.25}";
 
         web.perform(get("/api/status"))
                 .andExpect(status().isOk())
