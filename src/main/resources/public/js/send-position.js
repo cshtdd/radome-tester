@@ -36,7 +36,7 @@ export default function(jQuery){
                 console.log(`Button Set Position Clicked; theta: ${theta}; phi: ${phi};`);
 
                 jQuery.ajax('/api/movement', {
-                    data: JSON.stringify({ thetaDegrees: theta, phiDegrees: phi }),
+                    data: JSON.stringify({ theta: theta, phi: phi }),
                     contentType: 'application/json',
                     type: 'POST'
                 }).done(function(r){

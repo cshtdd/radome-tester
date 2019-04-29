@@ -9,6 +9,7 @@ import com.tddapps.rt.model.Position;
 import com.tddapps.rt.model.Status;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import ma.glasnost.orika.metadata.TypeFactory;
 
 public class AutoMapper implements Mapper {
     private final MapperFactory mapperFactory;
@@ -21,10 +22,10 @@ public class AutoMapper implements Mapper {
                 .customize(new StatusToStatusControllerStatusResponse())
                 .register();
 
-        mapperFactory.classMap(MovementController.MovementRequest.class, Position.class)
-                .byDefault()
-                .customize(new MovementControllerMovementRequestToPosition())
-                .register();
+        mapperFactory.registerObjectFactory(
+                new MovementControllerMovementRequestToPosition(),
+                TypeFactory.valueOf(Position.class),
+                TypeFactory.valueOf(MovementController.MovementRequest.class));
     }
 
     @Override

@@ -51,7 +51,7 @@ public class MovementControllerTest {
         when(movementServiceMock.CanMove(new Position(190, 85)))
                 .thenReturn(false);
 
-        Post("{\"thetaDegrees\": 190, \"phiDegrees\": 85}")
+        Post("{\"theta\": 190, \"phi\": 85}")
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Cannot Move"));
     }
@@ -63,7 +63,7 @@ public class MovementControllerTest {
         doThrow(new InvalidOperationException())
                 .when(movementServiceMock).Move(any());
 
-        Post("{\"thetaDegrees\": 190, \"phiDegrees\": 86}")
+        Post("{\"theta\": 190, \"phi\": 86}")
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Movement Error"));
     }
@@ -76,7 +76,7 @@ public class MovementControllerTest {
             throw new Exception();
         }).when(movementServiceMock).Move(any());
 
-        Post("{\"thetaDegrees\": 190, \"phiDegrees\": 86}")
+        Post("{\"theta\": 190, \"phi\": 86}")
                 .andExpect(status().is5xxServerError())
                 .andExpect(content().string("Unexpected Error"));
     }
@@ -86,7 +86,7 @@ public class MovementControllerTest {
         when(movementServiceMock.CanMove(any()))
                 .thenReturn(true);
 
-        Post("{\"thetaDegrees\": 191.333333, \"phiDegrees\": 84.66666}")
+        Post("{\"theta\": 191.333333, \"phi\": 84.66666}")
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
 

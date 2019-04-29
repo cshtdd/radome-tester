@@ -1,10 +1,12 @@
 package com.tddapps.rt.api.controllers;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.ioc.IocContainer;
 import com.tddapps.rt.mapping.Mapper;
 import com.tddapps.rt.model.MovementService;
 import com.tddapps.rt.model.Position;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -15,9 +17,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class MovementController {
     @Data
+    @AllArgsConstructor
     public static class MovementRequest {
-        private final double thetaDegrees;
-        private final double phiDegrees;
+        private double theta;
+        private double phi;
     }
 
     private final IocContainer container;
