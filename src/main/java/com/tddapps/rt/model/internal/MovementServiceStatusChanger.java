@@ -14,7 +14,11 @@ public class MovementServiceStatusChanger implements MovementService {
 
     @Override
     public boolean CanMove(Position position) {
-        return false;
+        if (!position.isValid()){
+            return false;
+        }
+
+        return !statusRepository.CurrentStatus().isMoving();
     }
 
     @Override
