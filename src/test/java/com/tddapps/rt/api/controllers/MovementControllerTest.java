@@ -19,6 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(MovementController.class)
@@ -49,7 +50,8 @@ public class MovementControllerTest {
                 .thenReturn(false);
 
         Post("{\"thetaDegrees\": 190, \"phiDegrees\": 85}")
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().string("Cannot Move"));
     }
 
     @Test
@@ -60,7 +62,8 @@ public class MovementControllerTest {
                 .when(movementServiceMock).Move(any());
 
         Post("{\"thetaDegrees\": 190, \"phiDegrees\": 86}")
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().string("Movement Error"));
     }
 
     @Test
@@ -72,7 +75,8 @@ public class MovementControllerTest {
         }).when(movementServiceMock).Move(any());
 
         Post("{\"thetaDegrees\": 190, \"phiDegrees\": 86}")
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is5xxServerError())
+                .andExpect(content().string("Unexpected Error"));
     }
 
     @Test
@@ -81,7 +85,8 @@ public class MovementControllerTest {
                 .thenReturn(true);
 
         Post("{\"thetaDegrees\": 191, \"phiDegrees\": 84}")
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().string(""));
 
         verify(movementServiceMock).Move(new Position(191, 84));
     }
