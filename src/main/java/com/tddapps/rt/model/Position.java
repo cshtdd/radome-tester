@@ -16,8 +16,8 @@ public class Position {
     private static final double MAX_PHI = 180.0;
 
 
-    private final double thetaDegrees;
-    private final double phiDegrees;
+    private double thetaDegrees;
+    private double phiDegrees;
 
     public boolean isValid() {
         var thetaIsValid = thetaDegrees >= MIN_THETA && thetaDegrees <= MAX_THETA;

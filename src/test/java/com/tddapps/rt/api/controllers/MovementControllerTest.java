@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.tddapps.rt.test.IocContainerAutoMappingHelper.SetupAutoMapping;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,6 +35,7 @@ public class MovementControllerTest {
 
     @Before
     public void Setup(){
+        SetupAutoMapping(containerMock);
         when(containerMock.Resolve(MovementService.class)).thenReturn(movementServiceMock);
     }
 
@@ -84,10 +86,10 @@ public class MovementControllerTest {
         when(movementServiceMock.CanMove(any()))
                 .thenReturn(true);
 
-        Post("{\"thetaDegrees\": 191, \"phiDegrees\": 84}")
+        Post("{\"thetaDegrees\": 191.333333, \"phiDegrees\": 84.66666}")
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
 
-        verify(movementServiceMock).Move(new Position(191, 84));
+        verify(movementServiceMock).Move(new Position(191.33, 84.67));
     }
 }

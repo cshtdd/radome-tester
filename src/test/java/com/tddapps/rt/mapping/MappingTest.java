@@ -1,5 +1,6 @@
 package com.tddapps.rt.mapping;
 
+import com.tddapps.rt.api.controllers.MovementController;
 import com.tddapps.rt.api.controllers.StatusController;
 import com.tddapps.rt.mapping.internal.AutoMapper;
 import com.tddapps.rt.model.Position;
@@ -29,6 +30,17 @@ public class MappingTest {
                 .build();
 
         var actual = mapper.map(status, StatusController.StatusResponse.class);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void MovementControllerMovementRequestToPosition(){
+        var expected = new Position(193.45, 45.33);
+
+        var request = new MovementController.MovementRequest(193.446, 45.33333);
+
+        var actual = mapper.map(request, Position.class);
 
         assertEquals(expected, actual);
     }

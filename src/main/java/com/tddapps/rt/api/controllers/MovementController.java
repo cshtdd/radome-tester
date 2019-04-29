@@ -2,6 +2,7 @@ package com.tddapps.rt.api.controllers;
 
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.ioc.IocContainer;
+import com.tddapps.rt.mapping.Mapper;
 import com.tddapps.rt.model.MovementService;
 import com.tddapps.rt.model.Position;
 import lombok.Data;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class MovementController {
     @Data
     public static class MovementRequest {
-        private final int thetaDegrees;
-        private final int phiDegrees;
+        private final double thetaDegrees;
+        private final double phiDegrees;
     }
 
     private final IocContainer container;
@@ -26,15 +27,13 @@ public class MovementController {
     }
 
     @PostMapping(value = "/api/movement")
-    ResponseEntity<String> Post(@RequestBody MovementRequest input) {
-        log.info(String.format("Movement; input: %s;", input));
-
+    ResponseEntity<String> Post(@RequestBody MovementRequest request) {
+        var mapper = container.Resolve(Mapper.class);
         var movementService = container.Resolve(MovementService.class);
 
-        var position = Position.builder()
-                .thetaDegrees(input.getThetaDegrees())
-                .phiDegrees(input.getPhiDegrees())
-                .build();
+        log.info(String.format("Movement; input: %s;", request));
+
+        var position = mapper.map(request, Position.class);
 
         if (!movementService.CanMove(position)) {
             log.info("Cannot Move");
