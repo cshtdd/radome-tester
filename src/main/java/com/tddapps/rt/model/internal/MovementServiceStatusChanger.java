@@ -28,6 +28,10 @@ public class MovementServiceStatusChanger implements MovementService {
 
     @Override
     public void Stop() {
-
+        var updatedStatus = statusRepository.CurrentStatus()
+                .toBuilder()
+                .isMoving(false)
+                .build();
+        statusRepository.Save(updatedStatus);
     }
 }

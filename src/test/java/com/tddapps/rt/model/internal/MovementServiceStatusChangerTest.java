@@ -50,4 +50,13 @@ public class MovementServiceStatusChangerTest {
     public void CanMoveWhenPositionIsValidAndNoMovementIsInProgress(){
         assertTrue(service.CanMove(new Position(270, 90)));
     }
+
+    @Test
+    public void StopChangesIsMovingToFalse(){
+        status.setMoving(true);
+
+        service.Stop();
+
+        assertFalse(status.isMoving());
+    }
 }
