@@ -51,6 +51,13 @@ public class MovementServiceStatusChangerTest {
     }
 
     @Test
+    public void CannotMoveWhenCalibrating(){
+        status.setCalibrating(true);
+
+        assertFalse(service.CanMove(new Position(270, 90)));
+    }
+
+    @Test
     public void CannotMoveWhenPositionIsInvalid(){
         assertFalse(service.CanMove(new Position(270, -90)));
     }
@@ -72,6 +79,13 @@ public class MovementServiceStatusChangerTest {
     @Test(expected = InvalidOperationException.class)
     public void MoveThrowsWhenAlreadyMoving() throws InvalidOperationException {
         status.setMoving(true);
+
+        service.Move(new Position(270, 90));
+    }
+
+    @Test(expected = InvalidOperationException.class)
+    public void MoveThrowsWhenCalibrating() throws InvalidOperationException {
+        status.setCalibrating(true);
 
         service.Move(new Position(270, 90));
     }
