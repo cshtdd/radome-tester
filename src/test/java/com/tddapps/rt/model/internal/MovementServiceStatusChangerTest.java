@@ -1,5 +1,6 @@
 package com.tddapps.rt.model.internal;
 
+import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.model.MovementService;
 import com.tddapps.rt.model.Position;
 import com.tddapps.rt.model.Status;
@@ -58,5 +59,29 @@ public class MovementServiceStatusChangerTest {
         service.Stop();
 
         assertFalse(status.isMoving());
+    }
+
+    @Test(expected = InvalidOperationException.class)
+    public void MoveThrowsWhenAlreadyMoving() throws InvalidOperationException {
+        status.setMoving(true);
+
+        service.Move(new Position(270, 90));
+    }
+
+    @Test(expected = InvalidOperationException.class)
+    public void MoveThrowsWhenPositionIsInvalid() throws InvalidOperationException {
+        service.Move(new Position(-270, 90));
+    }
+
+    @Test
+    public void MoveChangesStatus() throws InvalidOperationException {
+        var expected = Status.builder()
+                .isMoving(true)
+                .commandedPosition(new Position(270, 90))
+                .build();
+
+        service.Move(new Position(270, 90));
+
+        assertEquals(expected, status);
     }
 }

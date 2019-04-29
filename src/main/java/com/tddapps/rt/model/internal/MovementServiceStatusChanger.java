@@ -23,7 +23,16 @@ public class MovementServiceStatusChanger implements MovementService {
 
     @Override
     public void Move(Position position) throws InvalidOperationException {
+        if (!CanMove(position)){
+            throw new InvalidOperationException("Cannot Move");
+        }
 
+        var updatedStatus = statusRepository.CurrentStatus()
+                .toBuilder()
+                .isMoving(true)
+                .commandedPosition(position)
+                .build();
+        statusRepository.Save(updatedStatus);
     }
 
     @Override
