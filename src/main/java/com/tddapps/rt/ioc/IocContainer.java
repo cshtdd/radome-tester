@@ -8,8 +8,10 @@ import com.tddapps.rt.hardware.internal.pi.PinConverterPi3BPlus;
 import com.tddapps.rt.mapping.Mapper;
 import com.tddapps.rt.mapping.internal.AutoMapper;
 import com.tddapps.rt.model.ModelInitializer;
+import com.tddapps.rt.model.MovementService;
 import com.tddapps.rt.model.SettingsReader;
 import com.tddapps.rt.model.StatusRepository;
+import com.tddapps.rt.model.internal.MovementServiceStatusChanger;
 import com.tddapps.rt.model.internal.SettingsReaderEnvironment;
 import com.tddapps.rt.model.internal.StatusRepositoryInMemory;
 import org.picocontainer.DefaultPicoContainer;
@@ -41,8 +43,9 @@ public class IocContainer {
                 .addComponent(ModelInitializer.class)
                 .addComponent(ProgramStartup.class)
                 .addComponent(PinConverter.class, PinConverterPi3BPlus.class)
-                .as(CACHE).addComponent(StatusRepository.class, StatusRepositoryInMemory.class)
+                .addComponent(SettingsReader.class, SettingsReaderEnvironment.class)
+                .addComponent(MovementService.class, MovementServiceStatusChanger.class)
                 .as(CACHE).addComponent(Mapper.class, AutoMapper.class)
-                .addComponent(SettingsReader.class, SettingsReaderEnvironment.class);
+                .as(CACHE).addComponent(StatusRepository.class, StatusRepositoryInMemory.class);
     }
 }

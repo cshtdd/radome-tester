@@ -8,8 +8,10 @@ import com.tddapps.rt.hardware.internal.pi.PinConverterPi3BPlus;
 import com.tddapps.rt.mapping.Mapper;
 import com.tddapps.rt.mapping.internal.AutoMapper;
 import com.tddapps.rt.model.ModelInitializer;
+import com.tddapps.rt.model.MovementService;
 import com.tddapps.rt.model.SettingsReader;
 import com.tddapps.rt.model.StatusRepository;
+import com.tddapps.rt.model.internal.MovementServiceStatusChanger;
 import com.tddapps.rt.model.internal.SettingsReaderEnvironment;
 import com.tddapps.rt.model.internal.StatusRepositoryInMemory;
 import org.junit.Test;
@@ -39,6 +41,7 @@ public class IocContainerTest {
         assertTrue(IocContainer.getInstance().Resolve(PinConverter.class) instanceof PinConverterPi3BPlus);
         assertTrue(IocContainer.getInstance().Resolve(StatusRepository.class) instanceof StatusRepositoryInMemory);
         assertTrue(IocContainer.getInstance().Resolve(Mapper.class) instanceof AutoMapper);
+        assertTrue(IocContainer.getInstance().Resolve(MovementService.class) instanceof MovementServiceStatusChanger);
     }
 
     @Test
