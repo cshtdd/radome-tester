@@ -19,21 +19,28 @@ public class MovementServiceStatusChanger implements MovementService {
 
     @Override
     public boolean CanMove(Position position) {
-        if (!position.isValid()){
+        if (!CanMoveInternal(position)){
             return false;
         }
 
         var status = CurrentStatus();
-        return !status.isMoving() && !status.isCalibrating();
+
+        return CanMoveInternal(status);
     }
 
     @Override
     public void Move(Position position) throws InvalidOperationException {
-        if (!CanMove(position)){
+        if (!CanMoveInternal(position)){
+            throw new InvalidOperationException("Cannot Move to position");
+        }
+
+        var status = CurrentStatus();
+
+        if (!CanMoveInternal(status)){
             throw new InvalidOperationException("Cannot Move");
         }
 
-        var updatedStatus = CurrentStatus()
+        var updatedStatus = status
                 .toBuilder()
                 .isMoving(true)
                 .commandedPosition(position)
@@ -48,5 +55,13 @@ public class MovementServiceStatusChanger implements MovementService {
                 .isMoving(false)
                 .build();
         statusRepository.Save(updatedStatus);
+    }
+
+    private boolean CanMoveInternal(Status status) {
+        return !status.isMoving() && !status.isCalibrating();
+    }
+
+    private boolean CanMoveInternal(Position position) {
+        return position.isValid();
     }
 }
