@@ -1,6 +1,10 @@
 package com.tddapps.rt.api.controllers;
 
+import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.ioc.IocContainer;
+import com.tddapps.rt.model.MovementService;
+import com.tddapps.rt.model.Position;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +13,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,13 +29,60 @@ public class MovementControllerTest {
     @MockBean
     private IocContainer containerMock;
 
-    @Test
-    public void ReturnsOkByDefault() throws Exception {
-        var requestBody = "{\"thetaDegrees\": 190, \"phiDegrees\": 85}";
+    private final MovementService movementServiceMock = mock(MovementService.class);
 
+    @Before
+    public void Setup(){
+        when(containerMock.Resolve(MovementService.class)).thenReturn(movementServiceMock);
+    }
+
+    private ResultActions Post(String jsonBody) throws Exception {
         var request = post("/api/movement")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody);
-        web.perform(request).andExpect(status().isOk());
+                .content(jsonBody);
+        return web.perform(request);
+    }
+
+    @Test
+    public void Returns400WhenCannotMove() throws Exception {
+        when(movementServiceMock.CanMove(new Position(190, 85)))
+                .thenReturn(false);
+
+        Post("{\"thetaDegrees\": 190, \"phiDegrees\": 85}")
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void Returns400WhenMovementIsInvalid() throws Exception {
+        when(movementServiceMock.CanMove(any()))
+                .thenReturn(true);
+        doThrow(new InvalidOperationException())
+                .when(movementServiceMock).Move(any());
+
+        Post("{\"thetaDegrees\": 190, \"phiDegrees\": 86}")
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void Returns500WhenMovementFails() throws Exception {
+        when(movementServiceMock.CanMove(any()))
+                .thenReturn(true);
+        doAnswer(i -> {
+            throw new Exception();
+        }).when(movementServiceMock).Move(any());
+
+        Post("{\"thetaDegrees\": 190, \"phiDegrees\": 86}")
+                .andExpect(status().is5xxServerError());
+    }
+
+    @Test
+    public void ReturnsOkWhenMovementSucceeds() throws Exception {
+        when(movementServiceMock.CanMove(any()))
+                .thenReturn(true);
+
+        Post("{\"thetaDegrees\": 191, \"phiDegrees\": 84}")
+                .andExpect(status().isOk());
+
+        verify(movementServiceMock).Move(new Position(191, 84));
     }
 }
