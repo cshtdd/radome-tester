@@ -37,17 +37,21 @@ public class MovementController {
                 .build();
 
         if (!movementService.CanMove(position)) {
+            log.info("Cannot Move");
             return new ResponseEntity<>("Cannot Move", HttpStatus.BAD_REQUEST);
         }
 
         try {
             movementService.Move(position);
         } catch (InvalidOperationException e) {
+            log.warn("Movement Error; reason: InvalidOperation; details:", e);
             return new ResponseEntity<>("Movement Error", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
+            log.error("Movement Error; reason: Unexpected; details:", e);
             return new ResponseEntity<>("Unexpected Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+        log.info(String.format("Movement Started; position: %s", position));
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 }
