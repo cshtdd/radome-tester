@@ -9,8 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -18,11 +17,19 @@ public class MovementServiceStatusChangerTest {
     private final StatusRepository statusRepositoryMock = mock(StatusRepository.class);
     private final MovementService service = new MovementServiceStatusChanger(statusRepositoryMock);
 
+    private final Status DEFAULT_STATUS = Status.builder()
+            .isMoving(false)
+            .isCalibrating(false)
+            .commandedPosition(new Position(0, 0))
+            .currentPosition(new Position(180, 0))
+            .build();
+
     private Status status = null;
 
     @Before
     public void Setup(){
-        status = Status.builder().build();
+        status = DEFAULT_STATUS.toBuilder().build();
+
         when(statusRepositoryMock.CurrentStatus()).thenReturn(status);
         doAnswer(i -> {
             status = i.getArgument(0, Status.class);
@@ -31,8 +38,9 @@ public class MovementServiceStatusChangerTest {
     }
 
     @Test
-    public void StatusShouldBeEmptyByDefault(){
-        assertEquals(Status.builder().build(), status);
+    public void DefaultStatusValidation(){
+        assertEquals(DEFAULT_STATUS, status);
+        assertNotSame(DEFAULT_STATUS, status);
     }
 
     @Test
@@ -75,7 +83,7 @@ public class MovementServiceStatusChangerTest {
 
     @Test
     public void MoveChangesStatus() throws InvalidOperationException {
-        var expected = Status.builder()
+        var expected = DEFAULT_STATUS.toBuilder()
                 .isMoving(true)
                 .commandedPosition(new Position(270, 90))
                 .build();
