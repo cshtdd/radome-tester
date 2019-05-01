@@ -2,6 +2,8 @@ package com.tddapps.rt.ioc;
 
 import com.tddapps.rt.ProgramStartup;
 import com.tddapps.rt.api.ApiInitializer;
+import com.tddapps.rt.config.ConfigurationReader;
+import com.tddapps.rt.config.internal.ConfigurationReaderSettings;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.HardwareInitializer;
 import com.tddapps.rt.hardware.HardwareService;
@@ -48,6 +50,7 @@ public class IocContainerTest {
         assertTrue(IocContainer.getInstance().Resolve(MovementService.class) instanceof MovementServiceStatusChanger);
         assertTrue(IocContainer.getInstance().Resolve(HardwareService.class) instanceof HardwareServiceStatus);
         assertTrue(IocContainer.getInstance().Resolve(Delay.class) instanceof Sleep);
+        assertTrue(IocContainer.getInstance().Resolve(ConfigurationReader.class) instanceof ConfigurationReaderSettings);
     }
 
     @Test
