@@ -3,9 +3,11 @@ package com.tddapps.rt.config.internal;
 import com.tddapps.rt.config.Configuration;
 import com.tddapps.rt.config.ConfigurationReader;
 import com.tddapps.rt.config.Settings;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Arrays;
 
+@Log4j2
 public class ConfigurationReaderSettings implements ConfigurationReader {
     private final ConfigurationReader configurationReader;
     private final SettingsReader settingsReader;
@@ -17,6 +19,12 @@ public class ConfigurationReaderSettings implements ConfigurationReader {
 
     @Override
     public Configuration Read() {
+        var result = ReadInternal();
+        log.info(result);
+        return result;
+    }
+
+    private Configuration ReadInternal() {
         var result = configurationReader.Read();
 
         var thetaBcmPinsCsv = settingsReader.Read(Settings.THETA_BCM_PINS, "");
