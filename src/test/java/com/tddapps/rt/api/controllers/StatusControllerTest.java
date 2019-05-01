@@ -50,6 +50,7 @@ public class StatusControllerTest {
                 .isCalibrating(true)
                 .isCalibrated(true)
                 .isHardwareInitialized(true)
+                .isHardwareCrash(true)
                 .build();
         SeedStatus(seededStatus);
 
@@ -57,6 +58,7 @@ public class StatusControllerTest {
                 + "\"isCalibrating\": true, "
                 + "\"isCalibrated\": true, "
                 + "\"isHardwareInitialized\": true,"
+                + "\"isHardwareCrash\": true,"
                 + "\"isMoving\": true, "
                 + "\"theta\": 34.63, "
                 + "\"phi\": 12.25, "

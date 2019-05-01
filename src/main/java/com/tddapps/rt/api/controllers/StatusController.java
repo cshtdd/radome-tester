@@ -23,6 +23,9 @@ public class StatusController {
         @JsonProperty("isHardwareInitialized")
         private boolean isHardwareInitialized;
 
+        @JsonProperty("isHardwareCrash")
+        private boolean isHardwareCrash;
+
         @JsonProperty("isMoving")
         private boolean isMoving;
 
