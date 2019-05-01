@@ -17,6 +17,9 @@ public class StatusController {
         @JsonProperty("isCalibrating")
         private boolean isCalibrating;
 
+        @JsonProperty("isCalibrated")
+        private boolean isCalibrated;
+
         @JsonProperty("isMoving")
         private boolean isMoving;
 
