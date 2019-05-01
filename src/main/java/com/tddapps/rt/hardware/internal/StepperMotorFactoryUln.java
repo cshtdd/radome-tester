@@ -33,36 +33,35 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
     @Override
     public StepperMotor CreateTheta() throws InvalidOperationException {
         synchronized (criticalSection) {
-            var name = THETA;
-            var bcmPins = configurationReader.Read().getThetaBcmPins();
-            ValidateConfigurationPins(name, bcmPins);
-            ValidateMotorDoesNotAlreadyExist(name, motorTheta);
-            InitializeGpio();
-            var pins = BuildPins(name, bcmPins);
+            ValidateMotorDoesNotAlreadyExist(THETA, motorTheta);
 
-            motorTheta = new StepperMotorUln(name, gpio, pins);
-
-            return motorTheta;
+            var pins = BuildPins(THETA, configurationReader.Read().getThetaBcmPins());
+            return motorTheta = CreateMotor(THETA, pins);
         }
     }
 
     @Override
     public StepperMotor CreatePhi() throws InvalidOperationException {
         synchronized (criticalSection) {
-            var name = PHI;
-            var bcmPins = configurationReader.Read().getPhiBcmPins();
-            ValidateConfigurationPins(name, bcmPins);
-            ValidateMotorDoesNotAlreadyExist(name, motorPhi);
-            InitializeGpio();
-            var pins = BuildPins(name, bcmPins);
+            ValidateMotorDoesNotAlreadyExist(PHI, motorPhi);
 
-            motorPhi = new StepperMotorUln(name, gpio, pins);
-
-            return motorPhi;
+            var pins = BuildPins(PHI, configurationReader.Read().getPhiBcmPins());
+            return motorPhi = CreateMotor(PHI, pins);
         }
     }
 
+    private StepperMotorUln CreateMotor(String name, Pin[] pins) {
+        InitializeGpio();
+        return new StepperMotorUln(name, gpio, pins);
+    }
+
     private Pin[] BuildPins(String name, int[] bcmPins) throws InvalidOperationException {
+        if (bcmPins == null || bcmPins.length != 4) {
+            throw new InvalidOperationException(String.format(
+                    "Invalid number of bcmPins; motor: %s", name
+            ));
+        }
+
         try {
             return Arrays.stream(bcmPins)
                     .mapToObj(pinConverter::BCMToGPIO)
@@ -75,12 +74,6 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
             throw new InvalidOperationException(String.format(
                     "Error converting BCM pins; motor: %s", name
             ), e);
-        }
-    }
-
-    private void ValidateConfigurationPins(String name, int[] bcmPins) throws InvalidOperationException {
-        if (bcmPins == null || bcmPins.length != 4) {
-            throw new InvalidOperationException(String.format("Invalid number of bcmPins; motor: %s", name));
         }
     }
 
