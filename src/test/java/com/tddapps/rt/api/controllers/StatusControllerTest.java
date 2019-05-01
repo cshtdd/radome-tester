@@ -49,10 +49,20 @@ public class StatusControllerTest {
                 .isMoving(true)
                 .isCalibrating(true)
                 .isCalibrated(true)
+                .isHardwareInitialized(true)
                 .build();
         SeedStatus(seededStatus);
 
-        var expected = "{\"isCalibrating\": true, \"isCalibrated\": true, \"isMoving\": true, \"theta\": 34.63, \"phi\": 12.25, \"commandedTheta\": 134.63, \"commandedPhi\": 112.25}";
+        var expected = "{"
+                + "\"isCalibrating\": true, "
+                + "\"isCalibrated\": true, "
+                + "\"isHardwareInitialized\": true,"
+                + "\"isMoving\": true, "
+                + "\"theta\": 34.63, "
+                + "\"phi\": 12.25, "
+                + "\"commandedTheta\": 134.63, "
+                + "\"commandedPhi\": 112.25"
+                + "}";
 
         web.perform(get("/api/status"))
                 .andExpect(status().isOk())

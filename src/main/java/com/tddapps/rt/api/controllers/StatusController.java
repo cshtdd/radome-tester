@@ -20,6 +20,9 @@ public class StatusController {
         @JsonProperty("isCalibrated")
         private boolean isCalibrated;
 
+        @JsonProperty("isHardwareInitialized")
+        private boolean isHardwareInitialized;
+
         @JsonProperty("isMoving")
         private boolean isMoving;
 

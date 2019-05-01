@@ -17,6 +17,7 @@ public class MappingTest {
         var expected = new StatusController.StatusResponse();
         expected.setCalibrating(true);
         expected.setCalibrated(true);
+        expected.setHardwareInitialized(true);
         expected.setMoving(true);
         expected.setTheta(102.25);
         expected.setPhi(103.23);
@@ -29,6 +30,7 @@ public class MappingTest {
                 .isMoving(true)
                 .isCalibrating(true)
                 .isCalibrated(true)
+                .isHardwareInitialized(true)
                 .build();
 
         var actual = mapper.map(status, StatusController.StatusResponse.class);
