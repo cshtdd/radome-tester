@@ -27,13 +27,30 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
 
     @Override
     public StepperMotor CreateTheta() throws InvalidOperationException {
-        var config = configurationReader.Read();
         var name = THETA;
+        var pins = configurationReader.Read().getThetaBcmPins();
+        ValidateConfigurationPins(name, pins);
 
         synchronized (criticalSection){
             var motor = motorTheta;
 
             ValidateMotorDoesNotAlreadyExist(name, motor);
+            InitializeGpio();
+
+            return null;
+        }
+    }
+
+    @Override
+    public StepperMotor CreatePhi() throws InvalidOperationException {
+        var name = PHI;
+        var pins = configurationReader.Read().getPhiBcmPins();
+        ValidateConfigurationPins(name, pins);
+
+        synchronized (criticalSection){
+            var currentMotor = motorPhi;
+
+            ValidateMotorDoesNotAlreadyExist(name, currentMotor);
             InitializeGpio();
 
 
@@ -42,20 +59,9 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
         }
     }
 
-    @Override
-    public StepperMotor CreatePhi() throws InvalidOperationException {
-        var config = configurationReader.Read();
-        var motorName = PHI;
-
-        synchronized (criticalSection){
-            var currentMotor = motorPhi;
-
-            ValidateMotorDoesNotAlreadyExist(motorName, currentMotor);
-            InitializeGpio();
-
-
-
-            return null;
+    private void ValidateConfigurationPins(String name, int[] pins) throws InvalidOperationException{
+        if (pins == null || pins.length != 4){
+            throw new InvalidOperationException(String.format("Invalid number of pins; motor: %s", name));
         }
     }
 
