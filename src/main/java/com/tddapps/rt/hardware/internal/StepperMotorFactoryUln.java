@@ -58,7 +58,7 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
 
     private StepperMotorUln CreateMotor(String name, Pin[] pins) {
         InitializeGpio();
-        return new StepperMotorUln(name, gpio, pins);
+        return new StepperMotorUln(name, gpio, pins, delay);
     }
 
     private Pin[] BuildPins(String name, int[] bcmPins) throws InvalidOperationException {

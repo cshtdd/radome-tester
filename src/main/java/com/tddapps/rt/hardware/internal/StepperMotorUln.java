@@ -5,6 +5,7 @@ import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.PinState;
 import com.tddapps.rt.InvalidOperationException;
+import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.StepperMotor;
 import lombok.extern.log4j.Log4j2;
 
@@ -35,11 +36,13 @@ public class StepperMotorUln implements StepperMotor {
     private final String name;
     private final GpioController gpio;
     private final Pin[] pinIds;
+    private final Delay delay;
 
-    public StepperMotorUln(String name, GpioController gpio, Pin[] pinIds){
+    public StepperMotorUln(String name, GpioController gpio, Pin[] pinIds, Delay delay){
         this.name = name;
         this.gpio = gpio;
         this.pinIds = pinIds;
+        this.delay = delay;
     }
 
     private String ToLog(String msg){
@@ -142,8 +145,6 @@ public class StepperMotorUln implements StepperMotor {
             }
         }
 
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException e) { }
+        delay.Wait(1);
     }
 }
