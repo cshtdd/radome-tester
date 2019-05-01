@@ -13,10 +13,10 @@ import com.tddapps.rt.mapping.Mapper;
 import com.tddapps.rt.mapping.internal.AutoMapper;
 import com.tddapps.rt.model.ModelInitializer;
 import com.tddapps.rt.model.MovementService;
-import com.tddapps.rt.model.SettingsReader;
+import com.tddapps.rt.config.internal.SettingsReader;
 import com.tddapps.rt.model.StatusRepository;
 import com.tddapps.rt.model.internal.MovementServiceStatusChanger;
-import com.tddapps.rt.model.internal.SettingsReaderEnvironment;
+import com.tddapps.rt.config.internal.SettingsReaderEnvironment;
 import com.tddapps.rt.model.internal.StatusRepositoryInMemory;
 import org.junit.Test;
 

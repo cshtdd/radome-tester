@@ -1,6 +1,7 @@
-package com.tddapps.rt.model.internal;
+package com.tddapps.rt.config.internal;
 
-import com.tddapps.rt.model.SettingsReader;
+import com.tddapps.rt.config.internal.SettingsReader;
+import com.tddapps.rt.config.internal.SettingsReaderEnvironment;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;

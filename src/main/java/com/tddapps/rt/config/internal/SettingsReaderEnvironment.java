@@ -1,6 +1,6 @@
-package com.tddapps.rt.model.internal;
+package com.tddapps.rt.config.internal;
 
-import com.tddapps.rt.model.SettingsReader;
+import com.tddapps.rt.config.internal.SettingsReader;
 
 public class SettingsReaderEnvironment implements SettingsReader {
     @Override
