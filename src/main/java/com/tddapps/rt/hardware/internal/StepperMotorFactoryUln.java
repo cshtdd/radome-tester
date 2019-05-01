@@ -9,6 +9,9 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class StepperMotorFactoryUln implements StepperMotorFactory {
+    private final static String THETA = "Theta";
+    private final static String PHI = "Phi";
+
     private final ConfigurationReader configurationReader;
 
     private final Object criticalSection = new Object();
@@ -25,7 +28,7 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
     @Override
     public StepperMotor CreateTheta() throws InvalidOperationException {
         var config = configurationReader.Read();
-        var name = "Theta";
+        var name = THETA;
 
         synchronized (criticalSection){
             var motor = motorTheta;
@@ -33,7 +36,7 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
             ValidateMotorDoesNotAlreadyExist(name, motor);
             InitializeGpio();
 
-            
+
 
             return null;
         }
@@ -42,7 +45,7 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
     @Override
     public StepperMotor CreatePhi() throws InvalidOperationException {
         var config = configurationReader.Read();
-        var motorName = "Phi";
+        var motorName = PHI;
 
         synchronized (criticalSection){
             var currentMotor = motorPhi;
