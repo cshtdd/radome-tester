@@ -2,10 +2,13 @@ package com.tddapps.rt.hardware.internal;
 
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.Pin;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.config.ConfigurationReader;
 import com.tddapps.rt.hardware.StepperMotor;
 import lombok.extern.log4j.Log4j2;
+
+import java.util.Arrays;
 
 @Log4j2
 public class StepperMotorFactoryUln implements StepperMotorFactory {
@@ -13,6 +16,7 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
     private final static String PHI = "Phi";
 
     private final ConfigurationReader configurationReader;
+    private final PinConverter pinConverter;
 
     private final Object criticalSection = new Object();
 
@@ -21,22 +25,25 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
     private StepperMotor motorPhi;
 
 
-    public StepperMotorFactoryUln(ConfigurationReader configurationReader) {
+    public StepperMotorFactoryUln(ConfigurationReader configurationReader, PinConverter pinConverter) {
         this.configurationReader = configurationReader;
+        this.pinConverter = pinConverter;
     }
 
     @Override
     public StepperMotor CreateTheta() throws InvalidOperationException {
         var name = THETA;
-        var pins = configurationReader.Read().getThetaBcmPins();
-        ValidateConfigurationPins(name, pins);
+        var bcmPins = configurationReader.Read().getThetaBcmPins();
+        ValidateConfigurationPins(name, bcmPins);
 
-        synchronized (criticalSection){
+        synchronized (criticalSection) {
             var motor = motorTheta;
 
             ValidateMotorDoesNotAlreadyExist(name, motor);
             InitializeGpio();
+            var pins = BuildPins(name, bcmPins);
 
+            
             return null;
         }
     }
@@ -44,24 +51,40 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
     @Override
     public StepperMotor CreatePhi() throws InvalidOperationException {
         var name = PHI;
-        var pins = configurationReader.Read().getPhiBcmPins();
-        ValidateConfigurationPins(name, pins);
+        var bcmPins = configurationReader.Read().getPhiBcmPins();
+        ValidateConfigurationPins(name, bcmPins);
 
-        synchronized (criticalSection){
+        synchronized (criticalSection) {
             var currentMotor = motorPhi;
 
             ValidateMotorDoesNotAlreadyExist(name, currentMotor);
             InitializeGpio();
-
+            var pins = BuildPins(name, bcmPins);
 
 
             return null;
         }
     }
 
-    private void ValidateConfigurationPins(String name, int[] pins) throws InvalidOperationException{
-        if (pins == null || pins.length != 4){
-            throw new InvalidOperationException(String.format("Invalid number of pins; motor: %s", name));
+    private Pin[] BuildPins(String name, int[] bcmPins) throws InvalidOperationException {
+        try {
+            return Arrays.stream(bcmPins)
+                    .mapToObj(pinConverter::BCMToGPIO)
+                    .toArray(Pin[]::new);
+        } catch (IllegalArgumentException e) {
+            log.error(String.format(
+                    "Error converting BCM pins; motor: %s; bcmPins: %s;",
+                    name, Arrays.toString(bcmPins)
+            ), e);
+            throw new InvalidOperationException(String.format(
+                    "Error converting BCM pins; motor: %s", name
+            ), e);
+        }
+    }
+
+    private void ValidateConfigurationPins(String name, int[] bcmPins) throws InvalidOperationException {
+        if (bcmPins == null || bcmPins.length != 4) {
+            throw new InvalidOperationException(String.format("Invalid number of bcmPins; motor: %s", name));
         }
     }
 
@@ -74,7 +97,7 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
         }
     }
 
-    private void InitializeGpio(){
+    private void InitializeGpio() {
         if (gpio != null) {
             return;
         }
