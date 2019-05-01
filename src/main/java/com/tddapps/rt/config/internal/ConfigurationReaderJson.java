@@ -13,6 +13,12 @@ import java.nio.charset.StandardCharsets;
 public class ConfigurationReaderJson implements ConfigurationReader {
     @Override
     public Configuration Read() {
+        var result = ReadInternal();
+        log.info(result);
+        return result;
+    }
+
+    private Configuration ReadInternal() {
         try(var reader = CreateResourceReader("/config.json")){
             return ParseJson(reader);
         } catch (IOException e) {
