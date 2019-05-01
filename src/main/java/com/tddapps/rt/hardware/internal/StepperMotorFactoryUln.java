@@ -17,6 +17,7 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
 
     private final ConfigurationReader configurationReader;
     private final PinConverter pinConverter;
+    private final DelaySimulator delay;
 
     private final Object criticalSection = new Object();
 
@@ -25,9 +26,14 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
     private StepperMotor motorPhi;
 
 
-    public StepperMotorFactoryUln(ConfigurationReader configurationReader, PinConverter pinConverter) {
+    public StepperMotorFactoryUln(
+            ConfigurationReader configurationReader,
+            PinConverter pinConverter,
+            DelaySimulator delay
+    ) {
         this.configurationReader = configurationReader;
         this.pinConverter = pinConverter;
+        this.delay = delay;
     }
 
     @Override
