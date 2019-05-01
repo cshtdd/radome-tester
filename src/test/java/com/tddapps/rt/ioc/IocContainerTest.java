@@ -7,9 +7,7 @@ import com.tddapps.rt.config.internal.ConfigurationReaderSettings;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.HardwareInitializer;
 import com.tddapps.rt.hardware.HardwareService;
-import com.tddapps.rt.hardware.internal.HardwareServiceStatus;
-import com.tddapps.rt.hardware.internal.PinConverter;
-import com.tddapps.rt.hardware.internal.Sleep;
+import com.tddapps.rt.hardware.internal.*;
 import com.tddapps.rt.hardware.internal.pi.PinConverterPi3BPlus;
 import com.tddapps.rt.mapping.Mapper;
 import com.tddapps.rt.mapping.internal.AutoMapper;
@@ -51,12 +49,14 @@ public class IocContainerTest {
         assertTrue(IocContainer.getInstance().Resolve(HardwareService.class) instanceof HardwareServiceStatus);
         assertTrue(IocContainer.getInstance().Resolve(Delay.class) instanceof Sleep);
         assertTrue(IocContainer.getInstance().Resolve(ConfigurationReader.class) instanceof ConfigurationReaderSettings);
+        assertTrue(IocContainer.getInstance().Resolve(StepperMotorFactory.class) instanceof StepperMotorFactoryUln);
     }
 
     @Test
     public void RegisterSingletons(){
         assertSingleton(StatusRepository.class);
         assertSingleton(Mapper.class);
+        assertSingleton(StepperMotorFactory.class);
     }
 
     @Test

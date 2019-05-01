@@ -8,9 +8,7 @@ import com.tddapps.rt.config.internal.ConfigurationReaderSettings;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.HardwareInitializer;
 import com.tddapps.rt.hardware.HardwareService;
-import com.tddapps.rt.hardware.internal.HardwareServiceStatus;
-import com.tddapps.rt.hardware.internal.PinConverter;
-import com.tddapps.rt.hardware.internal.Sleep;
+import com.tddapps.rt.hardware.internal.*;
 import com.tddapps.rt.hardware.internal.pi.PinConverterPi3BPlus;
 import com.tddapps.rt.mapping.Mapper;
 import com.tddapps.rt.mapping.internal.AutoMapper;
@@ -46,6 +44,7 @@ public class IocContainer {
     private PicoContainer RegisterBindings() {
         return new DefaultPicoContainer()
                 .addComponent(ConfigurationReaderJson.class)
+                .addComponent(DelaySimulator.class)
                 .addComponent(ApiInitializer.class)
                 .addComponent(ModelInitializer.class)
                 .addComponent(HardwareInitializer.class)
@@ -57,6 +56,7 @@ public class IocContainer {
                 .addComponent(ConfigurationReader.class, ConfigurationReaderSettings.class)
                 .addComponent(Delay.class, Sleep.class)
                 .as(CACHE).addComponent(Mapper.class, AutoMapper.class)
-                .as(CACHE).addComponent(StatusRepository.class, StatusRepositoryInMemory.class);
+                .as(CACHE).addComponent(StatusRepository.class, StatusRepositoryInMemory.class)
+                .as(CACHE).addComponent(StepperMotorFactory.class, StepperMotorFactoryUln.class);
     }
 }
