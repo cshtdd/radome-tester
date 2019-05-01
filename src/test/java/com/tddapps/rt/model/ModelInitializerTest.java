@@ -16,6 +16,7 @@ public class ModelInitializerTest {
                 .isMoving(false)
                 .isCalibrated(true)
                 .isHardwareInitialized(false)
+                .isHardwareCrash(false)
                 .currentPosition(new Position(270, 90))
                 .commandedPosition(new Position(270, 90))
                 .build();
