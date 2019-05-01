@@ -10,6 +10,7 @@ public class Status {
     private boolean isCalibrating;
     private boolean isMoving;
     private boolean isHardwareInitialized;
+    private boolean isHardwareCrash;
     private Position currentPosition;
     private Position commandedPosition;
 }
