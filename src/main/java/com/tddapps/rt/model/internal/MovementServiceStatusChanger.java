@@ -58,7 +58,9 @@ public class MovementServiceStatusChanger implements MovementService {
     }
 
     private boolean CanMoveInternal(Status status) {
-        return !status.isMoving() && !status.isCalibrating();
+        return !status.isMoving() &&
+                !status.isCalibrating() &&
+                status.isCalibrated();
     }
 
     private boolean CanMoveInternal(Position position) {

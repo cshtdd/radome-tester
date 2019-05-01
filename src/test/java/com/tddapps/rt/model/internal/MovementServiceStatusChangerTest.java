@@ -20,6 +20,7 @@ public class MovementServiceStatusChangerTest {
     private final Status DEFAULT_STATUS = Status.builder()
             .isMoving(false)
             .isCalibrating(false)
+            .isCalibrated(false)
             .commandedPosition(new Position(0, 0))
             .currentPosition(new Position(180, 0))
             .build();
@@ -46,6 +47,7 @@ public class MovementServiceStatusChangerTest {
     @Test
     public void CannotMoveWhenIsAlreadyMoving(){
         status.setMoving(true);
+        status.setCalibrated(true);
 
         assertFalse(service.CanMove(new Position(270, 90)));
     }
@@ -53,17 +55,27 @@ public class MovementServiceStatusChangerTest {
     @Test
     public void CannotMoveWhenCalibrating(){
         status.setCalibrating(true);
+        status.setCalibrated(true);
 
         assertFalse(service.CanMove(new Position(270, 90)));
     }
 
     @Test
+    public void CannotMoveWhenNotCalibrated(){
+        assertFalse(service.CanMove(new Position(270, 90)));
+    }
+
+    @Test
     public void CannotMoveWhenPositionIsInvalid(){
+        status.setCalibrated(true);
+
         assertFalse(service.CanMove(new Position(270, -90)));
     }
 
     @Test
     public void CanMoveWhenPositionIsValidAndNoMovementIsInProgress(){
+        status.setCalibrated(true);
+
         assertTrue(service.CanMove(new Position(270, 90)));
     }
 
@@ -79,6 +91,7 @@ public class MovementServiceStatusChangerTest {
     @Test(expected = InvalidOperationException.class)
     public void MoveThrowsWhenAlreadyMoving() throws InvalidOperationException {
         status.setMoving(true);
+        status.setCalibrated(true);
 
         service.Move(new Position(270, 90));
     }
@@ -86,19 +99,30 @@ public class MovementServiceStatusChangerTest {
     @Test(expected = InvalidOperationException.class)
     public void MoveThrowsWhenCalibrating() throws InvalidOperationException {
         status.setCalibrating(true);
+        status.setCalibrated(true);
 
         service.Move(new Position(270, 90));
     }
 
     @Test(expected = InvalidOperationException.class)
+    public void MoveThrowsWhenNotCalibrated() throws InvalidOperationException {
+        service.Move(new Position(270, 90));
+    }
+
+    @Test(expected = InvalidOperationException.class)
     public void MoveThrowsWhenPositionIsInvalid() throws InvalidOperationException {
+        status.setCalibrated(true);
+
         service.Move(new Position(-270, 90));
     }
 
     @Test
     public void MoveChangesStatus() throws InvalidOperationException {
+        status.setCalibrated(true);
+
         var expected = DEFAULT_STATUS.toBuilder()
                 .isMoving(true)
+                .isCalibrated(true)
                 .commandedPosition(new Position(270, 90))
                 .build();
 
