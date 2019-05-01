@@ -14,6 +14,7 @@ public class ModelInitializerTest {
     public void InitializesAStatus(){
         var defaultStatus = Status.builder()
                 .isMoving(false)
+                .isCalibrated(true)
                 .currentPosition(new Position(270, 90))
                 .commandedPosition(new Position(270, 90))
                 .build();
