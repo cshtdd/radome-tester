@@ -21,18 +21,21 @@ public class ConfigurationReaderSettings implements ConfigurationReader {
 
         var thetaBcmPinsCsv = settingsReader.Read(Settings.THETA_BCM_PINS, "");
 
-        var thetaBcmPinsOverride = Arrays.stream(thetaBcmPinsCsv.split(","))
+        var thetaBcmPinsOverride = CsvToIntArray(thetaBcmPinsCsv);
+        if (thetaBcmPinsOverride.length > 0){
+            result.setThetaBcmPins(thetaBcmPinsOverride);
+        }
+
+        return result;
+    }
+
+    private int[] CsvToIntArray(String csv) {
+        return Arrays.stream(csv.split(","))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .filter(s -> !s.isBlank())
                 .map(Integer::parseInt)
                 .mapToInt(i -> i)
                 .toArray();
-
-        if (thetaBcmPinsOverride.length > 0){
-            result.setThetaBcmPins(thetaBcmPinsOverride);
-        }
-
-        return result;
     }
 }
