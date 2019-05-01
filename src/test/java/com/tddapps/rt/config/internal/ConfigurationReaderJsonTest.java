@@ -1,18 +1,19 @@
 package com.tddapps.rt.config.internal;
 
+import com.tddapps.rt.config.Configuration;
 import com.tddapps.rt.config.ConfigurationReader;
 import org.junit.Test;
-
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class ConfigurationReaderJsonTest {
     private final ConfigurationReader reader = new ConfigurationReaderJson();
 
     @Test
     public void ReadsTheConfigurationFromTheConfigJsonResource(){
-        var config = reader.Read();
+        var expected = new Configuration();
+        expected.setThetaBcmPins(new int[]{1, 2, 3, 4});
+        expected.setPhiBcmPins(new int[]{5, 6, 7, 8});
 
-        assertArrayEquals(new int[]{1, 2, 3, 4}, config.getThetaBcmPins());
-        assertArrayEquals(new int[]{5, 6, 7, 8}, config.getPhiBcmPins());
+        assertEquals(expected, reader.Read());
     }
 }
