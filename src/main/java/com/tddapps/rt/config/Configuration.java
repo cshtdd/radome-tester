@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Configuration {
-    int[] thetaBcmPins;
-    int[] phiBcmPins;
+    private int[] thetaBcmPins;
+    private int[] phiBcmPins;
 }
