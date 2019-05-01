@@ -37,14 +37,13 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
         ValidateConfigurationPins(name, bcmPins);
 
         synchronized (criticalSection) {
-            var motor = motorTheta;
-
-            ValidateMotorDoesNotAlreadyExist(name, motor);
+            ValidateMotorDoesNotAlreadyExist(name, motorTheta);
             InitializeGpio();
             var pins = BuildPins(name, bcmPins);
 
-            
-            return null;
+            motorTheta = new StepperMotorUln(name, gpio, pins);
+
+            return motorTheta;
         }
     }
 
@@ -55,14 +54,13 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
         ValidateConfigurationPins(name, bcmPins);
 
         synchronized (criticalSection) {
-            var currentMotor = motorPhi;
-
-            ValidateMotorDoesNotAlreadyExist(name, currentMotor);
+            ValidateMotorDoesNotAlreadyExist(name, motorPhi);
             InitializeGpio();
             var pins = BuildPins(name, bcmPins);
 
+            motorPhi = new StepperMotorUln(name, gpio, pins);
 
-            return null;
+            return motorPhi;
         }
     }
 
