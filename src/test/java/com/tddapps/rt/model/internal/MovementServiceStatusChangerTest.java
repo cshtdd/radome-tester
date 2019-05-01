@@ -21,6 +21,7 @@ public class MovementServiceStatusChangerTest {
             .isMoving(false)
             .isCalibrating(false)
             .isCalibrated(false)
+            .isHardwareInitialized(false)
             .commandedPosition(new Position(0, 0))
             .currentPosition(new Position(180, 0))
             .build();
@@ -48,6 +49,7 @@ public class MovementServiceStatusChangerTest {
     public void CannotMoveWhenIsAlreadyMoving(){
         status.setMoving(true);
         status.setCalibrated(true);
+        status.setHardwareInitialized(true);
 
         assertFalse(service.CanMove(new Position(270, 90)));
     }
@@ -56,18 +58,29 @@ public class MovementServiceStatusChangerTest {
     public void CannotMoveWhenCalibrating(){
         status.setCalibrating(true);
         status.setCalibrated(true);
+        status.setHardwareInitialized(true);
 
         assertFalse(service.CanMove(new Position(270, 90)));
     }
 
     @Test
     public void CannotMoveWhenNotCalibrated(){
+        status.setHardwareInitialized(true);
+
+        assertFalse(service.CanMove(new Position(270, 90)));
+    }
+
+    @Test
+    public void CannotMoveWhenHardwareNotInitialized(){
+        status.setCalibrated(true);
+
         assertFalse(service.CanMove(new Position(270, 90)));
     }
 
     @Test
     public void CannotMoveWhenPositionIsInvalid(){
         status.setCalibrated(true);
+        status.setHardwareInitialized(true);
 
         assertFalse(service.CanMove(new Position(270, -90)));
     }
@@ -75,6 +88,7 @@ public class MovementServiceStatusChangerTest {
     @Test
     public void CanMoveWhenPositionIsValidAndNoMovementIsInProgress(){
         status.setCalibrated(true);
+        status.setHardwareInitialized(true);
 
         assertTrue(service.CanMove(new Position(270, 90)));
     }
@@ -92,6 +106,7 @@ public class MovementServiceStatusChangerTest {
     public void MoveThrowsWhenAlreadyMoving() throws InvalidOperationException {
         status.setMoving(true);
         status.setCalibrated(true);
+        status.setHardwareInitialized(true);
 
         service.Move(new Position(270, 90));
     }
@@ -100,18 +115,29 @@ public class MovementServiceStatusChangerTest {
     public void MoveThrowsWhenCalibrating() throws InvalidOperationException {
         status.setCalibrating(true);
         status.setCalibrated(true);
+        status.setHardwareInitialized(true);
 
         service.Move(new Position(270, 90));
     }
 
     @Test(expected = InvalidOperationException.class)
     public void MoveThrowsWhenNotCalibrated() throws InvalidOperationException {
+        status.setHardwareInitialized(true);
+
+        service.Move(new Position(270, 90));
+    }
+
+    @Test(expected = InvalidOperationException.class)
+    public void MoveThrowsWhenHardwareNotInitialized() throws InvalidOperationException {
+        status.setCalibrated(true);
+
         service.Move(new Position(270, 90));
     }
 
     @Test(expected = InvalidOperationException.class)
     public void MoveThrowsWhenPositionIsInvalid() throws InvalidOperationException {
         status.setCalibrated(true);
+        status.setHardwareInitialized(true);
 
         service.Move(new Position(-270, 90));
     }
@@ -119,10 +145,12 @@ public class MovementServiceStatusChangerTest {
     @Test
     public void MoveChangesStatus() throws InvalidOperationException {
         status.setCalibrated(true);
+        status.setHardwareInitialized(true);
 
         var expected = DEFAULT_STATUS.toBuilder()
                 .isMoving(true)
                 .isCalibrated(true)
+                .isHardwareInitialized(true)
                 .commandedPosition(new Position(270, 90))
                 .build();
 
