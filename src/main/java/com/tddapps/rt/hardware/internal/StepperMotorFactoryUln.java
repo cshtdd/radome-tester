@@ -2,6 +2,7 @@ package com.tddapps.rt.hardware.internal;
 
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
+import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.config.ConfigurationReader;
 import com.tddapps.rt.hardware.StepperMotor;
 import lombok.extern.log4j.Log4j2;
@@ -22,20 +23,45 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
     }
 
     @Override
-    public StepperMotor CreateTheta() {
+    public StepperMotor CreateTheta() throws InvalidOperationException {
+        var config = configurationReader.Read();
+        var name = "Theta";
+
         synchronized (criticalSection){
+            var motor = motorTheta;
+
+            ValidateMotorDoesNotAlreadyExist(name, motor);
             InitializeGpio();
+
+            
 
             return null;
         }
     }
 
     @Override
-    public StepperMotor CreatePhi() {
+    public StepperMotor CreatePhi() throws InvalidOperationException {
+        var config = configurationReader.Read();
+        var motorName = "Phi";
+
         synchronized (criticalSection){
+            var currentMotor = motorPhi;
+
+            ValidateMotorDoesNotAlreadyExist(motorName, currentMotor);
             InitializeGpio();
 
+
+
             return null;
+        }
+    }
+
+    private void ValidateMotorDoesNotAlreadyExist(String name, StepperMotor motor) throws InvalidOperationException {
+        if (motor != null) {
+            log.warn(String.format("Motor already created; motor: %s", name));
+            throw new InvalidOperationException(String.format(
+                    "%s motor cannot be created twice", name
+            ));
         }
     }
 
