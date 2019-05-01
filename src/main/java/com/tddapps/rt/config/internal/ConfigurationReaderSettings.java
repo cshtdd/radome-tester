@@ -20,10 +20,15 @@ public class ConfigurationReaderSettings implements ConfigurationReader {
         var result = configurationReader.Read();
 
         var thetaBcmPinsCsv = settingsReader.Read(Settings.THETA_BCM_PINS, "");
-
         var thetaBcmPinsOverride = CsvToIntArray(thetaBcmPinsCsv);
         if (thetaBcmPinsOverride.length > 0){
             result.setThetaBcmPins(thetaBcmPinsOverride);
+        }
+
+        var phiBvmPinsCsv = settingsReader.Read(Settings.PHI_BCM_PINS, "");
+        var phiBcmPinsOverride = CsvToIntArray(phiBvmPinsCsv);
+        if (phiBcmPinsOverride.length > 0){
+            result.setPhiBcmPins(phiBcmPinsOverride);
         }
 
         return result;

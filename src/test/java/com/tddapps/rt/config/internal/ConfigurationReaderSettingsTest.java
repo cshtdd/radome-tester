@@ -34,4 +34,15 @@ public class ConfigurationReaderSettingsTest {
 
         assertEquals(expected, reader.Read());
     }
+
+    @Test
+    public void OverridesPhiBcmPinsWithSettingsValue(){
+        settingsReaderStub.Settings.put(Settings.PHI_BCM_PINS, "55,56, 57, 58 ");
+
+        var expected = new Configuration();
+        expected.setThetaBcmPins(new int[]{1, 2, 3, 4});
+        expected.setPhiBcmPins(new int[]{55, 56, 57, 58});
+
+        assertEquals(expected, reader.Read());
+    }
 }
