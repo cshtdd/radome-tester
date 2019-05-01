@@ -22,7 +22,7 @@ public class HardwareServiceStatusTest {
     }
 
     private static class HardwareServiceStatusTestable extends HardwareServiceStatus {
-        public int MaxIterations = 10;
+        public int MaxIterations = 1;
         public int CurrentIteration = 0;
 
         public HardwareServiceStatusTestable(StatusRepository statusRepository, Delay delay) {
@@ -37,8 +37,19 @@ public class HardwareServiceStatusTest {
 
     @Test
     public void RunFinishesBecauseItEvaluatesCondition() {
+        service.MaxIterations = 10;
+
         service.run();
 
         assertEquals(11, service.CurrentIteration);
+    }
+
+    @Test
+    public void RunWillNotDoAnythingIfHardwareHasAlreadyBeenInitialized() {
+        statusRepository.CurrentStatus().setHardwareInitialized(true);
+
+        service.run();
+
+        assertEquals(0, service.CurrentIteration);
     }
 }

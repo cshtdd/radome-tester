@@ -19,6 +19,13 @@ public class HardwareServiceStatus implements HardwareService {
     public void run() {
         //TODO finish this
 
+        var initialStatus = statusRepository.CurrentStatus();
+
+        if (initialStatus.isHardwareInitialized()){
+            //TODO log here
+            return;
+        }
+
         while (RunCondition()){
             // TODO send single movement steps
 
