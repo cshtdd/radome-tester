@@ -2,8 +2,10 @@ package com.tddapps.rt.ioc;
 
 import com.tddapps.rt.ProgramStartup;
 import com.tddapps.rt.api.ApiInitializer;
+import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.HardwareInitializer;
 import com.tddapps.rt.hardware.internal.PinConverter;
+import com.tddapps.rt.hardware.internal.Sleep;
 import com.tddapps.rt.hardware.internal.pi.PinConverterPi3BPlus;
 import com.tddapps.rt.mapping.Mapper;
 import com.tddapps.rt.mapping.internal.AutoMapper;
@@ -45,6 +47,7 @@ public class IocContainer {
                 .addComponent(PinConverter.class, PinConverterPi3BPlus.class)
                 .addComponent(SettingsReader.class, SettingsReaderEnvironment.class)
                 .addComponent(MovementService.class, MovementServiceStatusChanger.class)
+                .addComponent(Delay.class, Sleep.class)
                 .as(CACHE).addComponent(Mapper.class, AutoMapper.class)
                 .as(CACHE).addComponent(StatusRepository.class, StatusRepositoryInMemory.class);
     }
