@@ -7,6 +7,7 @@ import com.tddapps.rt.config.Settings;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Arrays;
+import java.util.function.BooleanSupplier;
 
 @Log4j2
 class ConfigurationReaderSettings implements ConfigurationReader {
@@ -39,6 +40,15 @@ class ConfigurationReaderSettings implements ConfigurationReader {
         var phiBcmPinsOverride = CsvToIntArray(phiBvmPinsCsv);
         if (phiBcmPinsOverride.length > 0){
             result.setPhiBcmPins(phiBcmPinsOverride);
+        }
+
+        var simulationStr = settingsReader.Read(Settings.IS_SIMULATION, "").toLowerCase();
+        if ("true".equals(simulationStr)){
+            result.setSimulation(true);
+        }
+
+        if ("false".equals(simulationStr)){
+            result.setSimulation(false);
         }
 
         return result;
