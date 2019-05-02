@@ -23,7 +23,7 @@ mvn clean package
 ### Run the Application  
 
 ```bash
-./target/radome-tester-*.jar
+RT_IS_SIMULATION=true ./target/radome-tester-*.jar
 ```
 
 ### Deployment Prerequisite  
