@@ -7,8 +7,8 @@ import com.tddapps.rt.hardware.StepperMotor;
 
 class StepperMotorFactorySelector implements StepperMotorFactory {
     private final ConfigurationReader configurationReader;
-    private final StepperMotorFactory stepperMotorFactory;
-    private final StepperMotorFactory stepperMotorFactorySimulator;
+    final StepperMotorFactory stepperMotorFactory;
+    final StepperMotorFactory stepperMotorFactorySimulator;
 
     @Inject
     public StepperMotorFactorySelector(

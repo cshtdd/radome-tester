@@ -20,4 +20,12 @@ public class IocContainerTest {
     public void RegisterSingletons() {
         assertSingleton(StepperMotorFactoryUln.class);
     }
+
+    @Test
+    public void StepperMotorFactorySelectorGetsConstructedWithTheTwoCorrectFactories(){
+        var factory = (StepperMotorFactorySelector)IocContainer.getInstance().Resolve(StepperMotorFactory.class);
+
+        assertTrue(factory.stepperMotorFactory instanceof StepperMotorFactoryUln);
+        assertTrue(factory.stepperMotorFactorySimulator instanceof StepperMotorFactorySimulator);
+    }
 }

@@ -1,7 +1,10 @@
 package com.tddapps.rt.hardware.internal;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import com.tddapps.rt.config.ConfigurationReader;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.DelaySimulator;
 import com.tddapps.rt.hardware.HardwareService;
@@ -14,7 +17,30 @@ public class IocModule extends AbstractModule {
         bind(PinConverter.class).to(PinConverterPi3BPlus.class);
         bind(HardwareService.class).to(HardwareServiceStatus.class);
 
+        bind(StepperMotorFactorySimulator.class);
         bind(StepperMotorFactoryUln.class).in(Singleton.class);
-        bind(StepperMotorFactory.class).to(StepperMotorFactorySelector.class);
+
+        bind(StepperMotorFactory.class).toProvider(StepperMotorFactoryFactory.class);
+    }
+
+    private static class StepperMotorFactoryFactory implements Provider<StepperMotorFactory>{
+        private final ConfigurationReader configurationReader;
+        private final StepperMotorFactoryUln factoryReal;
+        private final StepperMotorFactorySimulator factorySimulator;
+
+        @Inject
+        private StepperMotorFactoryFactory(
+                ConfigurationReader configurationReader,
+                StepperMotorFactoryUln factoryReal,
+                StepperMotorFactorySimulator factorySimulator) {
+            this.configurationReader = configurationReader;
+            this.factoryReal = factoryReal;
+            this.factorySimulator = factorySimulator;
+        }
+
+        @Override
+        public StepperMotorFactory get() {
+            return new StepperMotorFactorySelector(configurationReader, factoryReal, factorySimulator);
+        }
     }
 }
