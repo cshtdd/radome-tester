@@ -12,12 +12,12 @@ public class IocContainerTest {
     public void RegistersDependencies(){
         assertTrue(IocContainer.getInstance().Resolve(PinConverter.class) instanceof PinConverterPi3BPlus);
         assertTrue(IocContainer.getInstance().Resolve(HardwareService.class) instanceof HardwareServiceStatus);
-        assertTrue(IocContainer.getInstance().Resolve(StepperMotorFactory.class) instanceof StepperMotorFactoryUln);
+        assertTrue(IocContainer.getInstance().Resolve(StepperMotorFactory.class) instanceof StepperMotorFactorySelector);
         assertTrue(IocContainer.getInstance().Resolve(Delay.class) instanceof Sleep);
     }
 
     @Test
     public void RegisterSingletons() {
-        assertSingleton(StepperMotorFactory.class);
+        assertSingleton(StepperMotorFactoryUln.class);
     }
 }

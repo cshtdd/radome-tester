@@ -1,5 +1,6 @@
 package com.tddapps.rt.hardware.internal;
 
+import com.google.inject.Inject;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.config.ConfigurationReader;
 import com.tddapps.rt.hardware.StepperMotor;
@@ -9,6 +10,7 @@ class StepperMotorFactorySelector implements StepperMotorFactory {
     private final StepperMotorFactory stepperMotorFactory;
     private final StepperMotorFactory stepperMotorFactorySimulator;
 
+    @Inject
     public StepperMotorFactorySelector(
             ConfigurationReader configurationReader,
             StepperMotorFactory stepperMotorFactory,

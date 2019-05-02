@@ -13,6 +13,8 @@ public class IocModule extends AbstractModule {
         bind(Delay.class).to(Sleep.class);
         bind(PinConverter.class).to(PinConverterPi3BPlus.class);
         bind(HardwareService.class).to(HardwareServiceStatus.class);
-        bind(StepperMotorFactory.class).to(StepperMotorFactoryUln.class).in(Singleton.class);
+
+        bind(StepperMotorFactoryUln.class).in(Singleton.class);
+        bind(StepperMotorFactory.class).to(StepperMotorFactorySelector.class);
     }
 }
