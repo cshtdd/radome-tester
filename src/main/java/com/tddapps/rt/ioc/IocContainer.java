@@ -6,10 +6,6 @@ import com.tddapps.rt.StartupService;
 import com.tddapps.rt.api.ApiInitializer;
 import com.tddapps.rt.hardware.HardwareInitializer;
 import com.tddapps.rt.model.ModelInitializer;
-import com.tddapps.rt.model.MovementService;
-import com.tddapps.rt.model.StatusRepository;
-import com.tddapps.rt.model.internal.MovementServiceStatusChanger;
-import com.tddapps.rt.model.internal.StatusRepositoryInMemory;
 
 public class IocContainer {
     private static final IocContainer sharedInstance = new IocContainer();
@@ -33,6 +29,7 @@ public class IocContainer {
                 new com.tddapps.rt.config.internal.IocModule(),
                 new com.tddapps.rt.hardware.internal.IocModule(),
                 new com.tddapps.rt.mapping.internal.IocModule(),
+                new com.tddapps.rt.model.internal.IocModule(),
                 new DefaultModule()
         );
     }
@@ -46,10 +43,6 @@ public class IocContainer {
 
             bind(ProgramStartupFactory.class);
             bind(ProgramStartup.class).toProvider(ProgramStartupFactory.class);
-
-            bind(MovementService.class).to(MovementServiceStatusChanger.class);
-
-            bind(StatusRepository.class).to(StatusRepositoryInMemory.class).in(Singleton.class);
         }
     }
 

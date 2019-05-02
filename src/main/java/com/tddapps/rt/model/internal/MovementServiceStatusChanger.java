@@ -7,7 +7,7 @@ import com.tddapps.rt.model.Position;
 import com.tddapps.rt.model.Status;
 import com.tddapps.rt.model.StatusRepository;
 
-public class MovementServiceStatusChanger implements MovementService {
+class MovementServiceStatusChanger implements MovementService {
     private final StatusRepository statusRepository;
 
     @Inject
