@@ -1,9 +1,7 @@
-package com.tddapps.rt.test;
+package com.tddapps.rt.mapping.internal;
 
 import com.tddapps.rt.ioc.IocContainer;
 import com.tddapps.rt.mapping.Mapper;
-import com.tddapps.rt.mapping.internal.AutoMapper;
-
 import static org.mockito.Mockito.when;
 
 public abstract class IocContainerAutoMappingHelper {

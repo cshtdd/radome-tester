@@ -5,8 +5,6 @@ import com.tddapps.rt.ProgramStartup;
 import com.tddapps.rt.StartupService;
 import com.tddapps.rt.api.ApiInitializer;
 import com.tddapps.rt.hardware.HardwareInitializer;
-import com.tddapps.rt.mapping.Mapper;
-import com.tddapps.rt.mapping.internal.AutoMapper;
 import com.tddapps.rt.model.ModelInitializer;
 import com.tddapps.rt.model.MovementService;
 import com.tddapps.rt.model.StatusRepository;
@@ -34,6 +32,7 @@ public class IocContainer {
         return Guice.createInjector(
                 new com.tddapps.rt.config.internal.IocModule(),
                 new com.tddapps.rt.hardware.internal.IocModule(),
+                new com.tddapps.rt.mapping.internal.IocModule(),
                 new DefaultModule()
         );
     }
@@ -50,7 +49,6 @@ public class IocContainer {
 
             bind(MovementService.class).to(MovementServiceStatusChanger.class);
 
-            bind(Mapper.class).to(AutoMapper.class).in(Singleton.class);
             bind(StatusRepository.class).to(StatusRepositoryInMemory.class).in(Singleton.class);
         }
     }

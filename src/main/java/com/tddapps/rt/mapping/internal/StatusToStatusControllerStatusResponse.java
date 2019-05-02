@@ -1,4 +1,4 @@
-package com.tddapps.rt.mapping.internal.mappers;
+package com.tddapps.rt.mapping.internal;
 
 import com.tddapps.rt.api.controllers.StatusController;
 import com.tddapps.rt.model.Status;
@@ -7,7 +7,7 @@ import ma.glasnost.orika.MappingContext;
 
 import static com.tddapps.rt.utils.Round.ToPrecision;
 
-public class StatusToStatusControllerStatusResponse extends CustomMapper<Status, StatusController.StatusResponse> {
+class StatusToStatusControllerStatusResponse extends CustomMapper<Status, StatusController.StatusResponse> {
     @Override
     public void mapAtoB(Status status, StatusController.StatusResponse statusResponse, MappingContext context) {
         super.mapAtoB(status, statusResponse, context);

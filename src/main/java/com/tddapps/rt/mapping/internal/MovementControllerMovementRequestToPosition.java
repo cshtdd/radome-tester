@@ -1,4 +1,4 @@
-package com.tddapps.rt.mapping.internal.mappers;
+package com.tddapps.rt.mapping.internal;
 
 import com.tddapps.rt.api.controllers.MovementController;
 import com.tddapps.rt.model.Position;
@@ -7,7 +7,7 @@ import ma.glasnost.orika.ObjectFactory;
 
 import static com.tddapps.rt.utils.Round.ToPrecision;
 
-public class MovementControllerMovementRequestToPosition implements ObjectFactory<Position> {
+class MovementControllerMovementRequestToPosition implements ObjectFactory<Position> {
     @Override
     public Position create(Object source, MappingContext mappingContext) {
         var movementRequest = (MovementController.MovementRequest)source;

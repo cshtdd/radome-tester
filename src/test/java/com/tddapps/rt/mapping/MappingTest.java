@@ -2,7 +2,7 @@ package com.tddapps.rt.mapping;
 
 import com.tddapps.rt.api.controllers.MovementController;
 import com.tddapps.rt.api.controllers.StatusController;
-import com.tddapps.rt.mapping.internal.AutoMapper;
+import com.tddapps.rt.ioc.IocContainer;
 import com.tddapps.rt.model.Position;
 import com.tddapps.rt.model.Status;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class MappingTest {
-    private final Mapper mapper = new AutoMapper();
+    private final Mapper mapper = IocContainer.getInstance().Resolve(Mapper.class);
 
     @Test
     public void StatusToStatusControllerStatusResponse(){
