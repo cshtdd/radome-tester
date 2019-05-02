@@ -1,15 +1,13 @@
 package com.tddapps.rt.hardware;
 
 import com.tddapps.rt.InvalidOperationException;
+import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@Data
 public class StepperMotorSimulator implements StepperMotor {
     private final String name;
-
-    public StepperMotorSimulator(String name) {
-        this.name = name;
-    }
 
     @Override
     public void Init() {
