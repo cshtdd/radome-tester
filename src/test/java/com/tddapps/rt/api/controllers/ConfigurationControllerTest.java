@@ -48,6 +48,7 @@ public class ConfigurationControllerTest {
         seededConfig.setPhiBcmPins(new int[]{120, 123, 125, 127});
 
         var expected = "{"
+                + "\"simulation\": false,"
                 + "\"thetaBcmPins\": [20, 23, 25, 27],"
                 + "\"phiBcmPins\": [120, 123, 125, 127]"
                 + "}";
