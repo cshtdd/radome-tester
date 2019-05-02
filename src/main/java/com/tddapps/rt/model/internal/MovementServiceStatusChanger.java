@@ -1,5 +1,6 @@
 package com.tddapps.rt.model.internal;
 
+import com.google.inject.Inject;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.model.MovementService;
 import com.tddapps.rt.model.Position;
@@ -9,6 +10,7 @@ import com.tddapps.rt.model.StatusRepository;
 public class MovementServiceStatusChanger implements MovementService {
     private final StatusRepository statusRepository;
 
+    @Inject
     public MovementServiceStatusChanger(StatusRepository statusRepository) {
         this.statusRepository = statusRepository;
     }

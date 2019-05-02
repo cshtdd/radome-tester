@@ -1,5 +1,6 @@
 package com.tddapps.rt.hardware.internal;
 
+import com.google.inject.Inject;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.HardwareService;
 import com.tddapps.rt.model.StatusRepository;
@@ -10,6 +11,7 @@ public class HardwareServiceStatus implements HardwareService {
     private final StatusRepository statusRepository;
     private final Delay delay;
 
+    @Inject
     public HardwareServiceStatus(StatusRepository statusRepository, Delay delay) {
         this.statusRepository = statusRepository;
         this.delay = delay;

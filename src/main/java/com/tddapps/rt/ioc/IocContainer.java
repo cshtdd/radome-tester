@@ -1,6 +1,9 @@
 package com.tddapps.rt.ioc;
 
+import com.google.inject.*;
+import com.tddapps.rt.Program;
 import com.tddapps.rt.ProgramStartup;
+import com.tddapps.rt.StartupService;
 import com.tddapps.rt.api.ApiInitializer;
 import com.tddapps.rt.config.ConfigurationReader;
 import com.tddapps.rt.config.internal.ConfigurationReaderJson;
@@ -19,44 +22,75 @@ import com.tddapps.rt.model.StatusRepository;
 import com.tddapps.rt.model.internal.MovementServiceStatusChanger;
 import com.tddapps.rt.config.internal.SettingsReaderEnvironment;
 import com.tddapps.rt.model.internal.StatusRepositoryInMemory;
-import org.picocontainer.DefaultPicoContainer;
-import org.picocontainer.PicoContainer;
-
-import static org.picocontainer.Characteristics.CACHE;
 
 public class IocContainer {
     private static final IocContainer sharedInstance = new IocContainer();
 
-    private final PicoContainer resolver;
+    private final Injector resolver;
 
-    public static IocContainer getInstance(){
+    public static IocContainer getInstance() {
         return sharedInstance;
     }
 
-    private IocContainer(){
+    private IocContainer() {
         resolver = RegisterBindings();
     }
 
-    public <T> T Resolve(Class<T> type){
-        return resolver.getComponent(type);
+    public <T> T Resolve(Class<T> type) {
+        return resolver.getInstance(type);
     }
 
-    private PicoContainer RegisterBindings() {
-        return new DefaultPicoContainer()
-                .addComponent(ConfigurationReaderJson.class)
-                .addComponent(DelaySimulator.class)
-                .addComponent(ApiInitializer.class)
-                .addComponent(ModelInitializer.class)
-                .addComponent(HardwareInitializer.class)
-                .addComponent(ProgramStartup.class)
-                .addComponent(PinConverter.class, PinConverterPi3BPlus.class)
-                .addComponent(SettingsReader.class, SettingsReaderEnvironment.class)
-                .addComponent(MovementService.class, MovementServiceStatusChanger.class)
-                .addComponent(HardwareService.class, HardwareServiceStatus.class)
-                .addComponent(ConfigurationReader.class, ConfigurationReaderSettings.class)
-                .addComponent(Delay.class, Sleep.class)
-                .as(CACHE).addComponent(Mapper.class, AutoMapper.class)
-                .as(CACHE).addComponent(StatusRepository.class, StatusRepositoryInMemory.class)
-                .as(CACHE).addComponent(StepperMotorFactory.class, StepperMotorFactoryUln.class);
+    private Injector RegisterBindings() {
+        return Guice.createInjector(new DefaultModule());
+    }
+
+    private static class DefaultModule extends AbstractModule {
+        @Override
+        protected void configure() {
+            bind(ConfigurationReaderJson.class);
+            bind(DelaySimulator.class);
+            bind(ApiInitializer.class);
+            bind(ModelInitializer.class);
+            bind(HardwareInitializer.class);
+
+            bind(ProgramStartupFactory.class);
+            bind(ProgramStartup.class).toProvider(ProgramStartupFactory.class);
+
+            bind(PinConverter.class).to(PinConverterPi3BPlus.class);
+            bind(SettingsReader.class).to(SettingsReaderEnvironment.class);
+            bind(MovementService.class).to(MovementServiceStatusChanger.class);
+            bind(HardwareService.class).to(HardwareServiceStatus.class);
+            bind(ConfigurationReader.class).to(ConfigurationReaderSettings.class);
+            bind(Delay.class).to(Sleep.class);
+
+            bind(Mapper.class).to(AutoMapper.class).in(Singleton.class);
+            bind(StatusRepository.class).to(StatusRepositoryInMemory.class).in(Singleton.class);
+            bind(StepperMotorFactory.class).to(StepperMotorFactoryUln.class).in(Singleton.class);
+        }
+    }
+
+    public static class ProgramStartupFactory implements Provider<ProgramStartup> {
+        private final ApiInitializer apiInitializer;
+        private final ModelInitializer modelInitializer;
+        private final HardwareInitializer hardwareInitializer;
+
+        @Inject
+        public ProgramStartupFactory(
+                ApiInitializer apiInitializer,
+                ModelInitializer modelInitializer,
+                HardwareInitializer hardwareInitializer){
+            this.apiInitializer = apiInitializer;
+            this.modelInitializer = modelInitializer;
+            this.hardwareInitializer = hardwareInitializer;
+        }
+
+        @Override
+        public ProgramStartup get() {
+            return new ProgramStartup(new StartupService[]{
+                    apiInitializer,
+                    modelInitializer,
+                    hardwareInitializer
+            });
+        }
     }
 }

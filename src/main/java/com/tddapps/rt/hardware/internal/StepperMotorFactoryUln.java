@@ -1,5 +1,6 @@
 package com.tddapps.rt.hardware.internal;
 
+import com.google.inject.Inject;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.Pin;
@@ -25,7 +26,7 @@ public class StepperMotorFactoryUln implements StepperMotorFactory {
     private StepperMotor motorTheta;
     private StepperMotor motorPhi;
 
-
+    @Inject
     public StepperMotorFactoryUln(
             ConfigurationReader configurationReader,
             PinConverter pinConverter,

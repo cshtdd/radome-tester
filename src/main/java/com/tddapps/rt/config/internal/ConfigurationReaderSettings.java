@@ -1,5 +1,6 @@
 package com.tddapps.rt.config.internal;
 
+import com.google.inject.Inject;
 import com.tddapps.rt.config.Configuration;
 import com.tddapps.rt.config.ConfigurationReader;
 import com.tddapps.rt.config.Settings;
@@ -12,6 +13,7 @@ public class ConfigurationReaderSettings implements ConfigurationReader {
     private final ConfigurationReader configurationReader;
     private final SettingsReader settingsReader;
 
+    @Inject
     public ConfigurationReaderSettings(ConfigurationReaderJson configurationReader, SettingsReader settingsReader) {
         this.configurationReader = configurationReader;
         this.settingsReader = settingsReader;
