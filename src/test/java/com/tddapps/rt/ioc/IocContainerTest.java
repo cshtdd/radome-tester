@@ -4,9 +4,7 @@ import com.tddapps.rt.ProgramStartup;
 import com.tddapps.rt.api.ApiInitializer;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.HardwareInitializer;
-import com.tddapps.rt.hardware.HardwareService;
 import com.tddapps.rt.hardware.internal.*;
-import com.tddapps.rt.hardware.internal.pi.PinConverterPi3BPlus;
 import com.tddapps.rt.mapping.Mapper;
 import com.tddapps.rt.mapping.internal.AutoMapper;
 import com.tddapps.rt.model.ModelInitializer;
@@ -22,20 +20,16 @@ import static org.junit.Assert.*;
 public class IocContainerTest {
     @Test
     public void RegistersDependencies(){
-        assertTrue(IocContainer.getInstance().Resolve(PinConverter.class) instanceof PinConverterPi3BPlus);
         assertTrue(IocContainer.getInstance().Resolve(StatusRepository.class) instanceof StatusRepositoryInMemory);
         assertTrue(IocContainer.getInstance().Resolve(Mapper.class) instanceof AutoMapper);
         assertTrue(IocContainer.getInstance().Resolve(MovementService.class) instanceof MovementServiceStatusChanger);
-        assertTrue(IocContainer.getInstance().Resolve(HardwareService.class) instanceof HardwareServiceStatus);
         assertTrue(IocContainer.getInstance().Resolve(Delay.class) instanceof Sleep);
-        assertTrue(IocContainer.getInstance().Resolve(StepperMotorFactory.class) instanceof StepperMotorFactoryUln);
     }
 
     @Test
     public void RegisterSingletons(){
         assertSingleton(StatusRepository.class);
         assertSingleton(Mapper.class);
-        assertSingleton(StepperMotorFactory.class);
     }
 
     @Test

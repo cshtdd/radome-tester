@@ -1,7 +1,6 @@
 package com.tddapps.rt.hardware.internal;
 
 import com.pi4j.io.gpio.RaspiPin;
-import com.tddapps.rt.hardware.internal.pi.PinConverterPi3BPlus;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

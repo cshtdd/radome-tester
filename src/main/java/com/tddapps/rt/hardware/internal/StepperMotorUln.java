@@ -12,7 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import java.util.Arrays;
 
 @Log4j2
-public class StepperMotorUln implements StepperMotor {
+class StepperMotorUln implements StepperMotor {
     private static final int[][] movementSequence = new int[][]{
             new int []{1, 0, 0, 1},
             new int []{1, 0, 0, 0},

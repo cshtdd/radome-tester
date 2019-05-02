@@ -1,13 +1,12 @@
-package com.tddapps.rt.hardware.internal.pi;
+package com.tddapps.rt.hardware.internal;
 
 import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.RaspiPin;
-import com.tddapps.rt.hardware.internal.PinConverter;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PinConverterPi3BPlus implements PinConverter {
+class PinConverterPi3BPlus implements PinConverter {
     private final Map<Integer, Pin> mappings = new HashMap<>(){{
         put(17, RaspiPin.GPIO_00);
         put(18, RaspiPin.GPIO_01);

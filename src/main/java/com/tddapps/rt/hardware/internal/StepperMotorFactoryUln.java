@@ -12,7 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import java.util.Arrays;
 
 @Log4j2
-public class StepperMotorFactoryUln implements StepperMotorFactory {
+class StepperMotorFactoryUln implements StepperMotorFactory {
     private final static String THETA = "Theta";
     private final static String PHI = "Phi";
 

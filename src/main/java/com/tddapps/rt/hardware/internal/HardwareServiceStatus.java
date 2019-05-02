@@ -7,7 +7,7 @@ import com.tddapps.rt.model.StatusRepository;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class HardwareServiceStatus implements HardwareService {
+class HardwareServiceStatus implements HardwareService {
     private final StatusRepository statusRepository;
     private final Delay delay;
 
