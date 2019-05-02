@@ -3,6 +3,7 @@ package com.tddapps.rt.hardware.internal;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.tddapps.rt.hardware.Delay;
+import com.tddapps.rt.hardware.DelaySimulator;
 import com.tddapps.rt.hardware.HardwareService;
 
 public class IocModule extends AbstractModule {

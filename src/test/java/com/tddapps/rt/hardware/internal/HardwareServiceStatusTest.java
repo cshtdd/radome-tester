@@ -1,6 +1,7 @@
 package com.tddapps.rt.hardware.internal;
 
 import com.tddapps.rt.hardware.Delay;
+import com.tddapps.rt.hardware.DelaySimulator;
 import com.tddapps.rt.model.Status;
 import com.tddapps.rt.model.StatusRepository;
 import com.tddapps.rt.test.StatusRepositoryStub;

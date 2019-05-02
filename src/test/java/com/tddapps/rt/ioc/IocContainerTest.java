@@ -23,7 +23,6 @@ public class IocContainerTest {
         assertTrue(IocContainer.getInstance().Resolve(StatusRepository.class) instanceof StatusRepositoryInMemory);
         assertTrue(IocContainer.getInstance().Resolve(Mapper.class) instanceof AutoMapper);
         assertTrue(IocContainer.getInstance().Resolve(MovementService.class) instanceof MovementServiceStatusChanger);
-        assertTrue(IocContainer.getInstance().Resolve(Delay.class) instanceof Sleep);
     }
 
     @Test

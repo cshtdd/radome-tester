@@ -4,7 +4,7 @@ import com.tddapps.rt.hardware.Delay;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class Sleep implements Delay {
+class Sleep implements Delay {
     @Override
     public void Wait(int ms) {
         try {
