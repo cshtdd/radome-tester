@@ -1,4 +1,5 @@
 {
+  "isSimulation": true,
   "thetaBcmPins": [1, 2, 3, 4],
   "phiBcmPins": [5, 6, 7, 8]
 }

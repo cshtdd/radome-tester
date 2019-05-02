@@ -11,6 +11,7 @@ public class ConfigurationReaderJsonTest {
     @Test
     public void ReadsTheConfigurationFromTheConfigJsonResource(){
         var expected = new Configuration();
+        expected.setSimulation(true);
         expected.setThetaBcmPins(new int[]{1, 2, 3, 4});
         expected.setPhiBcmPins(new int[]{5, 6, 7, 8});
 
