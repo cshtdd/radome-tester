@@ -1,6 +1,4 @@
-package com.tddapps.rt.test;
-
-import com.tddapps.rt.config.internal.SettingsReader;
+package com.tddapps.rt.config.internal;
 
 import java.util.HashMap;
 import java.util.Map;

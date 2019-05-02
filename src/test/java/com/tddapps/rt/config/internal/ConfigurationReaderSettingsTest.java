@@ -3,7 +3,6 @@ package com.tddapps.rt.config.internal;
 import com.tddapps.rt.config.Configuration;
 import com.tddapps.rt.config.ConfigurationReader;
 import com.tddapps.rt.config.Settings;
-import com.tddapps.rt.test.SettingsReaderStub;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

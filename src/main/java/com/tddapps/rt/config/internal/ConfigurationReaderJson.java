@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 @Log4j2
-public class ConfigurationReaderJson implements ConfigurationReader {
+class ConfigurationReaderJson implements ConfigurationReader {
     @Override
     public Configuration Read() {
         var result = ReadInternal();

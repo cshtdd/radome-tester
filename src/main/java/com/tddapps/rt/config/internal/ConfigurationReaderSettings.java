@@ -9,7 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import java.util.Arrays;
 
 @Log4j2
-public class ConfigurationReaderSettings implements ConfigurationReader {
+class ConfigurationReaderSettings implements ConfigurationReader {
     private final ConfigurationReader configurationReader;
     private final SettingsReader settingsReader;
 
