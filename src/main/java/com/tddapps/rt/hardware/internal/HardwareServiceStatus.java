@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.HardwareService;
+import com.tddapps.rt.hardware.StepperMotor;
 import com.tddapps.rt.model.Status;
 import com.tddapps.rt.model.StatusRepository;
 import lombok.extern.log4j.Log4j2;
@@ -40,17 +41,18 @@ class HardwareServiceStatus implements HardwareService {
             return;
         }
 
+        StepperMotor motorTheta;
+        StepperMotor motorPhi;
+
         try {
-            //TODO get reference to the motor
-            stepperMotorFactory.CreateTheta();
+            motorTheta = stepperMotorFactory.CreateTheta();
         } catch (InvalidOperationException e) {
             SetHardwareCrashed(e);
             return;
         }
 
         try {
-            //TODO get reference to the motor
-            stepperMotorFactory.CreatePhi();
+            motorPhi = stepperMotorFactory.CreatePhi();
         } catch (InvalidOperationException e) {
             SetHardwareCrashed(e);
             return;
