@@ -58,4 +58,48 @@ public class PositionTest {
             assertFalse(new Position(270, phi).isValid());
         }
     }
+
+    @Test
+    public void AreAlmostEquals(){
+        assertFalse(new Position(180.00, 90.00).almostEquals(
+                new Position(179.98, 90.00)
+        ));
+
+        assertTrue(new Position(180.00, 90.00).almostEquals(
+                new Position(179.99, 90.00)
+        ));
+
+        assertTrue(new Position(180.00, 90.00).almostEquals(
+                new Position(180.00, 90.00)
+        ));
+
+        assertTrue(new Position(180.00, 90.00).almostEquals(
+                new Position(180.01, 90.00)
+        ));
+
+        assertFalse(new Position(180.00, 90.00).almostEquals(
+                new Position(180.02, 90.00)
+        ));
+
+
+        assertFalse(new Position(180.00, 90.00).almostEquals(
+                new Position(180.00, 89.98)
+        ));
+
+        assertTrue(new Position(180.00, 90.00).almostEquals(
+                new Position(180.00, 89.99)
+        ));
+
+        assertTrue(new Position(180.00, 90.00).almostEquals(
+                new Position(180.00, 90.00)
+        ));
+
+        assertTrue(new Position(180.00, 90.00).almostEquals(
+                new Position(180.00, 90.01)
+        ));
+
+        assertFalse(new Position(180.00, 90.00).almostEquals(
+                new Position(180.00, 90.02)
+        ));
+    }
 }

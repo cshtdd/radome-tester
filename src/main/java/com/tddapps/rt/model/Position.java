@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import static com.tddapps.rt.utils.Round.ToPrecision;
+
 @Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Builder(toBuilder = true)
@@ -23,5 +25,14 @@ public class Position {
         var thetaIsValid = thetaDegrees >= MIN_THETA && thetaDegrees <= MAX_THETA;
         var phiIsValid = phiDegrees >= MIN_PHI && phiDegrees <= MAX_PHI;
         return thetaIsValid && phiIsValid;
+    }
+
+    public boolean almostEquals(Position that) {
+        return WithinBounds(this.thetaDegrees - that.thetaDegrees) &&
+                WithinBounds(this.phiDegrees - that.phiDegrees);
+    }
+
+    private boolean WithinBounds(double delta) {
+        return ToPrecision(Math.abs(delta), 2) <= 0.01;
     }
 }
