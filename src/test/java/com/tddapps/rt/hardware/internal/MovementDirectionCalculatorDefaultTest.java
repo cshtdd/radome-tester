@@ -4,13 +4,14 @@ import com.tddapps.rt.hardware.Direction;
 import com.tddapps.rt.hardware.MovementDirectionCalculator;
 import com.tddapps.rt.model.Position;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class MovementDirectionCalculatorDefaultTest {
     private final MovementDirectionCalculator calculator = new MovementDirectionCalculatorDefault();
 
     @Test
-    public void ThetaIsMovedClockwiseWhenPositionsAreEqual(){
+    public void ThetaIsMovedClockwiseWhenPositionsAreEqual() {
         assertEquals(Direction.Clockwise, calculator.CalculateThetaDirection(
                 new Position(270, 90),
                 new Position(270, 90)
@@ -18,7 +19,7 @@ public class MovementDirectionCalculatorDefaultTest {
     }
 
     @Test
-    public void ThetaIsMovedClockwiseWhenPositionsAreAlmostEqual(){
+    public void ThetaIsMovedClockwiseWhenPositionsAreAlmostEqual() {
         assertEquals(Direction.Clockwise, calculator.CalculateThetaDirection(
                 new Position(270, 90),
                 new Position(270.01, 90)
@@ -41,7 +42,7 @@ public class MovementDirectionCalculatorDefaultTest {
     }
 
     @Test
-    public void PhiIsMovedClockwiseWhenPositionsAreEqual(){
+    public void PhiIsMovedClockwiseWhenPositionsAreEqual() {
         assertEquals(Direction.Clockwise, calculator.CalculatePhiDirection(
                 new Position(270, 90),
                 new Position(270, 90)
@@ -49,7 +50,7 @@ public class MovementDirectionCalculatorDefaultTest {
     }
 
     @Test
-    public void PhiIsMovedClockwiseWhenPositionsAreAlmostEqual(){
+    public void PhiIsMovedClockwiseWhenPositionsAreAlmostEqual() {
         assertEquals(Direction.Clockwise, calculator.CalculatePhiDirection(
                 new Position(270, 90),
                 new Position(270, 90.01)
@@ -72,7 +73,7 @@ public class MovementDirectionCalculatorDefaultTest {
     }
 
     @Test
-    public void ThetaIsMovedCounterClockwiseWhenItsValueIncreases(){
+    public void ThetaIsMovedCounterClockwiseWhenItsValueIncreases() {
         assertEquals(Direction.CounterClockwise, calculator.CalculateThetaDirection(
                 new Position(270, 90),
                 new Position(300, 90)
@@ -80,9 +81,25 @@ public class MovementDirectionCalculatorDefaultTest {
     }
 
     @Test
-    public void ThetaIsMovedClockwiseWhenItsValueDecreases(){
+    public void ThetaIsMovedClockwiseWhenItsValueDecreases() {
         assertEquals(Direction.Clockwise, calculator.CalculateThetaDirection(
                 new Position(300, 90),
+                new Position(270, 90)
+        ));
+    }
+
+    @Test
+    public void PhiIsMovedClockwiseWhenItsValueIncreases() {
+        assertEquals(Direction.Clockwise, calculator.CalculatePhiDirection(
+                new Position(270, 90),
+                new Position(270, 120)
+        ));
+    }
+
+    @Test
+    public void PhiIsMovedCounterClockwiseWhenItsValueDecreases() {
+        assertEquals(Direction.CounterClockwise, calculator.CalculatePhiDirection(
+                new Position(270, 120),
                 new Position(270, 90)
         ));
     }

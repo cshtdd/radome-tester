@@ -20,6 +20,14 @@ class MovementDirectionCalculatorDefault implements MovementDirectionCalculator 
 
     @Override
     public Direction CalculatePhiDirection(Position src, Position dest) {
+        if (src.AlmostEquals(dest)){
+            return Direction.Clockwise;
+        }
+
+        if (src.getPhiDegrees() > dest.getPhiDegrees()){
+            return Direction.CounterClockwise;
+        }
+
         return Direction.Clockwise;
     }
 }
