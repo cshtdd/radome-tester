@@ -68,6 +68,6 @@ class MovementServiceStatusChanger implements MovementService {
     }
 
     private boolean CanMoveInternal(Position position) {
-        return position.isValid();
+        return position.IsValid();
     }
 }

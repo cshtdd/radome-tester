@@ -21,18 +21,18 @@ public class Position {
     private final double thetaDegrees;
     private final double phiDegrees;
 
-    public boolean isValid() {
+    public boolean IsValid() {
         var thetaIsValid = thetaDegrees >= MIN_THETA && thetaDegrees <= MAX_THETA;
         var phiIsValid = phiDegrees >= MIN_PHI && phiDegrees <= MAX_PHI;
         return thetaIsValid && phiIsValid;
     }
 
-    public boolean almostEquals(Position that) {
-        return WithinBounds(this.thetaDegrees - that.thetaDegrees) &&
-                WithinBounds(this.phiDegrees - that.phiDegrees);
+    public boolean AlmostEquals(Position that) {
+        return IsWithinBounds(this.thetaDegrees - that.thetaDegrees) &&
+                IsWithinBounds(this.phiDegrees - that.phiDegrees);
     }
 
-    private boolean WithinBounds(double delta) {
+    private boolean IsWithinBounds(double delta) {
         return ToPrecision(Math.abs(delta), 2) <= 0.01;
     }
 }
