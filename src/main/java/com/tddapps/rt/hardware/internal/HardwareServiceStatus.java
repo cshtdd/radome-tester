@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.HardwareService;
+import com.tddapps.rt.model.Status;
 import com.tddapps.rt.model.StatusRepository;
 import lombok.extern.log4j.Log4j2;
 
@@ -25,8 +26,6 @@ class HardwareServiceStatus implements HardwareService {
 
     @Override
     public void run() {
-        //TODO finish this
-
         var initialStatus = statusRepository.CurrentStatus();
 
         if (initialStatus.isHardwareInitialized()){
@@ -38,25 +37,34 @@ class HardwareServiceStatus implements HardwareService {
             //TODO get reference to the motor
             stepperMotorFactory.CreateTheta();
         } catch (InvalidOperationException e) {
-            //TODO log here
-            statusRepository.Save(initialStatus.toBuilder().isHardwareCrash(true).build());
+            SetHardwareCrashed(e);
             return;
         }
 
         try {
             stepperMotorFactory.CreatePhi();
         } catch (InvalidOperationException e) {
-            //TODO log here
-            statusRepository.Save(initialStatus.toBuilder().isHardwareCrash(true).build());
+            SetHardwareCrashed(e);
             return;
         }
 
         statusRepository.Save(initialStatus.toBuilder().isHardwareInitialized(true).build());
+        //TODO log here
 
         while (RunCondition()){
             // TODO send single movement steps
             delay.Wait(1);
         }
+    }
+
+    private void SetHardwareCrashed(Exception e){
+        var status = statusRepository
+                .CurrentStatus()
+                .toBuilder()
+                .isHardwareCrash(true)
+                .build();
+        statusRepository.Save(status);
+        log.error("Hardware Crashed", e);
     }
 
     protected boolean RunCondition(){
