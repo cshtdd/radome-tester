@@ -27,36 +27,40 @@ class HardwareServiceStatus implements HardwareService {
     @Override
     public void run() {
         try {
-            if (statusRepository.CurrentStatus().isHardwareInitialized()) {
-                log.warn("Hardware already initialized");
-                return;
-            }
-
-            try {
-                //TODO get reference to the motor
-                stepperMotorFactory.CreateTheta();
-            } catch (InvalidOperationException e) {
-                SetHardwareCrashed(e);
-                return;
-            }
-
-            try {
-                //TODO get reference to the motor
-                stepperMotorFactory.CreatePhi();
-            } catch (InvalidOperationException e) {
-                SetHardwareCrashed(e);
-                return;
-            }
-
-            SetHardwareInitialized();
-
-            while (RunCondition()) {
-                // TODO send single movement steps
-                delay.Wait(1);
-            }
+            RunInternal();
         }
         catch (Exception e){
             SetHardwareCrashed(e);
+        }
+    }
+
+    private void RunInternal() {
+        if (statusRepository.CurrentStatus().isHardwareInitialized()) {
+            log.warn("Hardware already initialized");
+            return;
+        }
+
+        try {
+            //TODO get reference to the motor
+            stepperMotorFactory.CreateTheta();
+        } catch (InvalidOperationException e) {
+            SetHardwareCrashed(e);
+            return;
+        }
+
+        try {
+            //TODO get reference to the motor
+            stepperMotorFactory.CreatePhi();
+        } catch (InvalidOperationException e) {
+            SetHardwareCrashed(e);
+            return;
+        }
+
+        SetHardwareInitialized();
+
+        while (RunCondition()) {
+            // TODO send single movement steps
+            delay.Wait(1);
         }
     }
 
@@ -80,6 +84,8 @@ class HardwareServiceStatus implements HardwareService {
         log.error("Hardware Crashed", e);
     }
 
+    // this method is here for testing purposes
+    // it cannot be removed
     protected boolean RunCondition(){
         return true;
     }
