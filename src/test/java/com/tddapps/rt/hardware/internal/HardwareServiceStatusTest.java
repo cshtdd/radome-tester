@@ -28,6 +28,7 @@ public class HardwareServiceStatusTest {
     private static class HardwareServiceStatusTestable extends HardwareServiceStatus {
         public int MaxIterations = 1;
         public int CurrentIteration = 0;
+        public RuntimeException seededException;
 
         public HardwareServiceStatusTestable(
                 StatusRepository statusRepository,
@@ -38,6 +39,10 @@ public class HardwareServiceStatusTest {
 
         @Override
         protected boolean RunCondition() {
+            if (seededException!=null){
+                throw seededException;
+            }
+
             return CurrentIteration++ < MaxIterations;
         }
     }
@@ -103,5 +108,15 @@ public class HardwareServiceStatusTest {
         assertTrue(service.CurrentIteration > 0);
         assertTrue(statusRepository.CurrentStatus().isHardwareInitialized());
         assertFalse(statusRepository.CurrentStatus().isHardwareCrash());
+    }
+
+    @Test
+    public void SetsHardwareCrashWhenUnexpectedErrorOccurs(){
+        service.seededException = new RuntimeException();
+
+        service.run();
+
+        assertTrue(statusRepository.CurrentStatus().isHardwareInitialized());
+        assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
     }
 }

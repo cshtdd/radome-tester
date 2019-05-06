@@ -26,34 +26,37 @@ class HardwareServiceStatus implements HardwareService {
 
     @Override
     public void run() {
-        var initialStatus = statusRepository.CurrentStatus();
-
-        if (initialStatus.isHardwareInitialized()){
-            log.warn("Hardware already initialized");
-            return;
-        }
-
         try {
-            //TODO get reference to the motor
-            stepperMotorFactory.CreateTheta();
-        } catch (InvalidOperationException e) {
-            SetHardwareCrashed(e);
-            return;
+            if (statusRepository.CurrentStatus().isHardwareInitialized()) {
+                log.warn("Hardware already initialized");
+                return;
+            }
+
+            try {
+                //TODO get reference to the motor
+                stepperMotorFactory.CreateTheta();
+            } catch (InvalidOperationException e) {
+                SetHardwareCrashed(e);
+                return;
+            }
+
+            try {
+                //TODO get reference to the motor
+                stepperMotorFactory.CreatePhi();
+            } catch (InvalidOperationException e) {
+                SetHardwareCrashed(e);
+                return;
+            }
+
+            SetHardwareInitialized();
+
+            while (RunCondition()) {
+                // TODO send single movement steps
+                delay.Wait(1);
+            }
         }
-
-        try {
-            //TODO get reference to the motor
-            stepperMotorFactory.CreatePhi();
-        } catch (InvalidOperationException e) {
+        catch (Exception e){
             SetHardwareCrashed(e);
-            return;
-        }
-
-        SetHardwareInitialized();
-
-        while (RunCondition()){
-            // TODO send single movement steps
-            delay.Wait(1);
         }
     }
 
