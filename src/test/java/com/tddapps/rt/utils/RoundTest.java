@@ -2,7 +2,7 @@ package com.tddapps.rt.utils;
 
 import org.junit.Test;
 
-import static com.tddapps.rt.utils.Round.PrecisionValue;
+import static com.tddapps.rt.utils.Round.AllowedError;
 import static com.tddapps.rt.utils.Round.ToPrecision;
 
 public class RoundTest {
@@ -43,10 +43,10 @@ public class RoundTest {
 
     @Test
     public void CanCalculateThePrecision(){
-        assertEquals(1, PrecisionValue(0));
-        assertEquals(0.1, PrecisionValue(1));
-        assertEquals(0.01, PrecisionValue(2));
-        assertEquals(0.001, PrecisionValue(3));
-        assertEquals(0.0001, PrecisionValue(4));
+        assertEquals(1, AllowedError(0));
+        assertEquals(0.1, AllowedError(1));
+        assertEquals(0.01, AllowedError(2));
+        assertEquals(0.001, AllowedError(3));
+        assertEquals(0.0001, AllowedError(4));
     }
 }

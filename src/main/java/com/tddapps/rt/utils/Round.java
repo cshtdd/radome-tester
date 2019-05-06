@@ -1,7 +1,7 @@
 package com.tddapps.rt.utils;
 
 public abstract class Round {
-    public static double PrecisionValue(int decimalPlaces){
+    public static double AllowedError(int decimalPlaces){
         return 1.0 / TenthPower(decimalPlaces);
     }
 
