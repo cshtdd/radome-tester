@@ -6,7 +6,7 @@ import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.Pin;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.config.ConfigurationReader;
-import com.tddapps.rt.hardware.DelaySimulator;
+import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.StepperMotor;
 import lombok.extern.log4j.Log4j2;
 
@@ -19,7 +19,7 @@ class StepperMotorFactoryUln implements StepperMotorFactory {
 
     private final ConfigurationReader configurationReader;
     private final PinConverter pinConverter;
-    private final DelaySimulator delay;
+    private final Delay delay;
 
     private final Object criticalSection = new Object();
 
@@ -31,7 +31,7 @@ class StepperMotorFactoryUln implements StepperMotorFactory {
     public StepperMotorFactoryUln(
             ConfigurationReader configurationReader,
             PinConverter pinConverter,
-            DelaySimulator delay
+            Delay delay
     ) {
         this.configurationReader = configurationReader;
         this.pinConverter = pinConverter;
