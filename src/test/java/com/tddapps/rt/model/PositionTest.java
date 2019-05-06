@@ -6,6 +6,13 @@ import static org.junit.Assert.*;
 
 public class PositionTest {
     @Test
+    public void RoundsDegreeValuesToTwoDecimalPlaces(){
+        var expected = new Position(193.45, 45.33);
+
+        assertEquals(expected, new Position(193.446, 45.33333));
+    }
+
+    @Test
     public void CanBeCloned(){
         var p1 = new Position(270, 90);
         var p1Clone = p1.toBuilder().build();

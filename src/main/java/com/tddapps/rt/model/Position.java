@@ -1,14 +1,11 @@
 package com.tddapps.rt.model;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import static com.tddapps.rt.utils.Round.ToPrecision;
 
 @Data
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Builder(toBuilder = true)
 public class Position {
     private static final double MIN_THETA = 180.0;
@@ -20,6 +17,11 @@ public class Position {
 
     private final double thetaDegrees;
     private final double phiDegrees;
+
+    public Position(double thetaDegrees, double phiDegrees){
+        this.thetaDegrees = ToPrecision(thetaDegrees, 2);
+        this.phiDegrees = ToPrecision(phiDegrees, 2);
+    }
 
     public boolean IsValid() {
         var thetaIsValid = thetaDegrees >= MIN_THETA && thetaDegrees <= MAX_THETA;
