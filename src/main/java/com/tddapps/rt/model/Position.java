@@ -1,13 +1,16 @@
 package com.tddapps.rt.model;
 
+import com.tddapps.rt.utils.Round;
 import lombok.Builder;
 import lombok.Data;
 
-import static com.tddapps.rt.utils.Round.ToPrecision;
+import static com.tddapps.rt.utils.Round.AllowedError;
 
 @Data
 @Builder(toBuilder = true)
 public class Position {
+    private static final int DECIMAL_PLACES = 2;
+
     private static final double MIN_THETA = 180.0;
     private static final double MAX_THETA = 360.0;
 
@@ -19,8 +22,8 @@ public class Position {
     private final double phiDegrees;
 
     public Position(double thetaDegrees, double phiDegrees){
-        this.thetaDegrees = ToPrecision(thetaDegrees, 2);
-        this.phiDegrees = ToPrecision(phiDegrees, 2);
+        this.thetaDegrees = Round(thetaDegrees);
+        this.phiDegrees = Round(phiDegrees);
     }
 
     public boolean IsValid() {
@@ -35,6 +38,10 @@ public class Position {
     }
 
     private boolean IsWithinBounds(double delta) {
-        return ToPrecision(Math.abs(delta), 2) <= 0.01;
+        return Round(Math.abs(delta)) <= AllowedError(DECIMAL_PLACES);
+    }
+
+    private static double Round(double value){
+        return Round.ToPrecision(value, DECIMAL_PLACES);
     }
 }
