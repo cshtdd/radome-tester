@@ -29,7 +29,7 @@ class HardwareServiceStatus implements HardwareService {
         var initialStatus = statusRepository.CurrentStatus();
 
         if (initialStatus.isHardwareInitialized()){
-            //TODO log here
+            log.warn("Hardware already initialized");
             return;
         }
 
@@ -42,19 +42,29 @@ class HardwareServiceStatus implements HardwareService {
         }
 
         try {
+            //TODO get reference to the motor
             stepperMotorFactory.CreatePhi();
         } catch (InvalidOperationException e) {
             SetHardwareCrashed(e);
             return;
         }
 
-        statusRepository.Save(initialStatus.toBuilder().isHardwareInitialized(true).build());
-        //TODO log here
+        SetHardwareInitialized();
 
         while (RunCondition()){
             // TODO send single movement steps
             delay.Wait(1);
         }
+    }
+
+    private void SetHardwareInitialized(){
+        var status = statusRepository
+                .CurrentStatus()
+                .toBuilder()
+                .isHardwareInitialized(true)
+                .build();
+        statusRepository.Save(status);
+        log.info("Hardware Initialized");
     }
 
     private void SetHardwareCrashed(Exception e){
