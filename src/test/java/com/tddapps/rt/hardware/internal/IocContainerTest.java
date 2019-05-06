@@ -2,6 +2,7 @@ package com.tddapps.rt.hardware.internal;
 
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.HardwareService;
+import com.tddapps.rt.hardware.MovementDirectionCalculator;
 import com.tddapps.rt.ioc.IocContainer;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -14,6 +15,7 @@ public class IocContainerTest {
         assertTrue(IocContainer.getInstance().Resolve(HardwareService.class) instanceof HardwareServiceStatus);
         assertTrue(IocContainer.getInstance().Resolve(StepperMotorFactory.class) instanceof StepperMotorFactorySelector);
         assertTrue(IocContainer.getInstance().Resolve(Delay.class) instanceof Sleep);
+        assertTrue(IocContainer.getInstance().Resolve(MovementDirectionCalculator.class) instanceof MovementDirectionCalculatorDefault);
     }
 
     @Test
