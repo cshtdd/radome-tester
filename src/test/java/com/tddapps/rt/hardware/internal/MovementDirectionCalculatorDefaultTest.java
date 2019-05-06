@@ -29,4 +29,25 @@ public class MovementDirectionCalculatorDefaultTest {
                 new Position(269.99, 90)
         ));
     }
+
+    @Test
+    public void PhiIsMovedClockwiseWhenPositionsAreEqual(){
+        assertEquals(Direction.Clockwise, calculator.CalculatePhiDirection(
+                new Position(270, 90),
+                new Position(270, 90)
+        ));
+    }
+
+    @Test
+    public void PhiIsMovedClockwiseWhenPositionsAreAlmostEqual(){
+        assertEquals(Direction.Clockwise, calculator.CalculatePhiDirection(
+                new Position(270, 90),
+                new Position(270, 90.01)
+        ));
+
+        assertEquals(Direction.Clockwise, calculator.CalculatePhiDirection(
+                new Position(270, 90),
+                new Position(270, 89.99)
+        ));
+    }
 }

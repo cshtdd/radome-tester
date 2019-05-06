@@ -12,6 +12,6 @@ class MovementDirectionCalculatorDefault implements MovementDirectionCalculator 
 
     @Override
     public Direction CalculatePhiDirection(Position src, Position dest) {
-        return null;
+        return Direction.Clockwise;
     }
 }
