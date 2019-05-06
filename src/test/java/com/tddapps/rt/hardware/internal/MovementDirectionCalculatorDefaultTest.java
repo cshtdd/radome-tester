@@ -70,4 +70,20 @@ public class MovementDirectionCalculatorDefaultTest {
                 new Position(270, 90)
         ));
     }
+
+    @Test
+    public void ThetaIsMovedCounterClockwiseWhenItsValueIncreases(){
+        assertEquals(Direction.CounterClockwise, calculator.CalculateThetaDirection(
+                new Position(270, 90),
+                new Position(300, 90)
+        ));
+    }
+
+    @Test
+    public void ThetaIsMovedClockwiseWhenItsValueDecreases(){
+        assertEquals(Direction.Clockwise, calculator.CalculateThetaDirection(
+                new Position(300, 90),
+                new Position(270, 90)
+        ));
+    }
 }
