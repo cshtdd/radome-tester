@@ -28,6 +28,16 @@ public class MovementDirectionCalculatorDefaultTest {
                 new Position(270, 90),
                 new Position(269.99, 90)
         ));
+
+        assertEquals(Direction.Clockwise, calculator.CalculateThetaDirection(
+                new Position(270.01, 90),
+                new Position(270, 90)
+        ));
+
+        assertEquals(Direction.Clockwise, calculator.CalculateThetaDirection(
+                new Position(269.99, 90),
+                new Position(270, 90)
+        ));
     }
 
     @Test
@@ -48,6 +58,16 @@ public class MovementDirectionCalculatorDefaultTest {
         assertEquals(Direction.Clockwise, calculator.CalculatePhiDirection(
                 new Position(270, 90),
                 new Position(270, 89.99)
+        ));
+
+        assertEquals(Direction.Clockwise, calculator.CalculatePhiDirection(
+                new Position(270, 90.01),
+                new Position(270, 90)
+        ));
+
+        assertEquals(Direction.Clockwise, calculator.CalculatePhiDirection(
+                new Position(270, 89.99),
+                new Position(270, 90)
         ));
     }
 }
