@@ -2,6 +2,7 @@ package com.tddapps.rt.utils;
 
 import org.junit.Test;
 
+import static com.tddapps.rt.utils.Round.PrecisionValue;
 import static com.tddapps.rt.utils.Round.ToPrecision;
 
 public class RoundTest {
@@ -38,5 +39,14 @@ public class RoundTest {
         assertEquals(3.345, ToPrecision(3.3454, 3));
         assertEquals(3.345, ToPrecision(3.3449, 3));
         assertEquals(3.344, ToPrecision(3.34409, 3));
+    }
+
+    @Test
+    public void CanCalculateThePrecision(){
+        assertEquals(1, PrecisionValue(0));
+        assertEquals(0.1, PrecisionValue(1));
+        assertEquals(0.01, PrecisionValue(2));
+        assertEquals(0.001, PrecisionValue(3));
+        assertEquals(0.0001, PrecisionValue(4));
     }
 }
