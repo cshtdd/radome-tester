@@ -30,7 +30,7 @@ class HardwareServiceStatus implements HardwareService {
             RunInternal();
         }
         catch (Exception e){
-            SetHardwareCrashed(e);
+            SetHardwareCrashed("Unexpected Error", e);
         }
     }
 
@@ -74,14 +74,18 @@ class HardwareServiceStatus implements HardwareService {
         log.info("Hardware Initialized");
     }
 
-    private void SetHardwareCrashed(Exception e){
+    private void SetHardwareCrashed(Exception e) {
+        SetHardwareCrashed("Hardware Crashed", e);
+    }
+
+    private void SetHardwareCrashed(String message, Exception e){
         var status = statusRepository
                 .CurrentStatus()
                 .toBuilder()
                 .isHardwareCrash(true)
                 .build();
         statusRepository.Save(status);
-        log.error("Hardware Crashed", e);
+        log.error(message, e);
     }
 
     // this method is here for testing purposes
