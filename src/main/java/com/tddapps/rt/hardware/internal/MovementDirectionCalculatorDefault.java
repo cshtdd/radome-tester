@@ -7,7 +7,7 @@ import com.tddapps.rt.model.Position;
 class MovementDirectionCalculatorDefault implements MovementDirectionCalculator {
     @Override
     public Direction CalculateThetaDirection(Position src, Position dest) {
-        return null;
+        return Direction.Clockwise;
     }
 
     @Override
