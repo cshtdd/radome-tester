@@ -14,17 +14,20 @@ class HardwareServiceStatus implements HardwareService {
     private final Delay delay;
     private final StepperMotorFactory stepperMotorFactory;
     private final CalibrationService calibrationService;
+    private final StepperMovementService stepperMovementService;
 
     @Inject
     public HardwareServiceStatus(
             StatusRepository statusRepository,
             Delay delay,
             StepperMotorFactory stepperMotorFactory,
-            CalibrationService calibrationServiceMock) {
+            CalibrationService calibrationServiceMock,
+            StepperMovementService stepperMovementService) {
         this.statusRepository = statusRepository;
         this.delay = delay;
         this.stepperMotorFactory = stepperMotorFactory;
         calibrationService = calibrationServiceMock;
+        this.stepperMovementService = stepperMovementService;
     }
 
     @Override
@@ -79,7 +82,11 @@ class HardwareServiceStatus implements HardwareService {
         CompleteCalibration();
 
         while (RunCondition()) {
-            // TODO send single movement steps
+            try {
+                stepperMovementService.MoveTheta(motorTheta);
+            } catch (InvalidOperationException e) {
+
+            }
             delay.Wait(1);
         }
     }

@@ -17,12 +17,14 @@ public class HardwareServiceStatusTest {
     private final StatusRepository statusRepository = new StatusRepositoryStub();
     private final StepperMotorFactory stepperMotorFactoryMock = mock(StepperMotorFactory.class);
     private final CalibrationService calibrationServiceMock = mock(CalibrationService.class);
+    private final StepperMovementService stepperMovementServiceMock = mock(StepperMovementService.class);
 
     private final HardwareServiceStatusTestable service = new HardwareServiceStatusTestable(
             statusRepository,
             new DelaySimulator(),
             stepperMotorFactoryMock,
-            calibrationServiceMock
+            calibrationServiceMock,
+            stepperMovementServiceMock
     );
 
     @Before
@@ -39,8 +41,9 @@ public class HardwareServiceStatusTest {
                 StatusRepository statusRepository,
                 Delay delay,
                 StepperMotorFactory stepperMotorFactory,
-                CalibrationService calibrationServiceMock) {
-            super(statusRepository, delay, stepperMotorFactory, calibrationServiceMock);
+                CalibrationService calibrationServiceMock,
+                StepperMovementService stepperMovementServiceMock) {
+            super(statusRepository, delay, stepperMotorFactory, calibrationServiceMock, stepperMovementServiceMock);
         }
 
         @Override
@@ -174,5 +177,16 @@ public class HardwareServiceStatusTest {
         assertTrue(statusRepository.CurrentStatus().isCalibrating());
         assertFalse(statusRepository.CurrentStatus().isHardwareInitialized());
         assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+    }
+
+    @Test
+    public void MovesThetaOnTheLoop() throws InvalidOperationException {
+        service.MaxIterations = 10;
+        var thetaStepper = mock(StepperMotor.class);
+        when(stepperMotorFactoryMock.CreateTheta()).thenReturn(thetaStepper);
+
+        service.run();
+
+        verify(stepperMovementServiceMock, times(10)).MoveTheta(thetaStepper);
     }
 }
