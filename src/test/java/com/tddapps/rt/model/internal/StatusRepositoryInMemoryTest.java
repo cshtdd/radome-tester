@@ -5,7 +5,7 @@ import com.tddapps.rt.model.Status;
 import com.tddapps.rt.model.StatusRepository;
 import org.junit.Test;
 
-import static junit.framework.TestCase.*;
+import static org.junit.Assert.*;
 
 public class StatusRepositoryInMemoryTest {
     private final StatusRepository repository = new StatusRepositoryInMemory();
