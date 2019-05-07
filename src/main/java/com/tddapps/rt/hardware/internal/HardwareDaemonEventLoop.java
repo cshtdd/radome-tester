@@ -40,6 +40,8 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
     }
 
     private void RunInternal() throws InvalidOperationException {
+        log.info("Initialization Start");
+
         if (statusRepository.CurrentStatus().isHardwareInitialized()) {
             log.warn("Hardware already initialized");
             return;
@@ -48,8 +50,8 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
         StepperMotor motorTheta;
         StepperMotor motorPhi;
 
-        motorTheta = stepperMotorFactory.CreateTheta();
-        motorPhi = stepperMotorFactory.CreatePhi();
+        motorTheta = CreateThetaMotor();
+        motorPhi = CreatePhiMotor();
 
         BeginCalibration();
         calibrationService.CalibrateThetaStepper(motorTheta);
@@ -59,12 +61,22 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
         while (RunCondition()) {
             stepperMovementService.MoveTheta(motorTheta);
             stepperMovementService.MovePhi(motorPhi);
-
             delay.Wait(1);
         }
     }
 
+    private StepperMotor CreatePhiMotor() throws InvalidOperationException {
+        log.info("Create Phi Motor");
+        return stepperMotorFactory.CreatePhi();
+    }
+
+    private StepperMotor CreateThetaMotor() throws InvalidOperationException {
+        log.info("Create Theta Motor");
+        return stepperMotorFactory.CreateTheta();
+    }
+
     private void BeginCalibration() {
+        log.info("Start Calibration");
         var status = statusRepository
                 .CurrentStatus()
                 .toBuilder()
@@ -72,10 +84,10 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
                 .isCalibrated(false)
                 .build();
         statusRepository.Save(status);
-        log.info("Starting Calibration");
     }
 
     private void CompleteCalibration() {
+        log.info("Calibration Completed");
         var status = statusRepository
                 .CurrentStatus()
                 .toBuilder()
@@ -84,7 +96,6 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
                 .isHardwareInitialized(true)
                 .build();
         statusRepository.Save(status);
-        log.info("Calibration Completed");
         log.info("Hardware Initialized");
     }
 
