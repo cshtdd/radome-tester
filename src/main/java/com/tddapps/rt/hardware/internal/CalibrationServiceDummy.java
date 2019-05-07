@@ -1,10 +1,12 @@
 package com.tddapps.rt.hardware.internal;
 
+import com.google.inject.Inject;
 import com.tddapps.rt.hardware.StepperMotor;
 
 public class CalibrationServiceDummy implements CalibrationService {
     private final StepperPrecisionRepository stepperPrecisionRepository;
 
+    @Inject
     public CalibrationServiceDummy(StepperPrecisionRepository stepperPrecisionRepository) {
         this.stepperPrecisionRepository = stepperPrecisionRepository;
     }

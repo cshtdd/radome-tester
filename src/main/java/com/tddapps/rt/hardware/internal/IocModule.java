@@ -23,6 +23,7 @@ public class IocModule extends AbstractModule {
         bind(StepperPrecisionRepository.class).to(StepperPrecisionRepositoryInMemory.class).in(Singleton.class);
 
         bind(StepperMotorFactory.class).toProvider(StepperMotorFactoryFactory.class);
+        bind(CalibrationService.class).to(CalibrationServiceDummy.class);
     }
 
     private static class StepperMotorFactoryFactory implements Provider<StepperMotorFactory>{
