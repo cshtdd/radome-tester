@@ -6,18 +6,18 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class HardwareInitializer implements StartupService {
-    private final HardwareService hardwareService;
+    private final HardwareDaemon daemon;
 
     @Inject
-    public HardwareInitializer(HardwareService hardwareService) {
-        this.hardwareService = hardwareService;
+    public HardwareInitializer(HardwareDaemon daemon) {
+        this.daemon = daemon;
     }
 
     @Override
     public void RunAsync(String[] args) {
         log.info("Starting");
 
-        new Thread(hardwareService).start();
+        new Thread(daemon).start();
 
         log.info("Finishing");
     }

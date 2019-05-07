@@ -13,13 +13,13 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class HardwareServiceStatusTest {
+public class HardwareDaemonEventLoopTest {
     private final StatusRepository statusRepository = new StatusRepositoryStub();
     private final StepperMotorFactory stepperMotorFactoryMock = mock(StepperMotorFactory.class);
     private final CalibrationService calibrationServiceMock = mock(CalibrationService.class);
     private final StepperMovementService stepperMovementServiceMock = mock(StepperMovementService.class);
 
-    private final HardwareServiceStatusTestable service = new HardwareServiceStatusTestable(
+    private final HardwareDaemonEventLoopTestable service = new HardwareDaemonEventLoopTestable(
             statusRepository,
             new DelaySimulator(),
             stepperMotorFactoryMock,
@@ -32,12 +32,12 @@ public class HardwareServiceStatusTest {
         statusRepository.Save(Status.builder().build());
     }
 
-    private static class HardwareServiceStatusTestable extends HardwareServiceStatus {
+    private static class HardwareDaemonEventLoopTestable extends HardwareDaemonEventLoop {
         public int MaxIterations = 1;
         public int CurrentIteration = 0;
         public RuntimeException seededException;
 
-        public HardwareServiceStatusTestable(
+        public HardwareDaemonEventLoopTestable(
                 StatusRepository statusRepository,
                 Delay delay,
                 StepperMotorFactory stepperMotorFactory,

@@ -10,9 +10,9 @@ import static org.mockito.Mockito.*;
 
 public class HardwareInitializerTest {
     private boolean runInvoked = false;
-    private final HardwareService hardwareServiceMock = mock(HardwareService.class);
+    private final HardwareDaemon hardwareDaemonMock = mock(HardwareDaemon.class);
 
-    private final StartupService service = new HardwareInitializer(hardwareServiceMock);
+    private final StartupService service = new HardwareInitializer(hardwareDaemonMock);
 
     private boolean RunWasInvoked(){
         return runInvoked;
@@ -23,7 +23,7 @@ public class HardwareInitializerTest {
         doAnswer(i -> {
             runInvoked = true;
             return null;
-        }).when(hardwareServiceMock).run();
+        }).when(hardwareDaemonMock).run();
     }
 
     @Test
