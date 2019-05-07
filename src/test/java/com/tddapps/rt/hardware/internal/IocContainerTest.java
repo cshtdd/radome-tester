@@ -17,6 +17,7 @@ public class IocContainerTest {
         assertTrue(IocContainer.getInstance().Resolve(StepperPrecisionRepository.class) instanceof StepperPrecisionRepositoryInMemory);
         assertTrue(IocContainer.getInstance().Resolve(MovementCalculator.class) instanceof MovementCalculatorDefault);
         assertTrue(IocContainer.getInstance().Resolve(CalibrationService.class) instanceof CalibrationServiceDummy);
+        assertTrue(IocContainer.getInstance().Resolve(StepperMovementService.class) instanceof StepperMovementServiceStatus);
     }
 
     @Test
