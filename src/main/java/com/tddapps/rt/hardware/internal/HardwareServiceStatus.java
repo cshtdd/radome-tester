@@ -14,15 +14,18 @@ class HardwareServiceStatus implements HardwareService {
     private final StatusRepository statusRepository;
     private final Delay delay;
     private final StepperMotorFactory stepperMotorFactory;
+    private final CalibrationService calibrationService;
 
     @Inject
     public HardwareServiceStatus(
             StatusRepository statusRepository,
             Delay delay,
-            StepperMotorFactory stepperMotorFactory) {
+            StepperMotorFactory stepperMotorFactory,
+            CalibrationService calibrationServiceMock) {
         this.statusRepository = statusRepository;
         this.delay = delay;
         this.stepperMotorFactory = stepperMotorFactory;
+        calibrationService = calibrationServiceMock;
     }
 
     @Override
@@ -56,6 +59,12 @@ class HardwareServiceStatus implements HardwareService {
         } catch (InvalidOperationException e) {
             SetHardwareCrashed(e);
             return;
+        }
+
+        try {
+            calibrationService.CalibrateThetaStepper(motorTheta);
+        } catch (InvalidOperationException e) {
+
         }
 
         SetHardwareInitialized();

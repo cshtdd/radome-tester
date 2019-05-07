@@ -3,6 +3,7 @@ package com.tddapps.rt.hardware.internal;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.DelaySimulator;
+import com.tddapps.rt.hardware.StepperMotor;
 import com.tddapps.rt.model.Status;
 import com.tddapps.rt.model.StatusRepository;
 import com.tddapps.rt.test.StatusRepositoryStub;
@@ -15,9 +16,13 @@ import static org.mockito.Mockito.*;
 public class HardwareServiceStatusTest {
     private final StatusRepository statusRepository = new StatusRepositoryStub();
     private final StepperMotorFactory stepperMotorFactoryMock = mock(StepperMotorFactory.class);
+    private final CalibrationService calibrationServiceMock = mock(CalibrationService.class);
 
     private final HardwareServiceStatusTestable service = new HardwareServiceStatusTestable(
-            statusRepository, new DelaySimulator(), stepperMotorFactoryMock
+            statusRepository,
+            new DelaySimulator(),
+            stepperMotorFactoryMock,
+            calibrationServiceMock
     );
 
     @Before
@@ -33,8 +38,9 @@ public class HardwareServiceStatusTest {
         public HardwareServiceStatusTestable(
                 StatusRepository statusRepository,
                 Delay delay,
-                StepperMotorFactory stepperMotorFactory) {
-            super(statusRepository, delay, stepperMotorFactory);
+                StepperMotorFactory stepperMotorFactory,
+                CalibrationService calibrationServiceMock) {
+            super(statusRepository, delay, stepperMotorFactory, calibrationServiceMock);
         }
 
         @Override
@@ -118,5 +124,15 @@ public class HardwareServiceStatusTest {
 
         assertTrue(statusRepository.CurrentStatus().isHardwareInitialized());
         assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+    }
+
+    @Test
+    public void CalibratesTheta() throws InvalidOperationException {
+        var thetaStepper = mock(StepperMotor.class);
+        when(stepperMotorFactoryMock.CreateTheta()).thenReturn(thetaStepper);
+
+        service.run();
+
+        verify(calibrationServiceMock).CalibrateThetaStepper(thetaStepper);
     }
 }
