@@ -1,7 +1,6 @@
 package com.tddapps.rt.hardware.internal;
 
 import com.tddapps.rt.hardware.Direction;
-import com.tddapps.rt.hardware.MovementDirectionCalculator;
 import com.tddapps.rt.model.Position;
 import org.junit.Test;
 

@@ -2,7 +2,6 @@ package com.tddapps.rt.hardware.internal;
 
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.HardwareService;
-import com.tddapps.rt.hardware.MovementDirectionCalculator;
 import com.tddapps.rt.ioc.IocContainer;
 import org.junit.Test;
 import static org.junit.Assert.*;

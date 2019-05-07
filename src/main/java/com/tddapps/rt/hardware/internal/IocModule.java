@@ -8,7 +8,6 @@ import com.tddapps.rt.config.ConfigurationReader;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.DelaySimulator;
 import com.tddapps.rt.hardware.HardwareService;
-import com.tddapps.rt.hardware.MovementDirectionCalculator;
 
 public class IocModule extends AbstractModule {
     @Override
