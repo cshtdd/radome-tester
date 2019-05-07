@@ -50,14 +50,14 @@ class HardwareServiceStatus implements HardwareService {
         try {
             motorTheta = stepperMotorFactory.CreateTheta();
         } catch (InvalidOperationException e) {
-            SetHardwareCrashed(e);
+            SetHardwareCrashed("Theta stepper initialization failed", e);
             return;
         }
 
         try {
             motorPhi = stepperMotorFactory.CreatePhi();
         } catch (InvalidOperationException e) {
-            SetHardwareCrashed(e);
+            SetHardwareCrashed("Phi stepper initialization failed", e);
             return;
         }
 
@@ -66,7 +66,7 @@ class HardwareServiceStatus implements HardwareService {
         try {
             calibrationService.CalibrateThetaStepper(motorTheta);
         } catch (InvalidOperationException e) {
-            SetHardwareCrashed(e);
+            SetHardwareCrashed("Theta calibration failed", e);
             return;
         }
 
@@ -102,10 +102,6 @@ class HardwareServiceStatus implements HardwareService {
         statusRepository.Save(status);
         log.info("Calibration Completed");
         log.info("Hardware Initialized");
-    }
-
-    private void SetHardwareCrashed(Exception e) {
-        SetHardwareCrashed("Hardware Crashed", e);
     }
 
     private void SetHardwareCrashed(String message, Exception e){
