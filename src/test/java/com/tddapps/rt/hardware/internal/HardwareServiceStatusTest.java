@@ -189,4 +189,18 @@ public class HardwareServiceStatusTest {
 
         verify(stepperMovementServiceMock, times(10)).MoveTheta(thetaStepper);
     }
+
+    @Test
+    public void SetsHardwareCrashWhenThetaMovementFails() throws InvalidOperationException {
+        service.MaxIterations = 10;
+
+        doThrow(new InvalidOperationException())
+                .when(stepperMovementServiceMock)
+                .MoveTheta(any());
+
+        service.run();
+
+        assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+        assertEquals(1, service.CurrentIteration);
+    }
 }

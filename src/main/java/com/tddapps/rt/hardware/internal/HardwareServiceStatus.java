@@ -85,8 +85,10 @@ class HardwareServiceStatus implements HardwareService {
             try {
                 stepperMovementService.MoveTheta(motorTheta);
             } catch (InvalidOperationException e) {
-
+                SetHardwareCrashed("Theta movement failed", e);
+                return;
             }
+
             delay.Wait(1);
         }
     }
