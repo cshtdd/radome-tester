@@ -134,6 +134,8 @@ public class HardwareServiceStatusTest {
         service.run();
 
         verify(calibrationServiceMock).CalibrateThetaStepper(thetaStepper);
+        assertFalse(statusRepository.CurrentStatus().isCalibrating());
+        assertTrue(statusRepository.CurrentStatus().isCalibrated());
     }
 
     @Test
@@ -144,6 +146,7 @@ public class HardwareServiceStatusTest {
 
         service.run();
 
+        assertTrue(statusRepository.CurrentStatus().isCalibrating());
         assertFalse(statusRepository.CurrentStatus().isHardwareInitialized());
         assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
     }

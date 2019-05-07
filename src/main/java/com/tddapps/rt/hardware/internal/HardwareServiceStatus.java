@@ -61,6 +61,8 @@ class HardwareServiceStatus implements HardwareService {
             return;
         }
 
+        BeginCalibration();
+
         try {
             calibrationService.CalibrateThetaStepper(motorTheta);
         } catch (InvalidOperationException e) {
@@ -68,7 +70,9 @@ class HardwareServiceStatus implements HardwareService {
             return;
         }
 
-        SetHardwareInitialized();
+        // TODO calibrate phi
+
+        CompleteCalibration();
 
         while (RunCondition()) {
             // TODO send single movement steps
@@ -76,13 +80,27 @@ class HardwareServiceStatus implements HardwareService {
         }
     }
 
-    private void SetHardwareInitialized(){
+    private void BeginCalibration() {
         var status = statusRepository
                 .CurrentStatus()
                 .toBuilder()
+                .isCalibrating(true)
+                .isCalibrated(false)
+                .build();
+        statusRepository.Save(status);
+        log.info("Starting Calibration");
+    }
+
+    private void CompleteCalibration() {
+        var status = statusRepository
+                .CurrentStatus()
+                .toBuilder()
+                .isCalibrating(false)
+                .isCalibrated(true)
                 .isHardwareInitialized(true)
                 .build();
         statusRepository.Save(status);
+        log.info("Calibration Completed");
         log.info("Hardware Initialized");
     }
 
