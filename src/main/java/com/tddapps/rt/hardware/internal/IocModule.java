@@ -20,6 +20,7 @@ public class IocModule extends AbstractModule {
 
         bind(StepperMotorFactorySimulator.class);
         bind(StepperMotorFactoryUln.class).in(Singleton.class);
+        bind(StepperPrecisionRepository.class).to(StepperPrecisionRepositoryInMemory.class).in(Singleton.class);
 
         bind(StepperMotorFactory.class).toProvider(StepperMotorFactoryFactory.class);
     }
