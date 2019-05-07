@@ -34,13 +34,12 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
     public void run() {
         try {
             RunInternal();
-        }
-        catch (Exception e){
-            SetHardwareCrashed("Unexpected Error", e);
+        } catch (Exception e) {
+            SetHardwareCrashed(e);
         }
     }
 
-    private void RunInternal() {
+    private void RunInternal() throws InvalidOperationException {
         if (statusRepository.CurrentStatus().isHardwareInitialized()) {
             log.warn("Hardware already initialized");
             return;
@@ -49,53 +48,17 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
         StepperMotor motorTheta;
         StepperMotor motorPhi;
 
-        try {
-            motorTheta = stepperMotorFactory.CreateTheta();
-        } catch (InvalidOperationException e) {
-            SetHardwareCrashed("Theta stepper initialization failed", e);
-            return;
-        }
-
-        try {
-            motorPhi = stepperMotorFactory.CreatePhi();
-        } catch (InvalidOperationException e) {
-            SetHardwareCrashed("Phi stepper initialization failed", e);
-            return;
-        }
+        motorTheta = stepperMotorFactory.CreateTheta();
+        motorPhi = stepperMotorFactory.CreatePhi();
 
         BeginCalibration();
-
-        try {
-            calibrationService.CalibrateThetaStepper(motorTheta);
-        } catch (InvalidOperationException e) {
-            SetHardwareCrashed("Theta calibration failed", e);
-            return;
-        }
-
-        try {
-            calibrationService.CalibratePhiStepper(motorPhi);
-        } catch (InvalidOperationException e) {
-            SetHardwareCrashed("Phi calibration failed", e);
-            return;
-        }
-
+        calibrationService.CalibrateThetaStepper(motorTheta);
+        calibrationService.CalibratePhiStepper(motorPhi);
         CompleteCalibration();
 
         while (RunCondition()) {
-            try {
-                stepperMovementService.MoveTheta(motorTheta);
-            } catch (InvalidOperationException e) {
-                SetHardwareCrashed("Theta movement failed", e);
-                return;
-            }
-
-            try {
-                stepperMovementService.MovePhi(motorPhi);
-            }
-            catch (InvalidOperationException e){
-                SetHardwareCrashed("Phi movement failed", e);
-                return;
-            }
+            stepperMovementService.MoveTheta(motorTheta);
+            stepperMovementService.MovePhi(motorPhi);
 
             delay.Wait(1);
         }
@@ -125,19 +88,19 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
         log.info("Hardware Initialized");
     }
 
-    private void SetHardwareCrashed(String message, Exception e){
+    private void SetHardwareCrashed(Exception e) {
         var status = statusRepository
                 .CurrentStatus()
                 .toBuilder()
                 .isHardwareCrash(true)
                 .build();
         statusRepository.Save(status);
-        log.error(message, e);
+        log.error(e.getMessage(), e);
     }
 
     // this method is here for testing purposes
     // it cannot be removed
-    protected boolean RunCondition(){
+    protected boolean RunCondition() {
         return true;
     }
 }
