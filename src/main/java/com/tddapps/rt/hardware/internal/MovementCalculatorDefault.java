@@ -10,10 +10,7 @@ class MovementCalculatorDefault implements MovementCalculator {
             return 0;
         }
 
-        double delta = Math.abs(dest.getThetaDegrees() - src.getThetaDegrees());
-        double intervals = delta / precision.getDegreePrecision();
-        double stepCount = precision.getStepCount() * intervals;
-        return (int)stepCount;
+        return CalculateSteps(dest.getThetaDegrees() - src.getThetaDegrees(), precision);
     }
 
     @Override
@@ -32,10 +29,7 @@ class MovementCalculatorDefault implements MovementCalculator {
             return 0;
         }
 
-        double delta = Math.abs(dest.getPhiDegrees() - src.getPhiDegrees());
-        double intervals = delta / precision.getDegreePrecision();
-        double stepCount = precision.getStepCount() * intervals;
-        return (int)stepCount;
+        return CalculateSteps(dest.getPhiDegrees() - src.getPhiDegrees(), precision);
     }
 
     @Override
@@ -46,5 +40,11 @@ class MovementCalculatorDefault implements MovementCalculator {
         }
 
         return Direction.Clockwise;
+    }
+
+    private int CalculateSteps(double delta, Precision precision){
+        double intervals = Math.abs(delta) / precision.getDegreePrecision();
+        double stepCount = precision.getStepCount() * intervals;
+        return (int)stepCount;
     }
 }
