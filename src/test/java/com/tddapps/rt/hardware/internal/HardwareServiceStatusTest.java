@@ -203,4 +203,29 @@ public class HardwareServiceStatusTest {
         assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
         assertEquals(1, service.CurrentIteration);
     }
+
+    @Test
+    public void MovesPhiOnTheLoop() throws InvalidOperationException {
+        service.MaxIterations = 10;
+        var phiStepper = mock(StepperMotor.class);
+        when(stepperMotorFactoryMock.CreatePhi()).thenReturn(phiStepper);
+
+        service.run();
+
+        verify(stepperMovementServiceMock, times(10)).MovePhi(phiStepper);
+    }
+
+    @Test
+    public void SetsHardwareCrashWhenPhiMovementFails() throws InvalidOperationException {
+        service.MaxIterations = 10;
+
+        doThrow(new InvalidOperationException())
+                .when(stepperMovementServiceMock)
+                .MovePhi(any());
+
+        service.run();
+
+        assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+        assertEquals(1, service.CurrentIteration);
+    }
 }

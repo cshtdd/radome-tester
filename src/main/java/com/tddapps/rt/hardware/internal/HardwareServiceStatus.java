@@ -89,6 +89,14 @@ class HardwareServiceStatus implements HardwareService {
                 return;
             }
 
+            try {
+                stepperMovementService.MovePhi(motorPhi);
+            }
+            catch (InvalidOperationException e){
+                SetHardwareCrashed("Phi movement failed", e);
+                return;
+            }
+
             delay.Wait(1);
         }
     }
