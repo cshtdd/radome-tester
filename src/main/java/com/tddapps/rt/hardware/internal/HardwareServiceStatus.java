@@ -64,7 +64,8 @@ class HardwareServiceStatus implements HardwareService {
         try {
             calibrationService.CalibrateThetaStepper(motorTheta);
         } catch (InvalidOperationException e) {
-
+            SetHardwareCrashed(e);
+            return;
         }
 
         SetHardwareInitialized();

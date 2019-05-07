@@ -135,4 +135,16 @@ public class HardwareServiceStatusTest {
 
         verify(calibrationServiceMock).CalibrateThetaStepper(thetaStepper);
     }
+
+    @Test
+    public void SetsHardwareCrashWhenThetaCalibrationFails() throws InvalidOperationException {
+        doThrow(new InvalidOperationException())
+                .when(calibrationServiceMock)
+                .CalibrateThetaStepper(any());
+
+        service.run();
+
+        assertFalse(statusRepository.CurrentStatus().isHardwareInitialized());
+        assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+    }
 }
