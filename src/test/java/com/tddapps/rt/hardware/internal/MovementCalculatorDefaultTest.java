@@ -147,17 +147,40 @@ public class MovementCalculatorDefaultTest {
                 new Precision(5, 0.1)
         ));
 
-        assertEquals(50, calculator.CalculateThetaSteps(
-                new Position(271, 90),
-                new Position(270, 90),
-                new Precision(5, 0.1)
-        ));
-
 
         assertEquals(147, calculator.CalculateThetaSteps(
                 new Position(270, 90),
                 new Position(273.45, 90),
                 new Precision(3, 0.07)
+        ));
+    }
+
+    @Test
+    public void CalculatePhiSteps(){
+        assertEquals(1000, calculator.CalculatePhiSteps(
+                new Position(270, 90),
+                new Position(270, 91),
+                new Precision(10, 0.01)
+        ));
+
+        assertEquals(1000, calculator.CalculatePhiSteps(
+                new Position(270, 91),
+                new Position(270, 90),
+                new Precision(10, 0.01)
+        ));
+
+
+        assertEquals(50, calculator.CalculatePhiSteps(
+                new Position(270, 90),
+                new Position(270, 91),
+                new Precision(5, 0.1)
+        ));
+
+
+        assertEquals(1165, calculator.CalculatePhiSteps(
+                new Position(270, 90),
+                new Position(270, 93.33),
+                new Precision(7, 0.02)
         ));
     }
 }
