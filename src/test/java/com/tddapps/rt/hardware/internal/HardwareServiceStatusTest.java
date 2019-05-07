@@ -150,4 +150,29 @@ public class HardwareServiceStatusTest {
         assertFalse(statusRepository.CurrentStatus().isHardwareInitialized());
         assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
     }
+
+    @Test
+    public void CalibratesPhi() throws InvalidOperationException {
+        var phiStepper = mock(StepperMotor.class);
+        when(stepperMotorFactoryMock.CreatePhi()).thenReturn(phiStepper);
+
+        service.run();
+
+        verify(calibrationServiceMock).CalibratePhiStepper(phiStepper);
+        assertFalse(statusRepository.CurrentStatus().isCalibrating());
+        assertTrue(statusRepository.CurrentStatus().isCalibrated());
+    }
+
+    @Test
+    public void SetsHardwareCrashWhenPhiCalibrationFails() throws InvalidOperationException {
+        doThrow(new InvalidOperationException())
+                .when(calibrationServiceMock)
+                .CalibratePhiStepper(any());
+
+        service.run();
+
+        assertTrue(statusRepository.CurrentStatus().isCalibrating());
+        assertFalse(statusRepository.CurrentStatus().isHardwareInitialized());
+        assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+    }
 }

@@ -70,7 +70,12 @@ class HardwareServiceStatus implements HardwareService {
             return;
         }
 
-        // TODO calibrate phi
+        try {
+            calibrationService.CalibratePhiStepper(motorPhi);
+        } catch (InvalidOperationException e) {
+            SetHardwareCrashed("Phi calibration failed", e);
+            return;
+        }
 
         CompleteCalibration();
 
