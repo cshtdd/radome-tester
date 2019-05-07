@@ -5,7 +5,6 @@ import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.HardwareService;
 import com.tddapps.rt.hardware.StepperMotor;
-import com.tddapps.rt.model.Status;
 import com.tddapps.rt.model.StatusRepository;
 import lombok.extern.log4j.Log4j2;
 
