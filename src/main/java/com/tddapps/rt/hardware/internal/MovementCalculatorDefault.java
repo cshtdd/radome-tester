@@ -6,7 +6,14 @@ import com.tddapps.rt.model.Position;
 class MovementCalculatorDefault implements MovementCalculator {
     @Override
     public int CalculateThetaSteps(Position src, Position dest, Precision precision) {
-        return 0;
+        if (src.AlmostEquals(dest)){
+            return 0;
+        }
+
+        double delta = Math.abs(dest.getThetaDegrees() - src.getThetaDegrees());
+        double intervals = delta / precision.getDegreePrecision();
+        double stepCount = precision.getStepCount() * intervals;
+        return (int)stepCount;
     }
 
     @Override

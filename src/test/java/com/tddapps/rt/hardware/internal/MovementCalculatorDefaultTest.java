@@ -102,4 +102,62 @@ public class MovementCalculatorDefaultTest {
                 new Position(270, 90)
         ));
     }
+
+    @Test
+    public void NoThetaStepsAreNecessaryWhenPositionsAreAlmostEqual(){
+        var precision = new Precision(10, 0.01);
+
+        assertEquals(0, calculator.CalculateThetaSteps(
+                new Position(270, 90),
+                new Position(270, 90),
+                precision
+        ));
+
+        assertEquals(0, calculator.CalculateThetaSteps(
+                new Position(270, 90),
+                new Position(270.01, 90),
+                precision
+        ));
+
+        assertEquals(0, calculator.CalculateThetaSteps(
+                new Position(270.01, 90),
+                new Position(270, 90),
+                precision
+        ));
+    }
+
+    @Test
+    public void CalculateThetaSteps(){
+        assertEquals(1000, calculator.CalculateThetaSteps(
+                new Position(270, 90),
+                new Position(271, 90),
+                new Precision(10, 0.01)
+        ));
+
+        assertEquals(1000, calculator.CalculateThetaSteps(
+                new Position(271, 90),
+                new Position(270, 90),
+                new Precision(10, 0.01)
+        ));
+
+
+        assertEquals(50, calculator.CalculateThetaSteps(
+                new Position(270, 90),
+                new Position(271, 90),
+                new Precision(5, 0.1)
+        ));
+
+        assertEquals(50, calculator.CalculateThetaSteps(
+                new Position(271, 90),
+                new Position(270, 90),
+                new Precision(5, 0.1)
+        ));
+
+
+        assertEquals(147, calculator.CalculateThetaSteps(
+                new Position(270, 90),
+                new Position(273.45, 90),
+                new Precision(3, 0.07)
+        ));
+    }
 }
