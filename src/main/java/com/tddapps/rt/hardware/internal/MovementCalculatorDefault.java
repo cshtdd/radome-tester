@@ -5,6 +5,11 @@ import com.tddapps.rt.model.Position;
 
 class MovementCalculatorDefault implements MovementCalculator {
     @Override
+    public int CalculateThetaSteps(Position src, Position dest, Precision precision) {
+        return 0;
+    }
+
+    @Override
     public Direction CalculateThetaDirection(Position src, Position dest) {
         if (!src.AlmostEquals(dest) &&
                 src.getThetaDegrees() < dest.getThetaDegrees()) {
@@ -12,6 +17,11 @@ class MovementCalculatorDefault implements MovementCalculator {
         }
 
         return Direction.Clockwise;
+    }
+
+    @Override
+    public int CalculatePhiSteps(Position src, Position dest, Precision precision) {
+        return 0;
     }
 
     @Override
