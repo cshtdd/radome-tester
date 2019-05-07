@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class MovementDirectionCalculatorDefaultTest {
-    private final MovementDirectionCalculator calculator = new MovementDirectionCalculatorDefault();
+public class MovementCalculatorDefaultTest {
+    private final MovementCalculator calculator = new MovementCalculatorDefault();
 
     @Test
     public void ThetaMovesClockwiseWhenPositionsAreEqual() {
