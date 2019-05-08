@@ -147,6 +147,8 @@ public class HardwareDaemonEventLoopTest {
 
         assertTrue(statusRepository.CurrentStatus().isHardwareInitialized());
         assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+        verify(thetaStepper).Destroy();
+        verify(phiStepper).Destroy();
     }
 
     @Test
@@ -169,6 +171,8 @@ public class HardwareDaemonEventLoopTest {
         assertTrue(statusRepository.CurrentStatus().isCalibrating());
         assertFalse(statusRepository.CurrentStatus().isHardwareInitialized());
         assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+        verify(thetaStepper).Destroy();
+        verify(phiStepper).Destroy();
     }
 
     @Test
@@ -191,6 +195,8 @@ public class HardwareDaemonEventLoopTest {
         assertTrue(statusRepository.CurrentStatus().isCalibrating());
         assertFalse(statusRepository.CurrentStatus().isHardwareInitialized());
         assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+        verify(thetaStepper).Destroy();
+        verify(phiStepper).Destroy();
     }
 
     @Test
@@ -214,6 +220,8 @@ public class HardwareDaemonEventLoopTest {
 
         assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
         assertEquals(1, service.CurrentIteration);
+        verify(thetaStepper).Destroy();
+        verify(phiStepper).Destroy();
     }
 
     @Test
@@ -237,5 +245,7 @@ public class HardwareDaemonEventLoopTest {
 
         assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
         assertEquals(1, service.CurrentIteration);
+        verify(thetaStepper).Destroy();
+        verify(phiStepper).Destroy();
     }
 }
