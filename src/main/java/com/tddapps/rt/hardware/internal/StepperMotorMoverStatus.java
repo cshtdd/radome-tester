@@ -1,5 +1,6 @@
 package com.tddapps.rt.hardware.internal;
 
+import com.google.inject.Inject;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Direction;
 import com.tddapps.rt.hardware.StepperMotor;
@@ -17,6 +18,7 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
     private final MovementCalculator movementCalculator;
     private final StepperPrecisionRepository stepperPrecisionRepository;
 
+    @Inject
     public StepperMotorMoverStatus(
             StatusRepository statusRepository,
             MovementCalculator movementCalculator,
