@@ -53,6 +53,9 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
         motorTheta = CreateThetaMotor();
         motorPhi = CreatePhiMotor();
 
+        motorTheta.Init();
+        motorPhi.Init();
+
         BeginCalibration();
         calibrationService.CalibrateThetaStepper(motorTheta);
         calibrationService.CalibratePhiStepper(motorPhi);

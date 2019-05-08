@@ -19,6 +19,9 @@ public class HardwareDaemonEventLoopTest {
     private final CalibrationService calibrationServiceMock = mock(CalibrationService.class);
     private final StepperMotorMover stepperMotorMoverMock = mock(StepperMotorMover.class);
 
+    private final StepperMotor thetaStepper = mock(StepperMotor.class);
+    private final StepperMotor phiStepper = mock(StepperMotor.class);
+
     private final HardwareDaemonEventLoopTestable service = new HardwareDaemonEventLoopTestable(
             statusRepository,
             new DelaySimulator(),
@@ -28,8 +31,11 @@ public class HardwareDaemonEventLoopTest {
     );
 
     @Before
-    public void Setup() {
+    public void Setup() throws InvalidOperationException {
         statusRepository.Save(Status.builder().build());
+
+        when(stepperMotorFactoryMock.CreateTheta()).thenReturn(thetaStepper);
+        when(stepperMotorFactoryMock.CreatePhi()).thenReturn(phiStepper);
     }
 
     private static class HardwareDaemonEventLoopTestable extends HardwareDaemonEventLoop {
@@ -82,6 +88,13 @@ public class HardwareDaemonEventLoopTest {
     }
 
     @Test
+    public void InitializesThetaMotor() throws InvalidOperationException {
+        service.run();
+
+        verify(thetaStepper).Init();
+    }
+
+    @Test
     public void ThetaMotorCreationFailureChangesStatus() throws InvalidOperationException {
         when(stepperMotorFactoryMock.CreateTheta()).thenThrow(new InvalidOperationException());
 
@@ -97,6 +110,13 @@ public class HardwareDaemonEventLoopTest {
         service.run();
 
         verify(stepperMotorFactoryMock).CreatePhi();
+    }
+
+    @Test
+    public void InitializesPhiMotor() throws InvalidOperationException {
+        service.run();
+
+        verify(phiStepper).Init();
     }
 
     @Test
@@ -131,9 +151,6 @@ public class HardwareDaemonEventLoopTest {
 
     @Test
     public void CalibratesTheta() throws InvalidOperationException {
-        var thetaStepper = mock(StepperMotor.class);
-        when(stepperMotorFactoryMock.CreateTheta()).thenReturn(thetaStepper);
-
         service.run();
 
         verify(calibrationServiceMock).CalibrateThetaStepper(thetaStepper);
@@ -156,9 +173,6 @@ public class HardwareDaemonEventLoopTest {
 
     @Test
     public void CalibratesPhi() throws InvalidOperationException {
-        var phiStepper = mock(StepperMotor.class);
-        when(stepperMotorFactoryMock.CreatePhi()).thenReturn(phiStepper);
-
         service.run();
 
         verify(calibrationServiceMock).CalibratePhiStepper(phiStepper);
@@ -182,8 +196,6 @@ public class HardwareDaemonEventLoopTest {
     @Test
     public void MovesThetaOnTheLoop() throws InvalidOperationException {
         service.MaxIterations = 10;
-        var thetaStepper = mock(StepperMotor.class);
-        when(stepperMotorFactoryMock.CreateTheta()).thenReturn(thetaStepper);
 
         service.run();
 
@@ -207,8 +219,6 @@ public class HardwareDaemonEventLoopTest {
     @Test
     public void MovesPhiOnTheLoop() throws InvalidOperationException {
         service.MaxIterations = 10;
-        var phiStepper = mock(StepperMotor.class);
-        when(stepperMotorFactoryMock.CreatePhi()).thenReturn(phiStepper);
 
         service.run();
 
