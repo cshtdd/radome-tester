@@ -58,21 +58,7 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
         var steps = movementCalculator.CalculateThetaSteps(src, dest, precision);
 
         for (int i = 0; i < steps; i++) {
-            try {
-                if (direction.equals(Direction.Clockwise)) {
-                    motor.MoveCW();
-                } else {
-                    motor.MoveCCW();
-                }
-            } catch (InvalidOperationException e){
-                //TODO maybe log here
-                var updatedStatus = statusRepository.CurrentStatus()
-                        .toBuilder()
-                        .isMoving(false)
-                        .build();
-                statusRepository.Save(updatedStatus);
-                throw e;
-            }
+            Move(motor, direction);
         }
 
         var updatedPosition = src.toBuilder()
@@ -90,5 +76,22 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
     @Override
     public void MovePhi(StepperMotor motor) throws InvalidOperationException {
 
+    }
+
+    private void Move(StepperMotor motor, Direction direction) throws InvalidOperationException {
+        try {
+            if (direction.equals(Direction.Clockwise)) {
+                motor.MoveCW();
+            } else {
+                motor.MoveCCW();
+            }
+        } catch (InvalidOperationException e){
+            var updatedStatus = statusRepository.CurrentStatus()
+                    .toBuilder()
+                    .isMoving(false)
+                    .build();
+            statusRepository.Save(updatedStatus);
+            throw e;
+        }
     }
 }
