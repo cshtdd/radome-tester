@@ -29,6 +29,13 @@ public class StepperMotorMoverStatusTest {
         return statusRepositoryStub.CurrentStatus();
     }
 
+    private void assertNoMotorMoved() throws InvalidOperationException {
+        verify(stepperMotorThetaMock, times(0)).MoveCW();
+        verify(stepperMotorThetaMock, times(0)).MoveCCW();
+        verify(stepperMotorPhiMock, times(0)).MoveCW();
+        verify(stepperMotorPhiMock, times(0)).MoveCCW();
+    }
+
     @Before
     public void Setup() {
         statusRepositoryStub.Save(Status.builder().build());
@@ -98,10 +105,7 @@ public class StepperMotorMoverStatusTest {
         motorMover.MoveTheta(stepperMotorThetaMock);
         motorMover.MovePhi(stepperMotorPhiMock);
 
-        verify(stepperMotorThetaMock, times(0)).MoveCW();
-        verify(stepperMotorThetaMock, times(0)).MoveCCW();
-        verify(stepperMotorPhiMock, times(0)).MoveCW();
-        verify(stepperMotorPhiMock, times(0)).MoveCCW();
+        assertNoMotorMoved();
         assertFalse(status().isMoving());
     }
 
@@ -114,10 +118,7 @@ public class StepperMotorMoverStatusTest {
         motorMover.MoveTheta(stepperMotorThetaMock);
         motorMover.MovePhi(stepperMotorPhiMock);
 
-        verify(stepperMotorThetaMock, times(0)).MoveCW();
-        verify(stepperMotorThetaMock, times(0)).MoveCCW();
-        verify(stepperMotorPhiMock, times(0)).MoveCW();
-        verify(stepperMotorPhiMock, times(0)).MoveCCW();
+        assertNoMotorMoved();
         assertFalse(status().isMoving());
     }
 
@@ -130,10 +131,7 @@ public class StepperMotorMoverStatusTest {
         motorMover.MoveTheta(stepperMotorThetaMock);
         motorMover.MovePhi(stepperMotorPhiMock);
 
-        verify(stepperMotorThetaMock, times(0)).MoveCW();
-        verify(stepperMotorThetaMock, times(0)).MoveCCW();
-        verify(stepperMotorPhiMock, times(0)).MoveCW();
-        verify(stepperMotorPhiMock, times(0)).MoveCCW();
+        assertNoMotorMoved();
         assertFalse(status().isMoving());
     }
 
@@ -146,10 +144,7 @@ public class StepperMotorMoverStatusTest {
         motorMover.MoveTheta(stepperMotorThetaMock);
         motorMover.MovePhi(stepperMotorPhiMock);
 
-        verify(stepperMotorThetaMock, times(0)).MoveCW();
-        verify(stepperMotorThetaMock, times(0)).MoveCCW();
-        verify(stepperMotorPhiMock, times(0)).MoveCW();
-        verify(stepperMotorPhiMock, times(0)).MoveCCW();
+        assertNoMotorMoved();
         assertFalse(status().isMoving());
     }
 }
