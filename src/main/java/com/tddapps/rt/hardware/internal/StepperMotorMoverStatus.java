@@ -4,6 +4,7 @@ import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Direction;
 import com.tddapps.rt.hardware.StepperMotor;
 import com.tddapps.rt.model.Position;
+import com.tddapps.rt.model.Status;
 import com.tddapps.rt.model.StatusRepository;
 import lombok.extern.log4j.Log4j2;
 
@@ -28,32 +29,20 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
 
     @Override
     public void MoveTheta(StepperMotor motor) throws InvalidOperationException {
-        var currentStatus = statusRepository.CurrentStatus();
+        log.info(String.format("Movement Started; axis=%s;", THETA));
 
-        if (!currentStatus.isMoving()){
+        var currentStatus = statusRepository.CurrentStatus();
+        if (!ShouldMove(currentStatus)) {
             return;
         }
-
-        log.info(String.format("Movement Started; axis=%s;", THETA));
 
         var src = currentStatus.getCurrentPosition();
         var dest = currentStatus.getCommandedPosition();
-
-        if (!src.IsValid()){
-            HaltMovement("Invalid Current Position");
-            return;
-        }
-
-        if (!dest.IsValid()){
-            HaltMovement("Invalid Commanded Position");
-            return;
-        }
-
         var precision = stepperPrecisionRepository.ReadTheta();
         var direction = movementCalculator.CalculateThetaDirection(src, dest);
         var steps = movementCalculator.CalculateThetaSteps(src, dest, precision);
 
-        log.info(String.format("Moving motor; axis=%s; direction=%s; steps=%d;", THETA, direction, steps));
+        LogMotorMovement(THETA, direction, steps);
 
         for (int i = 0; i < steps; i++) {
             Move(motor, direction);
@@ -68,6 +57,24 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
     @Override
     public void MovePhi(StepperMotor motor) throws InvalidOperationException {
 
+    }
+
+    private boolean ShouldMove(Status currentStatus) {
+        if (!currentStatus.isMoving()){
+            return false;
+        }
+
+        if (!currentStatus.getCurrentPosition().IsValid()){
+            HaltMovement("Invalid Current Position");
+            return false;
+        }
+
+        if (!currentStatus.getCommandedPosition().IsValid()){
+            HaltMovement("Invalid Commanded Position");
+            return false;
+        }
+
+        return true;
     }
 
     private void Move(StepperMotor motor, Direction direction) throws InvalidOperationException {
@@ -90,6 +97,10 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
                 .isMoving(false)
                 .build();
         statusRepository.Save(updatedStatus);
+    }
+
+    private void LogMotorMovement(String axis, Direction direction, int steps) {
+        log.info(String.format("Moving motor; axis=%s; direction=%s; steps=%d;", axis, direction, steps));
     }
 
     private void CompleteMovement(String axis, Position updatedPosition, Position commandedPosition) {
