@@ -24,6 +24,12 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
     @Override
     public void MoveTheta(StepperMotor motor) throws InvalidOperationException {
         var currentStatus = statusRepository.CurrentStatus();
+
+        if (!currentStatus.isMoving()){
+            // TODO, maybe log something
+            return;
+        }
+
         var src = currentStatus.getCurrentPosition();
         var dest = currentStatus.getCommandedPosition();
 

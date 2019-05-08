@@ -37,6 +37,7 @@ public class StepperMotorMoverStatusTest {
 
     @Test
     public void MovesThetaCounterClockwise() throws InvalidOperationException {
+        status().setMoving(true);
         status().setCurrentPosition(new Position(200, 90));
         status().setCommandedPosition(new Position(270, 90));
 
@@ -47,6 +48,7 @@ public class StepperMotorMoverStatusTest {
 
     @Test
     public void MovesThetaClockwise() throws InvalidOperationException {
+        status().setMoving(true);
         status().setCurrentPosition(new Position(220, 90));
         status().setCommandedPosition(new Position(200, 90));
 
@@ -57,11 +59,23 @@ public class StepperMotorMoverStatusTest {
 
     @Test
     public void UpdatesStatusCurrentPosition() throws InvalidOperationException {
+        status().setMoving(true);
         status().setCurrentPosition(new Position(200, 50));
         status().setCommandedPosition(new Position(270, 90));
 
         motorMover.MoveTheta(stepperMotorThetaMock);
 
         assertEquals(new Position(270, 50), status().getCurrentPosition());
+    }
+
+    @Test
+    public void DoesNotMoveWhenStatusIsNotMoving() throws InvalidOperationException {
+        status().setCurrentPosition(new Position(200, 50));
+        status().setCommandedPosition(new Position(270, 90));
+
+        motorMover.MoveTheta(stepperMotorThetaMock);
+
+        verify(stepperMotorThetaMock, times(0)).MoveCW();
+        verify(stepperMotorThetaMock, times(0)).MoveCCW();
     }
 }
