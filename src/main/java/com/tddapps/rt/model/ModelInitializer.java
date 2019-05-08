@@ -21,10 +21,8 @@ public class ModelInitializer implements StartupService {
     }
 
     private Status buildDefaultStatus() {
-        var defaultPosition = new Position(270, 90);
+        var defaultPosition = new Position(0, 0);
         return Status.builder()
-                .isMoving(false)
-                .isCalibrated(true) // TODO: change this default to false when the real hardware is connected
                 .currentPosition(defaultPosition)
                 .commandedPosition(defaultPosition)
                 .build();

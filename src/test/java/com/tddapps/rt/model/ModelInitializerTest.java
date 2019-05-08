@@ -14,11 +14,11 @@ public class ModelInitializerTest {
     public void InitializesAStatus(){
         var defaultStatus = Status.builder()
                 .isMoving(false)
-                .isCalibrated(true)
+                .isCalibrated(false)
                 .isHardwareInitialized(false)
                 .isHardwareCrash(false)
-                .currentPosition(new Position(270, 90))
-                .commandedPosition(new Position(270, 90))
+                .currentPosition(new Position(0, 0))
+                .commandedPosition(new Position(0, 0))
                 .build();
 
         service.RunAsync(new String[0]);
