@@ -54,7 +54,27 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
 
     @Override
     public void MovePhi(StepperMotor motor) throws InvalidOperationException {
+        var currentStatus = statusRepository.CurrentStatus();
+        if (!ShouldMove(PHI, currentStatus)) {
+            return;
+        }
 
+        var src = currentStatus.getCurrentPosition();
+        var dest = currentStatus.getCommandedPosition();
+        var precision = stepperPrecisionRepository.ReadPhi();
+        var direction = movementCalculator.CalculatePhiDirection(src, dest);
+        var steps = movementCalculator.CalculatePhiSteps(src, dest, precision);
+
+        LogMotorMovement(PHI, direction, steps);
+
+        for (int i = 0; i < steps; i++) {
+            Move(motor, direction);
+        }
+
+        var updatedPosition = src.toBuilder()
+                .phiDegrees(dest.getPhiDegrees())
+                .build();
+        CompleteMovement(PHI, updatedPosition, dest);
     }
 
     private boolean ShouldMove(String axis, Status currentStatus) {
