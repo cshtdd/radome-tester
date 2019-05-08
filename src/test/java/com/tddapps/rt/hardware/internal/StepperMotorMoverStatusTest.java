@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 
 public class StepperMotorMoverStatusTest {
@@ -80,6 +81,7 @@ public class StepperMotorMoverStatusTest {
         verify(stepperMotorThetaMock, times(0)).MoveCCW();
         verify(stepperMotorPhiMock, times(0)).MoveCW();
         verify(stepperMotorPhiMock, times(0)).MoveCCW();
+        assertFalse(status().isMoving());
     }
 
     @Test
@@ -95,6 +97,7 @@ public class StepperMotorMoverStatusTest {
         verify(stepperMotorThetaMock, times(0)).MoveCCW();
         verify(stepperMotorPhiMock, times(0)).MoveCW();
         verify(stepperMotorPhiMock, times(0)).MoveCCW();
+        assertFalse(status().isMoving());
     }
 
     @Test
@@ -110,5 +113,6 @@ public class StepperMotorMoverStatusTest {
         verify(stepperMotorThetaMock, times(0)).MoveCCW();
         verify(stepperMotorPhiMock, times(0)).MoveCW();
         verify(stepperMotorPhiMock, times(0)).MoveCCW();
+        assertFalse(status().isMoving());
     }
 }

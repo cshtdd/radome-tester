@@ -35,11 +35,21 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
 
         if (!src.IsValid()){
             // TODO, log something
+            var updatedStatus = statusRepository.CurrentStatus()
+                    .toBuilder()
+                    .isMoving(false)
+                    .build();
+            statusRepository.Save(updatedStatus);
             return;
         }
 
         if (!dest.IsValid()){
             // TODO, log something
+            var updatedStatus = statusRepository.CurrentStatus()
+                    .toBuilder()
+                    .isMoving(false)
+                    .build();
+            statusRepository.Save(updatedStatus);
             return;
         }
 
