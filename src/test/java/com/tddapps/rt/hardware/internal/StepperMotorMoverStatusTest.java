@@ -136,4 +136,20 @@ public class StepperMotorMoverStatusTest {
         verify(stepperMotorPhiMock, times(0)).MoveCCW();
         assertFalse(status().isMoving());
     }
+
+    @Test
+    public void DoesNotMoveWhenPositionsAreAlmostEqual() throws InvalidOperationException {
+        status().setMoving(true);
+        status().setCurrentPosition(new Position(270, 50));
+        status().setCommandedPosition(new Position(270.01, 50.01));
+
+        motorMover.MoveTheta(stepperMotorThetaMock);
+        motorMover.MovePhi(stepperMotorPhiMock);
+
+        verify(stepperMotorThetaMock, times(0)).MoveCW();
+        verify(stepperMotorThetaMock, times(0)).MoveCCW();
+        verify(stepperMotorPhiMock, times(0)).MoveCW();
+        verify(stepperMotorPhiMock, times(0)).MoveCCW();
+        assertFalse(status().isMoving());
+    }
 }
