@@ -15,11 +15,11 @@ public class MappingTest {
     @Test
     public void StatusToStatusControllerStatusResponse(){
         var expected = new StatusController.StatusResponse();
-        expected.setCalibrating(true);
-        expected.setCalibrated(true);
-        expected.setHardwareInitialized(true);
-        expected.setHardwareCrash(true);
-        expected.setMoving(true);
+        expected.setIsCalibrating(true);
+        expected.setIsCalibrated(true);
+        expected.setIsHardwareInitialized(true);
+        expected.setIsHardwareCrash(true);
+        expected.setIsMoving(true);
         expected.setTheta(102.25);
         expected.setPhi(103.23);
         expected.setCommandedTheta(100.21);

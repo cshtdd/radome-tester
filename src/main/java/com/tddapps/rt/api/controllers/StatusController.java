@@ -1,6 +1,5 @@
 package com.tddapps.rt.api.controllers;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tddapps.rt.ioc.IocContainer;
 import com.tddapps.rt.mapping.Mapper;
 import com.tddapps.rt.model.StatusRepository;
@@ -14,20 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class StatusController {
     @Data
     public static class StatusResponse {
-        @JsonProperty("isCalibrating")
-        private boolean isCalibrating;
-
-        @JsonProperty("isCalibrated")
-        private boolean isCalibrated;
-
-        @JsonProperty("isHardwareInitialized")
-        private boolean isHardwareInitialized;
-
-        @JsonProperty("isHardwareCrash")
-        private boolean isHardwareCrash;
-
-        @JsonProperty("isMoving")
-        private boolean isMoving;
+        private Boolean isCalibrating;
+        private Boolean isCalibrated;
+        private Boolean isHardwareInitialized;
+        private Boolean isHardwareCrash;
+        private Boolean isMoving;
 
         private double theta;
         private double phi;

@@ -17,8 +17,7 @@ import static com.tddapps.rt.mapping.internal.IocContainerAutoMappingHelper.Setu
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(StatusController.class)
@@ -68,6 +67,11 @@ public class StatusControllerTest {
 
         web.perform(get("/api/status"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expected));
+                .andExpect(content().json(expected))
+                .andExpect(jsonPath("$.calibrating").doesNotExist())
+                .andExpect(jsonPath("$.calibrated").doesNotExist())
+                .andExpect(jsonPath("$.hardwareInitialized").doesNotExist())
+                .andExpect(jsonPath("$.hardwareCrash").doesNotExist())
+                .andExpect(jsonPath("$.moving").doesNotExist());
     }
 }

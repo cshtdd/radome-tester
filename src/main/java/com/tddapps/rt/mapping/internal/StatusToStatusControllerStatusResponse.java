@@ -10,6 +10,12 @@ class StatusToStatusControllerStatusResponse extends CustomMapper<Status, Status
     public void mapAtoB(Status status, StatusController.StatusResponse statusResponse, MappingContext context) {
         super.mapAtoB(status, statusResponse, context);
 
+        statusResponse.setIsCalibrating(status.isCalibrating());
+        statusResponse.setIsCalibrated(status.isCalibrated());
+        statusResponse.setIsHardwareInitialized(status.isHardwareInitialized());
+        statusResponse.setIsHardwareCrash(status.isHardwareCrash());
+        statusResponse.setIsMoving(status.isMoving());
+
         var currentPosition = status.getCurrentPosition();
         if (currentPosition != null){
             statusResponse.setTheta(currentPosition.getThetaDegrees());
