@@ -1,7 +1,6 @@
 package com.tddapps.rt.hardware.internal;
 
 import com.tddapps.rt.InvalidOperationException;
-import com.tddapps.rt.hardware.Direction;
 import com.tddapps.rt.hardware.StepperMotor;
 import com.tddapps.rt.model.Position;
 import com.tddapps.rt.model.Status;
@@ -9,81 +8,60 @@ import com.tddapps.rt.test.StatusRepositoryStub;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 public class StepperMotorMoverStatusTest {
+    private final Precision seededPrecision = new Precision(1, 1);
+
     private final StatusRepositoryStub statusRepositoryStub = new StatusRepositoryStub();
-    private final MovementCalculator movementCalculatorMock = mock(MovementCalculator.class);
+    private final MovementCalculator movementCalculator = new MovementCalculatorDefault();
     private final StepperPrecisionRepository stepperPrecisionRepositoryMock = mock(StepperPrecisionRepository.class);
     private final StepperMotorMover motorMover = new StepperMotorMoverStatus(
             statusRepositoryStub,
-            movementCalculatorMock,
+            movementCalculator,
             stepperPrecisionRepositoryMock
     );
     private final StepperMotor stepperMotorThetaMock = mock(StepperMotor.class);
     private final StepperMotor stepperMotorPhiMock = mock(StepperMotor.class);
 
+    private Status status() {
+        return statusRepositoryStub.CurrentStatus();
+    }
+
     @Before
     public void Setup() {
         statusRepositoryStub.Save(Status.builder().build());
+        when(stepperPrecisionRepositoryMock.ReadTheta()).thenReturn(seededPrecision);
     }
 
     @Test
     public void MovesThetaCounterClockwise() throws InvalidOperationException {
-        var src = new Position(200, 90);
-        var dest = new Position(270, 90);
-        var precision = new Precision(25, 0.1);
-
-        when(stepperPrecisionRepositoryMock.ReadTheta()).thenReturn(precision);
-        statusRepositoryStub.CurrentStatus().setCurrentPosition(src);
-        statusRepositoryStub.CurrentStatus().setCommandedPosition(dest);
-        when(movementCalculatorMock.CalculateThetaDirection(src, dest)).thenReturn(Direction.CounterClockwise);
-        when(movementCalculatorMock.CalculateThetaSteps(src, dest, precision)).thenReturn(65);
-
+        status().setCurrentPosition(new Position(200, 90));
+        status().setCommandedPosition(new Position(270, 90));
 
         motorMover.MoveTheta(stepperMotorThetaMock);
 
-
-        verify(stepperMotorThetaMock, times(65)).MoveCCW();
+        verify(stepperMotorThetaMock, times(70)).MoveCCW();
     }
 
     @Test
     public void MovesThetaClockwise() throws InvalidOperationException {
-        var src = new Position(200, 90);
-        var dest = new Position(270, 90);
-        var precision = new Precision(25, 0.1);
-
-        when(stepperPrecisionRepositoryMock.ReadTheta()).thenReturn(precision);
-        statusRepositoryStub.CurrentStatus().setCurrentPosition(src);
-        statusRepositoryStub.CurrentStatus().setCommandedPosition(dest);
-        when(movementCalculatorMock.CalculateThetaDirection(src, dest)).thenReturn(Direction.Clockwise);
-        when(movementCalculatorMock.CalculateThetaSteps(src, dest, precision)).thenReturn(50);
-
+        status().setCurrentPosition(new Position(220, 90));
+        status().setCommandedPosition(new Position(200, 90));
 
         motorMover.MoveTheta(stepperMotorThetaMock);
 
-
-        verify(stepperMotorThetaMock, times(50)).MoveCW();
+        verify(stepperMotorThetaMock, times(20)).MoveCW();
     }
 
     @Test
     public void UpdatesStatusCurrentPosition() throws InvalidOperationException {
-        var expectedPosition = new Position(270, 50);
-        var src = new Position(200, 50);
-        var dest = new Position(270, 90);
-        var precision = new Precision(25, 0.1);
-
-        when(stepperPrecisionRepositoryMock.ReadTheta()).thenReturn(precision);
-        statusRepositoryStub.CurrentStatus().setCurrentPosition(src);
-        statusRepositoryStub.CurrentStatus().setCommandedPosition(dest);
-        when(movementCalculatorMock.CalculateThetaDirection(src, dest)).thenReturn(Direction.CounterClockwise);
-        when(movementCalculatorMock.CalculateThetaSteps(src, dest, precision)).thenReturn(65);
-
+        status().setCurrentPosition(new Position(200, 50));
+        status().setCommandedPosition(new Position(270, 90));
 
         motorMover.MoveTheta(stepperMotorThetaMock);
 
-
-        assertEquals(expectedPosition, statusRepositoryStub.CurrentStatus().getCurrentPosition());
+        assertEquals(new Position(270, 50), status().getCurrentPosition());
     }
 }
