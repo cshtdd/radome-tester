@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 
 public class StepperMotorMoverStatusTest {
     private final StatusRepositoryStub statusRepositoryStub = new StatusRepositoryStub();
@@ -64,5 +65,25 @@ public class StepperMotorMoverStatusTest {
 
 
         verify(stepperMotorThetaMock, times(50)).MoveCW();
+    }
+
+    @Test
+    public void UpdatesStatusCurrentPosition() throws InvalidOperationException {
+        var expectedPosition = new Position(270, 50);
+        var src = new Position(200, 50);
+        var dest = new Position(270, 90);
+        var precision = new Precision(25, 0.1);
+
+        when(stepperPrecisionRepositoryMock.ReadTheta()).thenReturn(precision);
+        statusRepositoryStub.CurrentStatus().setCurrentPosition(src);
+        statusRepositoryStub.CurrentStatus().setCommandedPosition(dest);
+        when(movementCalculatorMock.CalculateThetaDirection(src, dest)).thenReturn(Direction.CounterClockwise);
+        when(movementCalculatorMock.CalculateThetaSteps(src, dest, precision)).thenReturn(65);
+
+
+        motorMover.MoveTheta(stepperMotorThetaMock);
+
+
+        assertEquals(expectedPosition, statusRepositoryStub.CurrentStatus().getCurrentPosition());
     }
 }

@@ -3,6 +3,7 @@ package com.tddapps.rt.hardware.internal;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Direction;
 import com.tddapps.rt.hardware.StepperMotor;
+import com.tddapps.rt.model.Position;
 import com.tddapps.rt.model.StatusRepository;
 
 public class StepperMotorMoverStatus implements StepperMotorMover {
@@ -37,6 +38,15 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
                 motor.MoveCCW();
             }
         }
+
+        var updatedPosition = src.toBuilder()
+                .thetaDegrees(dest.getThetaDegrees())
+                .build();
+        var updatedStatus = statusRepository.CurrentStatus()
+                .toBuilder()
+                .currentPosition(updatedPosition)
+                .build();
+        statusRepository.Save(updatedStatus);
     }
 
     @Override
