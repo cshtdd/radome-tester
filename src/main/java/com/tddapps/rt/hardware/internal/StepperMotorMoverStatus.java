@@ -33,6 +33,16 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
         var src = currentStatus.getCurrentPosition();
         var dest = currentStatus.getCommandedPosition();
 
+        if (!src.IsValid()){
+            // TODO, log something
+            return;
+        }
+
+        if (!dest.IsValid()){
+            // TODO, log something
+            return;
+        }
+
         var precision = stepperPrecisionRepository.ReadTheta();
         var direction = movementCalculator.CalculateThetaDirection(src, dest);
         var steps = movementCalculator.CalculateThetaSteps(src, dest, precision);

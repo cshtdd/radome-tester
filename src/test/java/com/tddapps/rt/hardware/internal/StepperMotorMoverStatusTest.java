@@ -74,8 +74,41 @@ public class StepperMotorMoverStatusTest {
         status().setCommandedPosition(new Position(270, 90));
 
         motorMover.MoveTheta(stepperMotorThetaMock);
+        motorMover.MovePhi(stepperMotorPhiMock);
 
         verify(stepperMotorThetaMock, times(0)).MoveCW();
         verify(stepperMotorThetaMock, times(0)).MoveCCW();
+        verify(stepperMotorPhiMock, times(0)).MoveCW();
+        verify(stepperMotorPhiMock, times(0)).MoveCCW();
+    }
+
+    @Test
+    public void DoesNotMoveWhenCurrentPositionIsInvalid() throws InvalidOperationException {
+        status().setMoving(true);
+        status().setCurrentPosition(new Position(720, 50));
+        status().setCommandedPosition(new Position(270, 90));
+
+        motorMover.MoveTheta(stepperMotorThetaMock);
+        motorMover.MovePhi(stepperMotorPhiMock);
+
+        verify(stepperMotorThetaMock, times(0)).MoveCW();
+        verify(stepperMotorThetaMock, times(0)).MoveCCW();
+        verify(stepperMotorPhiMock, times(0)).MoveCW();
+        verify(stepperMotorPhiMock, times(0)).MoveCCW();
+    }
+
+    @Test
+    public void DoesNotMoveWhenCommandedPositionIsInvalid() throws InvalidOperationException {
+        status().setMoving(true);
+        status().setCurrentPosition(new Position(270, 50));
+        status().setCommandedPosition(new Position(-4, 90));
+
+        motorMover.MoveTheta(stepperMotorThetaMock);
+        motorMover.MovePhi(stepperMotorPhiMock);
+
+        verify(stepperMotorThetaMock, times(0)).MoveCW();
+        verify(stepperMotorThetaMock, times(0)).MoveCCW();
+        verify(stepperMotorPhiMock, times(0)).MoveCW();
+        verify(stepperMotorPhiMock, times(0)).MoveCCW();
     }
 }
