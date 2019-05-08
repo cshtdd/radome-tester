@@ -29,7 +29,7 @@ public class StepperMotorMoverStatusTest {
     }
 
     @Test
-    public void MovesTheta() throws InvalidOperationException {
+    public void MovesThetaCounterClockwise() throws InvalidOperationException {
         var src = new Position(200, 90);
         var dest = new Position(270, 90);
         var precision = new Precision(25, 0.1);
@@ -45,5 +45,24 @@ public class StepperMotorMoverStatusTest {
 
 
         verify(stepperMotorThetaMock, times(65)).MoveCCW();
+    }
+
+    @Test
+    public void MovesThetaClockwise() throws InvalidOperationException {
+        var src = new Position(200, 90);
+        var dest = new Position(270, 90);
+        var precision = new Precision(25, 0.1);
+
+        when(stepperPrecisionRepositoryMock.ReadTheta()).thenReturn(precision);
+        statusRepositoryStub.CurrentStatus().setCurrentPosition(src);
+        statusRepositoryStub.CurrentStatus().setCommandedPosition(dest);
+        when(movementCalculatorMock.CalculateThetaDirection(src, dest)).thenReturn(Direction.Clockwise);
+        when(movementCalculatorMock.CalculateThetaSteps(src, dest, precision)).thenReturn(50);
+
+
+        motorMover.MoveTheta(stepperMotorThetaMock);
+
+
+        verify(stepperMotorThetaMock, times(50)).MoveCW();
     }
 }

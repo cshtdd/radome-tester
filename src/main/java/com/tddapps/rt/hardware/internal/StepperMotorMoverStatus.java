@@ -1,6 +1,7 @@
 package com.tddapps.rt.hardware.internal;
 
 import com.tddapps.rt.InvalidOperationException;
+import com.tddapps.rt.hardware.Direction;
 import com.tddapps.rt.hardware.StepperMotor;
 import com.tddapps.rt.model.StatusRepository;
 
@@ -21,8 +22,20 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
 
     @Override
     public void MoveTheta(StepperMotor motor) throws InvalidOperationException {
-        for (int i = 0; i < 65; i++) {
-            motor.MoveCCW();
+        var currentStatus = statusRepository.CurrentStatus();
+        var src = currentStatus.getCurrentPosition();
+        var dest = currentStatus.getCommandedPosition();
+
+        var precision = stepperPrecisionRepository.ReadTheta();
+        var direction = movementCalculator.CalculateThetaDirection(src, dest);
+        var steps = movementCalculator.CalculateThetaSteps(src, dest, precision);
+
+        for (int i = 0; i < steps; i++) {
+            if (direction.equals(Direction.Clockwise)){
+                motor.MoveCW();
+            } else {
+                motor.MoveCCW();
+            }
         }
     }
 
