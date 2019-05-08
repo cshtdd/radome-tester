@@ -8,8 +8,7 @@ import com.tddapps.rt.test.StatusRepositoryStub;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class StepperMotorMoverStatusTest {
@@ -59,7 +58,7 @@ public class StepperMotorMoverStatusTest {
     }
 
     @Test
-    public void UpdatesStatusCurrentPosition() throws InvalidOperationException {
+    public void MoveThetaUpdatesCurrentPosition() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(200, 50));
         status().setCommandedPosition(new Position(270, 90));
@@ -67,6 +66,28 @@ public class StepperMotorMoverStatusTest {
         motorMover.MoveTheta(stepperMotorThetaMock);
 
         assertEquals(new Position(270, 50), status().getCurrentPosition());
+    }
+
+    @Test
+    public void MoveThetaSetsIsMovingToFalseWhenPositionsMatchAfterMovement() throws InvalidOperationException {
+        status().setMoving(true);
+        status().setCurrentPosition(new Position(200, 90));
+        status().setCommandedPosition(new Position(270, 90));
+
+        motorMover.MoveTheta(stepperMotorThetaMock);
+
+        assertFalse(status().isMoving());
+    }
+
+    @Test
+    public void MoveThetaKeepsIsMovingTrueWhenPositionsDoNotMatchAfterMovement() throws InvalidOperationException {
+        status().setMoving(true);
+        status().setCurrentPosition(new Position(200, 50));
+        status().setCommandedPosition(new Position(270, 90));
+
+        motorMover.MoveTheta(stepperMotorThetaMock);
+
+        assertTrue(status().isMoving());
     }
 
     @Test

@@ -68,9 +68,11 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
         var updatedPosition = src.toBuilder()
                 .thetaDegrees(dest.getThetaDegrees())
                 .build();
+        var isMoving = !updatedPosition.AlmostEquals(dest);
         var updatedStatus = statusRepository.CurrentStatus()
                 .toBuilder()
                 .currentPosition(updatedPosition)
+                .isMoving(isMoving)
                 .build();
         statusRepository.Save(updatedStatus);
     }
