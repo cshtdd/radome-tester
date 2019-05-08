@@ -17,14 +17,14 @@ public class HardwareDaemonEventLoopTest {
     private final StatusRepository statusRepository = new StatusRepositoryStub();
     private final StepperMotorFactory stepperMotorFactoryMock = mock(StepperMotorFactory.class);
     private final CalibrationService calibrationServiceMock = mock(CalibrationService.class);
-    private final StepperMovementService stepperMovementServiceMock = mock(StepperMovementService.class);
+    private final StepperMotorMover stepperMotorMoverMock = mock(StepperMotorMover.class);
 
     private final HardwareDaemonEventLoopTestable service = new HardwareDaemonEventLoopTestable(
             statusRepository,
             new DelaySimulator(),
             stepperMotorFactoryMock,
             calibrationServiceMock,
-            stepperMovementServiceMock
+            stepperMotorMoverMock
     );
 
     @Before
@@ -42,8 +42,8 @@ public class HardwareDaemonEventLoopTest {
                 Delay delay,
                 StepperMotorFactory stepperMotorFactory,
                 CalibrationService calibrationServiceMock,
-                StepperMovementService stepperMovementServiceMock) {
-            super(statusRepository, delay, stepperMotorFactory, calibrationServiceMock, stepperMovementServiceMock);
+                StepperMotorMover stepperMotorMoverMock) {
+            super(statusRepository, delay, stepperMotorFactory, calibrationServiceMock, stepperMotorMoverMock);
         }
 
         @Override
@@ -187,7 +187,7 @@ public class HardwareDaemonEventLoopTest {
 
         service.run();
 
-        verify(stepperMovementServiceMock, times(10)).MoveTheta(thetaStepper);
+        verify(stepperMotorMoverMock, times(10)).MoveTheta(thetaStepper);
     }
 
     @Test
@@ -195,7 +195,7 @@ public class HardwareDaemonEventLoopTest {
         service.MaxIterations = 10;
 
         doThrow(new InvalidOperationException())
-                .when(stepperMovementServiceMock)
+                .when(stepperMotorMoverMock)
                 .MoveTheta(any());
 
         service.run();
@@ -212,7 +212,7 @@ public class HardwareDaemonEventLoopTest {
 
         service.run();
 
-        verify(stepperMovementServiceMock, times(10)).MovePhi(phiStepper);
+        verify(stepperMotorMoverMock, times(10)).MovePhi(phiStepper);
     }
 
     @Test
@@ -220,7 +220,7 @@ public class HardwareDaemonEventLoopTest {
         service.MaxIterations = 10;
 
         doThrow(new InvalidOperationException())
-                .when(stepperMovementServiceMock)
+                .when(stepperMotorMoverMock)
                 .MovePhi(any());
 
         service.run();

@@ -3,7 +3,7 @@ package com.tddapps.rt.hardware.internal;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.StepperMotor;
 
-public class StepperMovementServiceStatus implements StepperMovementService {
+public class StepperMotorMoverStatus implements StepperMotorMover {
     @Override
     public void MoveTheta(StepperMotor motor) throws InvalidOperationException {
 

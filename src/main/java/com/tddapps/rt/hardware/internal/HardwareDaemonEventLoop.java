@@ -14,7 +14,7 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
     private final Delay delay;
     private final StepperMotorFactory stepperMotorFactory;
     private final CalibrationService calibrationService;
-    private final StepperMovementService stepperMovementService;
+    private final StepperMotorMover stepperMotorMover;
 
     @Inject
     public HardwareDaemonEventLoop(
@@ -22,12 +22,12 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
             Delay delay,
             StepperMotorFactory stepperMotorFactory,
             CalibrationService calibrationServiceMock,
-            StepperMovementService stepperMovementService) {
+            StepperMotorMover stepperMotorMover) {
         this.statusRepository = statusRepository;
         this.delay = delay;
         this.stepperMotorFactory = stepperMotorFactory;
         calibrationService = calibrationServiceMock;
-        this.stepperMovementService = stepperMovementService;
+        this.stepperMotorMover = stepperMotorMover;
     }
 
     @Override
@@ -59,8 +59,8 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
         CompleteCalibration();
 
         while (RunCondition()) {
-            stepperMovementService.MoveTheta(motorTheta);
-            stepperMovementService.MovePhi(motorPhi);
+            stepperMotorMover.MoveTheta(motorTheta);
+            stepperMotorMover.MovePhi(motorPhi);
             delay.Wait(1);
         }
     }
