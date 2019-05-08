@@ -29,10 +29,8 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
 
     @Override
     public void MoveTheta(StepperMotor motor) throws InvalidOperationException {
-        log.info(String.format("Movement Started; axis=%s;", THETA));
-
         var currentStatus = statusRepository.CurrentStatus();
-        if (!ShouldMove(currentStatus)) {
+        if (!ShouldMove(THETA, currentStatus)) {
             return;
         }
 
@@ -59,10 +57,12 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
 
     }
 
-    private boolean ShouldMove(Status currentStatus) {
+    private boolean ShouldMove(String axis, Status currentStatus) {
         if (!currentStatus.isMoving()){
             return false;
         }
+
+        log.info(String.format("Movement Started; axis=%s;", axis));
 
         if (!currentStatus.getCurrentPosition().IsValid()){
             HaltMovement("Invalid Current Position");
