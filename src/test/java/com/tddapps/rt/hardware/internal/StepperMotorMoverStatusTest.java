@@ -98,6 +98,23 @@ public class StepperMotorMoverStatusTest {
     }
 
     @Test
+    public void MoveThetaBubblesUpMovementExceptions() throws InvalidOperationException {
+        status().setMoving(true);
+        status().setCurrentPosition(new Position(270, 50));
+        status().setCommandedPosition(new Position(260, 90));
+        doThrow(new InvalidOperationException()).when(stepperMotorThetaMock).MoveCW();
+
+        try {
+            motorMover.MoveTheta(stepperMotorThetaMock);
+            fail("Should have thrown");
+        }catch (InvalidOperationException e){
+            assertNotNull(e);
+        }
+
+        assertFalse(status().isMoving());
+    }
+
+    @Test
     public void DoesNotMoveWhenStatusIsNotMoving() throws InvalidOperationException {
         status().setCurrentPosition(new Position(200, 50));
         status().setCommandedPosition(new Position(270, 90));

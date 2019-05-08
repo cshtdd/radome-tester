@@ -58,10 +58,20 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
         var steps = movementCalculator.CalculateThetaSteps(src, dest, precision);
 
         for (int i = 0; i < steps; i++) {
-            if (direction.equals(Direction.Clockwise)){
-                motor.MoveCW();
-            } else {
-                motor.MoveCCW();
+            try {
+                if (direction.equals(Direction.Clockwise)) {
+                    motor.MoveCW();
+                } else {
+                    motor.MoveCCW();
+                }
+            } catch (InvalidOperationException e){
+                //TODO maybe log here
+                var updatedStatus = statusRepository.CurrentStatus()
+                        .toBuilder()
+                        .isMoving(false)
+                        .build();
+                statusRepository.Save(updatedStatus);
+                throw e;
             }
         }
 
