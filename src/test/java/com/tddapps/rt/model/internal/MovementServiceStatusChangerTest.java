@@ -122,6 +122,15 @@ public class MovementServiceStatusChangerTest {
         assertFalse(status.isMoving());
     }
 
+    @Test
+    public void StopChangesIsPanningToFalse(){
+        status.setPanning(true);
+
+        service.Stop();
+
+        assertFalse(status.isPanning());
+    }
+
     @Test(expected = InvalidOperationException.class)
     public void MoveThrowsWhenAlreadyPanning() throws InvalidOperationException {
         status.setPanning(true);

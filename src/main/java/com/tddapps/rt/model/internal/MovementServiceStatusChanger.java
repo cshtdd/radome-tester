@@ -54,6 +54,7 @@ class MovementServiceStatusChanger implements MovementService {
     public void Stop() {
         var updatedStatus = CurrentStatus()
                 .toBuilder()
+                .isPanning(false)
                 .isMoving(false)
                 .build();
         statusRepository.Save(updatedStatus);
