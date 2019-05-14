@@ -62,7 +62,7 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
             while (RunCondition()) {
                 stepperMotorMover.MoveTheta(motorTheta);
                 stepperMotorMover.MovePhi(motorPhi);
-                delay.Wait(10);
+                delay.Yield();
             }
         } finally {
             motorPhi.Destroy();
