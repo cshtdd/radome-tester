@@ -18,6 +18,7 @@ public class MovementServiceStatusChangerTest {
     private final MovementService service = new MovementServiceStatusChanger(statusRepositoryMock);
 
     private final Status DEFAULT_STATUS = Status.builder()
+            .isPanning(false)
             .isMoving(false)
             .isCalibrating(false)
             .isCalibrated(false)
@@ -44,6 +45,15 @@ public class MovementServiceStatusChangerTest {
     public void DefaultStatusValidation(){
         assertEquals(DEFAULT_STATUS, status);
         assertNotSame(DEFAULT_STATUS, status);
+    }
+
+    @Test
+    public void CannotMoveWhenIsAlreadyPanning(){
+        status.setPanning(true);
+        status.setCalibrated(true);
+        status.setHardwareInitialized(true);
+
+        assertFalse(service.CanMove(new Position(270, 90)));
     }
 
     @Test
@@ -110,6 +120,15 @@ public class MovementServiceStatusChangerTest {
         service.Stop();
 
         assertFalse(status.isMoving());
+    }
+
+    @Test(expected = InvalidOperationException.class)
+    public void MoveThrowsWhenAlreadyPanning() throws InvalidOperationException {
+        status.setPanning(true);
+        status.setCalibrated(true);
+        status.setHardwareInitialized(true);
+
+        service.Move(new Position(270, 90));
     }
 
     @Test(expected = InvalidOperationException.class)
