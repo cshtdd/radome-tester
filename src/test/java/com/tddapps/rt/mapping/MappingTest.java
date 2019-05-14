@@ -20,6 +20,7 @@ public class MappingTest {
         expected.setIsHardwareInitialized(true);
         expected.setIsHardwareCrash(true);
         expected.setIsMoving(true);
+        expected.setIsPanning(true);
         expected.setTheta(102.25);
         expected.setPhi(103.23);
         expected.setCommandedTheta(100.21);
@@ -28,6 +29,7 @@ public class MappingTest {
         var status = Status.builder()
                 .currentPosition(new Position(102.25333, 103.2333))
                 .commandedPosition(new Position(100.212222, 101.33333))
+                .isPanning(true)
                 .isMoving(true)
                 .isCalibrating(true)
                 .isCalibrated(true)

@@ -45,6 +45,7 @@ public class StatusControllerTest {
         var seededStatus = Status.builder()
                 .currentPosition(new Position(34.6333333, 12.253))
                 .commandedPosition(new Position(134.6333333, 112.2544))
+                .isPanning(true)
                 .isMoving(true)
                 .isCalibrating(true)
                 .isCalibrated(true)
@@ -58,6 +59,7 @@ public class StatusControllerTest {
                 + "\"isCalibrated\": true, "
                 + "\"isHardwareInitialized\": true,"
                 + "\"isHardwareCrash\": true,"
+                + "\"isPanning\": true, "
                 + "\"isMoving\": true, "
                 + "\"theta\": 34.63, "
                 + "\"phi\": 12.25, "
@@ -72,6 +74,7 @@ public class StatusControllerTest {
                 .andExpect(jsonPath("$.calibrated").doesNotExist())
                 .andExpect(jsonPath("$.hardwareInitialized").doesNotExist())
                 .andExpect(jsonPath("$.hardwareCrash").doesNotExist())
+                .andExpect(jsonPath("$.panning").doesNotExist())
                 .andExpect(jsonPath("$.moving").doesNotExist());
     }
 }

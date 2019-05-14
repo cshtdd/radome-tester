@@ -18,6 +18,7 @@ public class StatusController {
         private Boolean isHardwareInitialized;
         private Boolean isHardwareCrash;
         private Boolean isMoving;
+        private Boolean isPanning;
 
         private double theta;
         private double phi;

@@ -15,6 +15,7 @@ class StatusToStatusControllerStatusResponse extends CustomMapper<Status, Status
         statusResponse.setIsHardwareInitialized(status.isHardwareInitialized());
         statusResponse.setIsHardwareCrash(status.isHardwareCrash());
         statusResponse.setIsMoving(status.isMoving());
+        statusResponse.setIsPanning(status.isPanning());
 
         var currentPosition = status.getCurrentPosition();
         if (currentPosition != null){
