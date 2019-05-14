@@ -8,6 +8,7 @@ import lombok.Data;
 public class Status {
     private boolean isCalibrated;
     private boolean isCalibrating;
+    private boolean isPanning;
     private boolean isMoving;
     private boolean isHardwareInitialized;
     private boolean isHardwareCrash;

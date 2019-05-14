@@ -13,6 +13,7 @@ public class ModelInitializerTest {
     @Test
     public void InitializesAStatus(){
         var defaultStatus = Status.builder()
+                .isPanning(false)
                 .isMoving(false)
                 .isCalibrated(false)
                 .isHardwareInitialized(false)
