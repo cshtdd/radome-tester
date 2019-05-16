@@ -14,4 +14,13 @@ public class Status {
     private boolean isHardwareCrash;
     private Position currentPosition;
     private Position commandedPosition;
+
+    public boolean CanMove(){
+        return !isPanning &&
+                !isMoving &&
+                !isCalibrating &&
+                !isHardwareCrash &&
+                isCalibrated &&
+                isHardwareInitialized;
+    }
 }

@@ -21,9 +21,7 @@ class MovementServiceStatusChanger implements MovementService {
 
     @Override
     public boolean CanPan() {
-        var status = CurrentStatus();
-
-        return CanMove(status);
+        return CurrentStatus().CanMove();
     }
 
     @Override
@@ -41,9 +39,7 @@ class MovementServiceStatusChanger implements MovementService {
             throw new InvalidOperationException("Cannot Move to position");
         }
 
-        var status = CurrentStatus();
-
-        if (!CanMove(status)){
+        if (!CurrentStatus().CanMove()){
             throw new InvalidOperationException("Cannot Move");
         }
 
@@ -61,14 +57,5 @@ class MovementServiceStatusChanger implements MovementService {
                 .isPanning(false)
                 .isMoving(false)
                 .build());
-    }
-
-    private boolean CanMove(Status status) {
-        return !status.isPanning() &&
-                !status.isMoving() &&
-                !status.isCalibrating() &&
-                !status.isHardwareCrash() &&
-                status.isCalibrated() &&
-                status.isHardwareInitialized();
     }
 }
