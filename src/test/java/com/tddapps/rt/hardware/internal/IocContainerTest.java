@@ -1,7 +1,7 @@
 package com.tddapps.rt.hardware.internal;
 
 import com.tddapps.rt.hardware.Delay;
-import com.tddapps.rt.hardware.HardwareDaemon;
+import com.tddapps.rt.hardware.MovementDaemon;
 import com.tddapps.rt.ioc.IocContainer;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -11,7 +11,7 @@ public class IocContainerTest {
     @Test
     public void RegistersDependencies(){
         assertTrue(IocContainer.getInstance().Resolve(PinConverter.class) instanceof PinConverterPi3BPlus);
-        assertTrue(IocContainer.getInstance().Resolve(HardwareDaemon.class) instanceof HardwareDaemonEventLoop);
+        assertTrue(IocContainer.getInstance().Resolve(MovementDaemon.class) instanceof MovementDaemonEventLoop);
         assertTrue(IocContainer.getInstance().Resolve(StepperMotorFactory.class) instanceof StepperMotorFactorySelector);
         assertTrue(IocContainer.getInstance().Resolve(Delay.class) instanceof Sleep);
         assertTrue(IocContainer.getInstance().Resolve(StepperPrecisionRepository.class) instanceof StepperPrecisionRepositoryInMemory);

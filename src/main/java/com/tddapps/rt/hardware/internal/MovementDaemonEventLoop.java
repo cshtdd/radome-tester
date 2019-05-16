@@ -3,13 +3,13 @@ package com.tddapps.rt.hardware.internal;
 import com.google.inject.Inject;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Delay;
-import com.tddapps.rt.hardware.HardwareDaemon;
+import com.tddapps.rt.hardware.MovementDaemon;
 import com.tddapps.rt.hardware.StepperMotor;
 import com.tddapps.rt.model.StatusRepository;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-class HardwareDaemonEventLoop implements HardwareDaemon {
+class MovementDaemonEventLoop implements MovementDaemon {
     private final StatusRepository statusRepository;
     private final Delay delay;
     private final StepperMotorFactory stepperMotorFactory;
@@ -17,7 +17,7 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
     private final StepperMotorMover stepperMotorMover;
 
     @Inject
-    public HardwareDaemonEventLoop(
+    public MovementDaemonEventLoop(
             StatusRepository statusRepository,
             Delay delay,
             StepperMotorFactory stepperMotorFactory,

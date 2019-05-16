@@ -13,7 +13,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class HardwareDaemonEventLoopTest {
+public class MovementDaemonEventLoopTest {
     private final StatusRepository statusRepository = new StatusRepositoryStub();
     private final StepperMotorFactory stepperMotorFactoryMock = mock(StepperMotorFactory.class);
     private final CalibrationService calibrationServiceMock = mock(CalibrationService.class);
@@ -22,7 +22,7 @@ public class HardwareDaemonEventLoopTest {
     private final StepperMotor thetaStepper = mock(StepperMotor.class);
     private final StepperMotor phiStepper = mock(StepperMotor.class);
 
-    private final HardwareDaemonEventLoopTestable service = new HardwareDaemonEventLoopTestable(
+    private final MovementDaemonEventLoopTestable service = new MovementDaemonEventLoopTestable(
             statusRepository,
             new DelaySimulator(),
             stepperMotorFactoryMock,
@@ -38,12 +38,12 @@ public class HardwareDaemonEventLoopTest {
         when(stepperMotorFactoryMock.CreatePhi()).thenReturn(phiStepper);
     }
 
-    private static class HardwareDaemonEventLoopTestable extends HardwareDaemonEventLoop {
+    private static class MovementDaemonEventLoopTestable extends MovementDaemonEventLoop {
         public int MaxIterations = 1;
         public int CurrentIteration = 0;
         public RuntimeException seededException;
 
-        public HardwareDaemonEventLoopTestable(
+        public MovementDaemonEventLoopTestable(
                 StatusRepository statusRepository,
                 Delay delay,
                 StepperMotorFactory stepperMotorFactory,

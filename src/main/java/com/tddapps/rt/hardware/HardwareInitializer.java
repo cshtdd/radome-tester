@@ -6,10 +6,10 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class HardwareInitializer implements StartupService {
-    private final HardwareDaemon daemon;
+    private final MovementDaemon daemon;
 
     @Inject
-    public HardwareInitializer(HardwareDaemon daemon) {
+    public HardwareInitializer(MovementDaemon daemon) {
         this.daemon = daemon;
     }
 
