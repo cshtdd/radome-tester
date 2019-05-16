@@ -7,10 +7,12 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ModelInitializer implements StartupService {
     private final StatusRepository statusRepository;
+    private final PanningDaemon daemon;
 
     @Inject
-    public ModelInitializer(StatusRepository statusRepository) {
+    public ModelInitializer(StatusRepository statusRepository, PanningDaemon daemon) {
         this.statusRepository = statusRepository;
+        this.daemon = daemon;
     }
 
     @Override
@@ -18,6 +20,10 @@ public class ModelInitializer implements StartupService {
         log.info("Starting");
 
         statusRepository.Save(buildDefaultStatus());
+
+        new Thread(daemon).start();
+
+        log.info("Finishing");
     }
 
     private Status buildDefaultStatus() {
