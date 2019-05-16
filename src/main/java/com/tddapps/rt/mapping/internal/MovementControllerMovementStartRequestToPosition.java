@@ -5,10 +5,10 @@ import com.tddapps.rt.model.Position;
 import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.ObjectFactory;
 
-class MovementControllerMovementRequestToPosition implements ObjectFactory<Position> {
+class MovementControllerMovementStartRequestToPosition implements ObjectFactory<Position> {
     @Override
     public Position create(Object source, MappingContext mappingContext) {
-        var movementRequest = (MovementController.MovementRequest)source;
+        var movementRequest = (MovementController.MovementStartRequest)source;
 
         var theta = movementRequest.getTheta();
         var phi = movementRequest.getPhi();

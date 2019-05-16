@@ -46,7 +46,7 @@ public class MappingTest {
     public void MovementControllerMovementRequestToPosition(){
         var expected = new Position(193.45, 45.33);
 
-        var request = new MovementController.MovementRequest(193.446, 45.33333);
+        var request = new MovementController.MovementStartRequest(193.446, 45.33333);
 
         var actual = mapper.map(request, Position.class);
 

@@ -21,9 +21,9 @@ class AutoMapper implements Mapper {
                 .register();
 
         mapperFactory.registerObjectFactory(
-                new MovementControllerMovementRequestToPosition(),
+                new MovementControllerMovementStartRequestToPosition(),
                 TypeFactory.valueOf(Position.class),
-                TypeFactory.valueOf(MovementController.MovementRequest.class));
+                TypeFactory.valueOf(MovementController.MovementStartRequest.class));
     }
 
     @Override

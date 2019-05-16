@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MovementController {
     @Data
     @AllArgsConstructor
-    public static class MovementRequest {
+    public static class MovementStartRequest {
         private double theta;
         private double phi;
     }
@@ -30,8 +30,8 @@ public class MovementController {
         this.container = container;
     }
 
-    @PostMapping(value = "/api/movement")
-    ResponseEntity<String> Post(@RequestBody MovementRequest request) {
+    @PostMapping(value = "/api/movement/start")
+    ResponseEntity<String> Start(@RequestBody MovementStartRequest request) {
         var mapper = container.Resolve(Mapper.class);
         var movementService = container.Resolve(MovementService.class);
 
@@ -55,6 +55,47 @@ public class MovementController {
         }
 
         log.info(String.format("Movement Started; position: %s", position));
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/api/movement/stop")
+    ResponseEntity<String> Stop() {
+        var movementService = container.Resolve(MovementService.class);
+
+        log.info("Halting;");
+        try {
+            movementService.Stop();
+        } catch (Exception e) {
+            log.error("Halting Error; reason: Unexpected; details:", e);
+            return new ResponseEntity<>("Unexpected Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        log.info("Halting Started");
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/api/movement/pan")
+    ResponseEntity<String> Pan() {
+        var movementService = container.Resolve(MovementService.class);
+
+        log.info("Panning;");
+
+        if (!movementService.CanPan()){
+            log.info("Cannot Pan");
+            return new ResponseEntity<>("Cannot Pan", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            movementService.Pan();
+        } catch (InvalidOperationException e) {
+            log.warn("Panning Error; reason: InvalidOperation; details:", e);
+            return new ResponseEntity<>("Panning Error", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("Panning Error; reason: Unexpected; details:", e);
+            return new ResponseEntity<>("Unexpected Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        log.info("Panning Started");
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 }
