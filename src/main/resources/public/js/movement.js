@@ -38,6 +38,36 @@ export default function(jQuery){
                 });
             });
         },
+        setupPan: function(config){
+            /*
+            {
+                buttonId,
+                errorMessageId,
+                successMessageId
+            }
+            */
+
+            console.log('Configure Movement Pan');
+
+            jQuery(config.buttonId).click(function(e){
+                e.preventDefault();
+                e.stopPropagation();
+
+                console.log(`Button Movement Pan Clicked`);
+
+                jQuery.ajax('/api/movement/pan', {
+                    contentType: 'application/json',
+                    type: 'POST'
+                }).done(function(r){
+                    console.log('movement pan; response: ', r);
+                    showAlert(config.successMessageId, 'Panning');
+                }).fail(function(e) {
+                    console.log('transmission error: ', e);
+                    var errorMessage = `[${e.status}] - ${e.responseText}`;
+                    showAlert(config.errorMessageId, errorMessage);
+                });
+            });
+        },
         setupStart: function(config){
             /*
             {

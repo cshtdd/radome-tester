@@ -39,7 +39,7 @@
     </div>
 
     <h1>Movement</h1>
-    <button type="button" class="btn btn-primary mb-2" id="buttonPanning">Pan</button>
+    <button type="button" class="btn btn-primary mb-2" id="buttonPan">Pan</button>
     <button type="button" class="btn btn-danger mb-2" id="buttonStop">Stop</button>
 
     <form id="formMovement" class="needs-validation">
@@ -102,6 +102,14 @@
       warnMessageId: '#warnMessage',
       successMessageId: '#successMessage'
     });
+
+    movementModule($).setupPan({
+      buttonId: '#buttonPan',
+      errorMessageId: '#errorMessage',
+      warnMessageId: '#warnMessage',
+      successMessageId: '#successMessage'
+    });
+
 
     statusReaderModule($).start({
       containerId: '#statusContainer',
