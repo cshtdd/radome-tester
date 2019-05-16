@@ -2,6 +2,7 @@ package com.tddapps.rt.model.internal;
 
 import com.tddapps.rt.ioc.IocContainer;
 import com.tddapps.rt.model.MovementService;
+import com.tddapps.rt.model.PanningDaemon;
 import com.tddapps.rt.model.StatusRepository;
 import org.junit.Test;
 
@@ -13,6 +14,7 @@ public class IocContainerTest {
     public void RegistersDependencies(){
         assertTrue(IocContainer.getInstance().Resolve(StatusRepository.class) instanceof StatusRepositoryInMemory);
         assertTrue(IocContainer.getInstance().Resolve(MovementService.class) instanceof MovementServiceStatusChanger);
+        assertTrue(IocContainer.getInstance().Resolve(PanningDaemon.class) instanceof PanningDaemonEventLoop);
     }
 
     @Test

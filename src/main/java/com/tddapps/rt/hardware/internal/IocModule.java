@@ -8,7 +8,6 @@ import com.tddapps.rt.config.ConfigurationReader;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.hardware.DelaySimulator;
 import com.tddapps.rt.hardware.MovementDaemon;
-import com.tddapps.rt.hardware.PanningDaemon;
 
 public class IocModule extends AbstractModule {
     @Override
@@ -17,7 +16,6 @@ public class IocModule extends AbstractModule {
         bind(Delay.class).to(Sleep.class);
         bind(PinConverter.class).to(PinConverterPi3BPlus.class);
         bind(MovementDaemon.class).to(MovementDaemonEventLoop.class);
-        bind(PanningDaemon.class).to(PanningDaemonEventLoop.class);
         bind(MovementCalculator.class).to(MovementCalculatorDefault.class);
 
         bind(StepperMotorFactorySimulator.class);
