@@ -35,7 +35,7 @@ public class MovementController {
         var mapper = container.Resolve(Mapper.class);
         var movementService = container.Resolve(MovementService.class);
 
-        log.info(String.format("Movement; input: %s;", request));
+        log.info(String.format("Movement Start; input: %s;", request));
 
         var position = mapper.map(request, Position.class);
 
@@ -47,10 +47,10 @@ public class MovementController {
         try {
             movementService.Move(position);
         } catch (InvalidOperationException e) {
-            log.warn("Movement Error; reason: InvalidOperation; details:", e);
+            log.warn("Movement Start Error; reason: InvalidOperation; details:", e);
             return new ResponseEntity<>("Movement Error", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            log.error("Movement Error; reason: Unexpected; details:", e);
+            log.error("Movement Start Error; reason: Unexpected; details:", e);
             return new ResponseEntity<>("Unexpected Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -62,15 +62,15 @@ public class MovementController {
     ResponseEntity<String> Stop() {
         var movementService = container.Resolve(MovementService.class);
 
-        log.info("Halting;");
+        log.info("Movement Stop;");
         try {
             movementService.Stop();
         } catch (Exception e) {
-            log.error("Halting Error; reason: Unexpected; details:", e);
+            log.error("Movement Stop Error; reason: Unexpected; details:", e);
             return new ResponseEntity<>("Unexpected Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        log.info("Halting Started");
+        log.info("Movement Stopped");
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
