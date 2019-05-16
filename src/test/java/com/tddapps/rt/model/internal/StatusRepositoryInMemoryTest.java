@@ -37,6 +37,26 @@ public class StatusRepositoryInMemoryTest {
     }
 
     @Test
+    public void UpdatesStatus(){
+        var seededFirst = Status.builder()
+                .currentPosition(new Position(270, 90))
+                .commandedPosition(new Position(270, 90))
+                .isMoving(false)
+                .build();
+        repository.Save(seededFirst);
+
+        repository.Update(s -> s.toBuilder().isMoving(true).build());
+
+        var actual = repository.CurrentStatus();
+        var expected = Status.builder()
+                .currentPosition(new Position(270, 90))
+                .commandedPosition(new Position(270, 90))
+                .isMoving(true)
+                .build();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void ReturnsACloneOfTheStatus(){
         var seeded = Status.builder()
                 .currentPosition(new Position(270, 90))
