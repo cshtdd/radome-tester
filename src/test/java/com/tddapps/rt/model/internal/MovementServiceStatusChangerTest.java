@@ -108,6 +108,64 @@ public class MovementServiceStatusChangerTest {
     }
 
     @Test
+    public void CannotPanWhenIsAlreadyPanning(){
+        status().setPanning(true);
+        status().setCalibrated(true);
+        status().setHardwareInitialized(true);
+
+        assertFalse(service.CanPan());
+    }
+
+    @Test
+    public void CannotPanWhenIsAlreadyMoving(){
+        status().setMoving(true);
+        status().setCalibrated(true);
+        status().setHardwareInitialized(true);
+
+        assertFalse(service.CanPan());
+    }
+
+    @Test
+    public void CannotPanWhenCalibrating(){
+        status().setCalibrating(true);
+        status().setCalibrated(true);
+        status().setHardwareInitialized(true);
+
+        assertFalse(service.CanPan());
+    }
+
+    @Test
+    public void CannotPanWhenHardwareCrashed(){
+        status().setHardwareCrash(true);
+        status().setCalibrated(true);
+        status().setHardwareInitialized(true);
+
+        assertFalse(service.CanPan());
+    }
+
+    @Test
+    public void CannotPanWhenNotCalibrated(){
+        status().setHardwareInitialized(true);
+
+        assertFalse(service.CanPan());
+    }
+
+    @Test
+    public void CannotPanWhenHardwareNotInitialized(){
+        status().setCalibrated(true);
+
+        assertFalse(service.CanPan());
+    }
+
+    @Test
+    public void CanPanWhenProperlyInitializedAndNoMovementIsInProgress(){
+        status().setCalibrated(true);
+        status().setHardwareInitialized(true);
+
+        assertTrue(service.CanPan());
+    }
+
+    @Test
     public void StopChangesIsMovingToFalse(){
         status().setMoving(true);
 

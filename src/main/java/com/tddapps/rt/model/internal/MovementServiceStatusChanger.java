@@ -20,6 +20,13 @@ class MovementServiceStatusChanger implements MovementService {
     }
 
     @Override
+    public boolean CanPan() {
+        var status = CurrentStatus();
+
+        return CanMoveInternal(status);
+    }
+
+    @Override
     public boolean CanMove(Position position) {
         if (!CanMoveInternal(position)){
             return false;
