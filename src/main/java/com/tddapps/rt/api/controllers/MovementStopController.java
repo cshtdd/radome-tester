@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Log4j2
 @RestController
-public class HaltingController {
+public class MovementStopController {
     private final IocContainer container;
 
-    public HaltingController(IocContainer container) {
+    public MovementStopController(IocContainer container) {
         this.container = container;
     }
 
-    @PostMapping(value = "/api/halting")
+    @PostMapping(value = "/api/movement/stop")
     ResponseEntity<String> Post() {
         var movementService = container.Resolve(MovementService.class);
 

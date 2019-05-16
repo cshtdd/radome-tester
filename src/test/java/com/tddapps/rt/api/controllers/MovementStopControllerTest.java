@@ -20,8 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(HaltingController.class)
-public class HaltingControllerTest {
+@WebMvcTest(MovementStopController.class)
+public class MovementStopControllerTest {
     @Autowired
     private MockMvc web;
 
@@ -37,7 +37,7 @@ public class HaltingControllerTest {
     }
 
     private ResultActions Post() throws Exception {
-        var request = post("/api/halting")
+        var request = post("/api/movement/stop")
                 .contentType(MediaType.APPLICATION_JSON);
         return web.perform(request);
     }
