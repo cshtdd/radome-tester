@@ -4,20 +4,24 @@ import com.google.inject.Inject;
 import com.tddapps.rt.StartupService;
 import lombok.extern.log4j.Log4j2;
 
+import java.util.Arrays;
+
 @Log4j2
 public class HardwareInitializer implements StartupService {
-    private final MovementDaemon daemon;
+    private final Runnable[] daemons;
 
     @Inject
-    public HardwareInitializer(MovementDaemon daemon) {
-        this.daemon = daemon;
+    public HardwareInitializer(MovementDaemon movement, PanningDaemon panning) {
+        daemons = new Runnable[]{ movement, panning };
     }
 
     @Override
     public void RunAsync(String[] args) {
         log.info("Starting");
 
-        new Thread(daemon).start();
+        Arrays.stream(daemons)
+                .map(Thread::new)
+                .forEach(Thread::start);
 
         log.info("Finishing");
     }

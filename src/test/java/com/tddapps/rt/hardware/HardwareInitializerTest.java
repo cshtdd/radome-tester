@@ -12,27 +12,29 @@ import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class HardwareInitializerTest {
-    private List<String> runDaemons = new ArrayList<>();
+    private int runCount = 0;
     private final MovementDaemon movementDaemonMock = mock(MovementDaemon.class);
+    private final PanningDaemon panningDaemonMock = mock(PanningDaemon.class);
 
-    private final StartupService service = new HardwareInitializer(movementDaemonMock);
-
-    private boolean RunMovementWasInvoked(){
-        return runDaemons.contains("Movement");
-    }
+    private final StartupService service = new HardwareInitializer(movementDaemonMock, panningDaemonMock);
 
     @Before
     public void Setup(){
         doAnswer(i -> {
-            runDaemons.add("Movement");
+            runCount++;
             return null;
         }).when(movementDaemonMock).run();
+
+        doAnswer(i -> {
+            runCount++;
+            return null;
+        }).when(panningDaemonMock).run();
     }
 
     @Test
-    public void RunsTheHardwareService() {
+    public void RunsTheMovementDaemons() {
         service.RunAsync(new String[]{});
 
-        assertTrue(Await(this::RunMovementWasInvoked));
+        assertTrue(Await(() -> runCount == 2));
     }
 }
