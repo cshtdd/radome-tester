@@ -40,7 +40,7 @@
 
     <h1>Movement</h1>
     <button type="button" class="btn btn-primary mb-2" id="buttonPanning">Pan</button>
-    <button type="button" class="btn btn-danger mb-2" id="buttonHalt">Stop</button>
+    <button type="button" class="btn btn-danger mb-2" id="buttonStop">Stop</button>
 
     <form id="formMovement" class="needs-validation">
       <div class="form-row align-items-center">
@@ -91,6 +91,13 @@
 
     movementModule($).setupStart({
       formId: '#formMovement',
+      errorMessageId: '#errorMessage',
+      warnMessageId: '#warnMessage',
+      successMessageId: '#successMessage'
+    });
+
+    movementModule($).setupStop({
+      buttonId: '#buttonStop',
       errorMessageId: '#errorMessage',
       warnMessageId: '#warnMessage',
       successMessageId: '#successMessage'
