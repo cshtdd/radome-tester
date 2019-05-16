@@ -257,4 +257,70 @@ public class MovementServiceStatusChangerTest {
 
         assertEquals(expected, status());
     }
+
+    @Test(expected = InvalidOperationException.class)
+    public void PanThrowsWhenAlreadyPanning() throws InvalidOperationException {
+        status().setPanning(true);
+        status().setCalibrated(true);
+        status().setHardwareInitialized(true);
+
+        service.Pan();
+    }
+
+    @Test(expected = InvalidOperationException.class)
+    public void PanThrowsWhenAlreadyMoving() throws InvalidOperationException {
+        status().setMoving(true);
+        status().setCalibrated(true);
+        status().setHardwareInitialized(true);
+
+        service.Pan();
+    }
+
+    @Test(expected = InvalidOperationException.class)
+    public void PanThrowsWhenCalibrating() throws InvalidOperationException {
+        status().setCalibrating(true);
+        status().setCalibrated(true);
+        status().setHardwareInitialized(true);
+
+        service.Pan();
+    }
+
+    @Test(expected = InvalidOperationException.class)
+    public void PanThrowsWhenHardwareCrashed() throws InvalidOperationException {
+        status().setHardwareCrash(true);
+        status().setCalibrated(true);
+        status().setHardwareInitialized(true);
+
+        service.Pan();
+    }
+
+    @Test(expected = InvalidOperationException.class)
+    public void PanThrowsWhenNotCalibrated() throws InvalidOperationException {
+        status().setHardwareInitialized(true);
+
+        service.Pan();
+    }
+
+    @Test(expected = InvalidOperationException.class)
+    public void PanThrowsWhenHardwareNotInitialized() throws InvalidOperationException {
+        status().setCalibrated(true);
+
+        service.Pan();
+    }
+
+    @Test
+    public void PanChangesStatus() throws InvalidOperationException {
+        status().setHardwareInitialized(true);
+        status().setCalibrated(true);
+
+        var expected = DEFAULT_STATUS.toBuilder()
+                .isCalibrated(true)
+                .isHardwareInitialized(true)
+                .isPanning(true)
+                .build();
+
+        service.Pan();
+
+        assertEquals(expected, status());
+    }
 }

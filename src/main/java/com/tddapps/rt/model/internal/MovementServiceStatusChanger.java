@@ -34,6 +34,18 @@ class MovementServiceStatusChanger implements MovementService {
     }
 
     @Override
+    public void Pan() throws InvalidOperationException{
+        if (!CanPan()){
+            throw new InvalidOperationException("Cannot Pan");
+        }
+
+        statusRepository.Update(currentStatus -> currentStatus
+                .toBuilder()
+                .isPanning(true)
+                .build());
+    }
+
+    @Override
     public void Move(Position position) throws InvalidOperationException {
         if (!position.IsValid()){
             throw new InvalidOperationException("Cannot Move to position");
