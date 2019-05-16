@@ -8,7 +8,7 @@ export default function(jQuery){
     }
 
     return {
-        configure: function(config){
+        setupStart: function(config){
             /*
             {
                 formId,
