@@ -18,31 +18,31 @@ public class CalibrationServiceDummy implements CalibrationService {
     public void CalibrateThetaStepper(StepperMotor motor) {
         stepperPrecisionRepository.SaveTheta(new Precision(1, 0.02));
 
-        var currentStatus = statusRepository.CurrentStatus();
-        var updatedPosition = currentStatus.getCurrentPosition()
-                .toBuilder()
-                .thetaDegrees(270)
-                .build();
-        var updatedStatus = currentStatus
-                .toBuilder()
-                .currentPosition(updatedPosition)
-                .build();
-        statusRepository.Save(updatedStatus);
+        statusRepository.Update(currentStatus -> {
+            var updatedPosition = currentStatus.getCurrentPosition()
+                    .toBuilder()
+                    .thetaDegrees(270)
+                    .build();
+            return currentStatus
+                    .toBuilder()
+                    .currentPosition(updatedPosition)
+                    .build();
+        });
     }
 
     @Override
     public void CalibratePhiStepper(StepperMotor motor) {
         stepperPrecisionRepository.SavePhi(new Precision(1, 0.05));
 
-        var currentStatus = statusRepository.CurrentStatus();
-        var updatedPosition = currentStatus.getCurrentPosition()
-                .toBuilder()
-                .phiDegrees(90)
-                .build();
-        var updatedStatus = currentStatus
-                .toBuilder()
-                .currentPosition(updatedPosition)
-                .build();
-        statusRepository.Save(updatedStatus);
+        statusRepository.Update(currentStatus -> {
+            var updatedPosition = currentStatus.getCurrentPosition()
+                    .toBuilder()
+                    .phiDegrees(90)
+                    .build();
+            return currentStatus
+                    .toBuilder()
+                    .currentPosition(updatedPosition)
+                    .build();
+        });
     }
 }

@@ -114,11 +114,10 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
 
     private void HaltMovement(String reason) {
         log.info(String.format("Stop Movement; reason=%s", reason));
-        var updatedStatus = statusRepository.CurrentStatus()
+        statusRepository.Update(currentStatus -> currentStatus
                 .toBuilder()
                 .isMoving(false)
-                .build();
-        statusRepository.Save(updatedStatus);
+                .build());
     }
 
     private void LogMotorMovement(String axis, Direction direction, int steps) {
@@ -130,11 +129,10 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
 
         log.info(String.format("Movement Completed; axis=%s; isMoving=%s", axis, isStillMoving));
 
-        var updatedStatus = statusRepository.CurrentStatus()
+        statusRepository.Update(currentStatus -> currentStatus
                 .toBuilder()
                 .currentPosition(updatedPosition)
                 .isMoving(isStillMoving)
-                .build();
-        statusRepository.Save(updatedStatus);
+                .build());
     }
 }

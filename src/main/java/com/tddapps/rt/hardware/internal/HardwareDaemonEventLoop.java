@@ -82,35 +82,32 @@ class HardwareDaemonEventLoop implements HardwareDaemon {
 
     private void BeginCalibration() {
         log.info("Start Calibration");
-        var status = statusRepository
-                .CurrentStatus()
-                .toBuilder()
-                .isCalibrating(true)
-                .isCalibrated(false)
-                .build();
-        statusRepository.Save(status);
+        statusRepository.Update(currentStatus -> currentStatus
+            .toBuilder()
+            .isCalibrating(true)
+            .isCalibrated(false)
+            .build());
     }
 
     private void CompleteCalibration() {
         log.info("Calibration Completed");
-        var status = statusRepository
-                .CurrentStatus()
+
+        statusRepository.Update(currentStatus -> currentStatus
                 .toBuilder()
                 .isCalibrating(false)
                 .isCalibrated(true)
                 .isHardwareInitialized(true)
-                .build();
-        statusRepository.Save(status);
+                .build());
+
         log.info("Hardware Initialized");
     }
 
     private void SetHardwareCrashed(Exception e) {
-        var status = statusRepository
-                .CurrentStatus()
+        statusRepository.Update(currentStatus -> currentStatus
                 .toBuilder()
                 .isHardwareCrash(true)
-                .build();
-        statusRepository.Save(status);
+                .build());
+
         log.error(e.getMessage(), e);
     }
 

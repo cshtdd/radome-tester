@@ -42,22 +42,20 @@ class MovementServiceStatusChanger implements MovementService {
             throw new InvalidOperationException("Cannot Move");
         }
 
-        var updatedStatus = status
+        statusRepository.Update(currentStatus -> currentStatus
                 .toBuilder()
                 .isMoving(true)
                 .commandedPosition(position)
-                .build();
-        statusRepository.Save(updatedStatus);
+                .build());
     }
 
     @Override
     public void Stop() {
-        var updatedStatus = CurrentStatus()
+        statusRepository.Update(currentStatus -> currentStatus
                 .toBuilder()
                 .isPanning(false)
                 .isMoving(false)
-                .build();
-        statusRepository.Save(updatedStatus);
+                .build());
     }
 
     private boolean CanMoveInternal(Status status) {
