@@ -21,12 +21,12 @@ public class HardwareInitializerTest {
     @Before
     public void Setup(){
         doAnswer(i -> {
-            runCount++;
+            runCount += 1;
             return null;
         }).when(movementDaemonMock).run();
 
         doAnswer(i -> {
-            runCount++;
+            runCount += 10;
             return null;
         }).when(panningDaemonMock).run();
     }
@@ -35,6 +35,6 @@ public class HardwareInitializerTest {
     public void RunsTheMovementDaemons() {
         service.RunAsync(new String[]{});
 
-        assertTrue(Await(() -> runCount == 2));
+        assertTrue(Await(() -> runCount == 11));
     }
 }
