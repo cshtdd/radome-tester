@@ -84,7 +84,7 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
             return false;
         }
 
-        log.info(String.format("Movement Started; axis=%s;", axis));
+        log.debug(String.format("Movement Started; axis=%s;", axis));
 
         if (!currentStatus.getCurrentPosition().IsValid()){
             HaltMovement("Invalid Current Position");
@@ -121,13 +121,13 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
     }
 
     private void LogMotorMovement(String axis, Direction direction, int steps) {
-        log.info(String.format("Moving motor; axis=%s; direction=%s; steps=%d;", axis, direction, steps));
+        log.debug(String.format("Moving motor; axis=%s; direction=%s; steps=%d;", axis, direction, steps));
     }
 
     private void CompleteMovement(String axis, Position updatedPosition, Position commandedPosition) {
         var isStillMoving = !updatedPosition.AlmostEquals(commandedPosition);
 
-        log.info(String.format("Movement Completed; axis=%s; isMoving=%s", axis, isStillMoving));
+        log.debug(String.format("Movement Completed; axis=%s; isMoving=%s", axis, isStillMoving));
 
         statusRepository.Update(currentStatus -> currentStatus
                 .toBuilder()

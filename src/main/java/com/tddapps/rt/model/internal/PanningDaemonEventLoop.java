@@ -92,10 +92,11 @@ class PanningDaemonEventLoop implements PanningDaemon {
 
     private void LogMovement(Position position) {
         log.info(String.format(
-                "Move; stepIndex: %d; count: %d; position: %s",
+                "Move; current: %d; total: %d; theta: %.2f; phi: %.2f;",
                 currentPositionIndex,
                 allPositions.length,
-                position
+                position.getThetaDegrees(),
+                position.getPhiDegrees()
         ));
     }
 
