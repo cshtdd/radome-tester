@@ -16,6 +16,9 @@ class PanningDaemonEventLoop implements PanningDaemon {
     private final Delay delay;
 
     private PanningSettings settings;
+    private Position[] allPositions;
+    private int currentPositionIndex;
+    private int finalPositionIndex;
 
     @Inject
     PanningDaemonEventLoop(
@@ -31,36 +34,60 @@ class PanningDaemonEventLoop implements PanningDaemon {
 
     @Override
     public void run() {
-        settings = settingsRepository.Read();
-        var positions = ReadPanningPositions();
-        var index = 0;
+        InitializeInternalState();
 
         while (RunCondition()){
             var status = statusRepository.CurrentStatus();
-
-            if (!status.isPanning() && index != 0){
-                index = 0;
+            PrepareInternalState(status);
+            if (ShouldMove(status)){
+                Move();
             }
-
-            if (status.isPanning()){
-                var position = positions[index];
-                if (movementService.CanMove(position)){
-                    try {
-                        index++;
-
-                        if (index == positions.length){
-                            index = 0;
-                            CompletePanning();
-                        }
-
-                        movementService.Move(position);
-                    } catch (InvalidOperationException e) {
-
-                    }
-                }
-            }
-
             delay.Yield();
+        }
+    }
+
+    private boolean ShouldMove(Status status) {
+        return status.isPanning();
+    }
+
+    private void Move() {
+        var position = ReadCurrentPosition();
+        if (!movementService.CanMove(position)) {
+            return;
+        }
+
+        try {
+            movementService.Move(position);
+        } catch (InvalidOperationException e) {
+
+        }
+
+        IncrementPositionIndex();
+    }
+
+    private void InitializeInternalState() {
+        settings = settingsRepository.Read();
+        currentPositionIndex = 0;
+        allPositions = ReadPanningPositions();
+        finalPositionIndex = allPositions.length;
+    }
+
+    private Position ReadCurrentPosition() {
+        return allPositions[currentPositionIndex];
+    }
+
+    private void IncrementPositionIndex() {
+        currentPositionIndex++;
+
+        if (currentPositionIndex == finalPositionIndex){
+            currentPositionIndex = 0;
+            CompletePanning();
+        }
+    }
+
+    private void PrepareInternalState(Status status) {
+        if (!status.isPanning()){
+            currentPositionIndex = 0;
         }
     }
 
