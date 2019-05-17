@@ -5,7 +5,8 @@ import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.model.*;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 class PanningDaemonEventLoop implements PanningDaemon {
@@ -13,6 +14,8 @@ class PanningDaemonEventLoop implements PanningDaemon {
     private final MovementService movementService;
     private final PanningSettingsRepository settingsRepository;
     private final Delay delay;
+
+    private PanningSettings settings;
 
     @Inject
     PanningDaemonEventLoop(
@@ -28,6 +31,7 @@ class PanningDaemonEventLoop implements PanningDaemon {
 
     @Override
     public void run() {
+        settings = settingsRepository.Read();
         var positions = ReadPanningPositions();
         var index = 0;
 
@@ -63,17 +67,30 @@ class PanningDaemonEventLoop implements PanningDaemon {
     }
 
     private Position[] ReadPanningPositions(){
-        var settings = settingsRepository.Read();
+        return IntStream.rangeClosed(0, ThetaStepsCount())
+                .mapToDouble(this::StepToTheta)
+                .mapToObj(theta -> IntStream.rangeClosed(0, PhiStepsCount())
+                        .mapToDouble(this::StepToPhi)
+                        .mapToObj(phi -> new Position(theta, phi))
+                        .collect(Collectors.toList()))
+                .flatMap(List::stream)
+                .toArray(Position[]::new);
+    }
 
-        var result = new ArrayList<Position>();
+    private int PhiStepsCount() {
+        return (int)((settings.getMaxPhi() - settings.getMinPhi()) / settings.getIncrementPhi());
+    }
 
-        for (double theta = settings.getMinTheta(); theta <= settings.getMaxTheta(); theta += settings.getIncrementTheta()){
-            for (double phi = settings.getMinPhi(); phi <= settings.getMaxPhi(); phi += settings.getIncrementPhi()){
-                result.add(new Position(theta, phi));
-            }
-        }
+    private int ThetaStepsCount() {
+        return (int)((settings.getMaxTheta() - settings.getMinTheta()) / settings.getIncrementTheta());
+    }
 
-        return result.toArray(new Position[0]);
+    private double StepToTheta(int i){
+        return (i * settings.getIncrementTheta()) + settings.getMinTheta();
+    }
+
+    private double StepToPhi(int i){
+        return (i * settings.getIncrementPhi()) + settings.getMinPhi();
     }
 
     // this method is here for testing purposes
