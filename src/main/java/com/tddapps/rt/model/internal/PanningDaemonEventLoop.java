@@ -20,7 +20,6 @@ class PanningDaemonEventLoop implements PanningDaemon {
     private PanningSettings settings;
     private Position[] allPositions;
     private int currentPositionIndex;
-    private int finalPositionIndex;
 
     @Inject
     PanningDaemonEventLoop(
@@ -75,16 +74,27 @@ class PanningDaemonEventLoop implements PanningDaemon {
             return;
         }
 
+        LogMovement(position);
         movementService.Move(position);
 
         IncrementPositionIndex();
     }
 
     private void InitializeInternalState() {
+        log.info("Initialization Start");
+
         settings = settingsRepository.Read();
         currentPositionIndex = 0;
         allPositions = ReadPanningPositions();
-        finalPositionIndex = allPositions.length;
+    }
+
+    private void LogMovement(Position position) {
+        log.info(String.format(
+                "Move; stepIndex: %d; count: %d; position: %s",
+                currentPositionIndex,
+                allPositions.length,
+                position
+        ));
     }
 
     private Position ReadCurrentPosition() {
@@ -94,7 +104,7 @@ class PanningDaemonEventLoop implements PanningDaemon {
     private void IncrementPositionIndex() {
         currentPositionIndex++;
 
-        if (currentPositionIndex == finalPositionIndex){
+        if (currentPositionIndex == allPositions.length){
             currentPositionIndex = 0;
             CompletePanning();
         }
