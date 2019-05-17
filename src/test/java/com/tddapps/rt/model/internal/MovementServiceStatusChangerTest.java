@@ -42,12 +42,12 @@ public class MovementServiceStatusChangerTest {
     }
 
     @Test
-    public void CannotMoveWhenIsAlreadyPanning(){
+    public void CanMoveWhenPanning(){
         status().setPanning(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        assertFalse(service.CanMove(new Position(270, 90)));
+        assertTrue(service.CanMove(new Position(270, 90)));
     }
 
     @Test
@@ -183,8 +183,8 @@ public class MovementServiceStatusChangerTest {
         assertFalse(status().isPanning());
     }
 
-    @Test(expected = InvalidOperationException.class)
-    public void MoveThrowsWhenAlreadyPanning() throws InvalidOperationException {
+    @Test
+    public void MoveDoesNotThrowWhenAlreadyPanning() throws InvalidOperationException {
         status().setPanning(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);

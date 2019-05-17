@@ -21,7 +21,7 @@ class MovementServiceStatusChanger implements MovementService {
 
     @Override
     public boolean CanPan() {
-        return CurrentStatus().CanMove();
+        return CurrentStatus().CanPan();
     }
 
     @Override
@@ -30,7 +30,7 @@ class MovementServiceStatusChanger implements MovementService {
             return false;
         }
 
-        return CanPan();
+        return CurrentStatus().CanMove();
     }
 
     @Override

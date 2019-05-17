@@ -15,9 +15,12 @@ public class Status {
     private Position currentPosition;
     private Position commandedPosition;
 
+    public boolean CanPan(){
+        return !isPanning && CanMove();
+    }
+
     public boolean CanMove(){
-        return !isPanning &&
-                !isMoving &&
+        return !isMoving &&
                 !isCalibrating &&
                 !isHardwareCrash &&
                 isCalibrated &&
