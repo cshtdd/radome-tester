@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.tddapps.rt.config.Configuration;
 import com.tddapps.rt.config.ConfigurationReader;
 import com.tddapps.rt.config.Settings;
+import com.tddapps.rt.utils.Round;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Arrays;
@@ -49,6 +50,13 @@ class ConfigurationReaderSettings implements ConfigurationReader {
 
         if ("false".equals(simulationStr)){
             result.setSimulation(false);
+        }
+
+        var panningPrecisionStr = settingsReader.Read(Settings.PANNING_PRECISION, "").toLowerCase();
+        if (!"".equals(panningPrecisionStr)){
+            double panningPrecisionRaw = Double.parseDouble(panningPrecisionStr);
+            double panningPrecision = Round.ToPrecision(panningPrecisionRaw, 2);
+            result.setPanningPrecision(panningPrecision);
         }
 
         return result;

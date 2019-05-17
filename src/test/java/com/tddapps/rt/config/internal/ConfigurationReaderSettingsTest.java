@@ -63,4 +63,17 @@ public class ConfigurationReaderSettingsTest {
 
         assertEquals(expected, reader.Read());
     }
+
+    @Test
+    public void OverridesPanningPrecisionWithSettingsValue(){
+        settingsReaderStub.Settings.put(Settings.PANNING_PRECISION, "0.75666");
+
+        var expected = new Configuration();
+        expected.setSimulation(true);
+        expected.setThetaBcmPins(new int[]{1, 2, 3, 4});
+        expected.setPhiBcmPins(new int[]{5, 6, 7, 8});
+        expected.setPanningPrecision(0.76);
+
+        assertEquals(expected, reader.Read());
+    }
 }
