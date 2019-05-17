@@ -100,7 +100,7 @@ public class PanningDaemonEventLoopTest {
     }
 
     @Test
-    public void MovesToMultiplePositionsThatMapTheEntireSurface() throws InvalidOperationException {
+    public void MapsTheEntireSurface() throws InvalidOperationException {
         daemon.MaxIterations = 100;
         status().setPanning(true);
         when(movementServiceMock.CanMove(any())).thenReturn(true);
@@ -119,5 +119,29 @@ public class PanningDaemonEventLoopTest {
                 verify(movementServiceMock).Move(new Position(theta, phi));
             }
         }
+    }
+
+    @Test
+    public void MapsTheEntireSurfaceEvenWhenBoundariesAndIncrementsDoNotAlign() throws InvalidOperationException {
+        daemon.MaxIterations = 100;
+        status().setPanning(true);
+        when(movementServiceMock.CanMove(any())).thenReturn(true);
+        panningSettings.settings = new PanningSettings(
+                180, 187, 3,
+                90, 95, 2
+        );
+
+        daemon.run();
+
+        assertFalse(status().isPanning());
+        verify(movementServiceMock).Move(new Position(180, 90));
+        verify(movementServiceMock).Move(new Position(180, 92));
+        verify(movementServiceMock).Move(new Position(180, 94));
+        verify(movementServiceMock).Move(new Position(183, 90));
+        verify(movementServiceMock).Move(new Position(183, 92));
+        verify(movementServiceMock).Move(new Position(183, 94));
+        verify(movementServiceMock).Move(new Position(186, 90));
+        verify(movementServiceMock).Move(new Position(186, 92));
+        verify(movementServiceMock).Move(new Position(186, 94));
     }
 }

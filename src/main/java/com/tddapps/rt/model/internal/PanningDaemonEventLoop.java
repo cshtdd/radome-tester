@@ -49,8 +49,6 @@ class PanningDaemonEventLoop implements PanningDaemon {
 
                     }
                 }
-
-                // TODO finish this
             }
 
             delay.Yield();
