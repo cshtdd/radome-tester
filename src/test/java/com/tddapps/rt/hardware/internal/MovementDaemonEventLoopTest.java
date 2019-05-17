@@ -30,6 +30,10 @@ public class MovementDaemonEventLoopTest {
             stepperMotorMoverMock
     );
 
+    private Status status() {
+        return statusRepository.CurrentStatus();
+    }
+
     @Before
     public void Setup() throws InvalidOperationException {
         statusRepository.Save(Status.builder().build());
@@ -73,7 +77,7 @@ public class MovementDaemonEventLoopTest {
 
     @Test
     public void RunWillNotDoAnythingIfHardwareHasAlreadyBeenInitialized() {
-        statusRepository.CurrentStatus().setHardwareInitialized(true);
+        status().setHardwareInitialized(true);
 
         daemon.run();
 
@@ -101,8 +105,8 @@ public class MovementDaemonEventLoopTest {
         daemon.run();
 
         assertEquals(0, daemon.CurrentIteration);
-        assertFalse(statusRepository.CurrentStatus().isHardwareInitialized());
-        assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+        assertFalse(status().isHardwareInitialized());
+        assertTrue(status().isHardwareCrash());
     }
 
     @Test
@@ -126,8 +130,8 @@ public class MovementDaemonEventLoopTest {
         daemon.run();
 
         assertEquals(0, daemon.CurrentIteration);
-        assertFalse(statusRepository.CurrentStatus().isHardwareInitialized());
-        assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+        assertFalse(status().isHardwareInitialized());
+        assertTrue(status().isHardwareCrash());
     }
 
     @Test
@@ -135,8 +139,8 @@ public class MovementDaemonEventLoopTest {
         daemon.run();
 
         assertTrue(daemon.CurrentIteration > 0);
-        assertTrue(statusRepository.CurrentStatus().isHardwareInitialized());
-        assertFalse(statusRepository.CurrentStatus().isHardwareCrash());
+        assertTrue(status().isHardwareInitialized());
+        assertFalse(status().isHardwareCrash());
     }
 
     @Test
@@ -145,8 +149,8 @@ public class MovementDaemonEventLoopTest {
 
         daemon.run();
 
-        assertTrue(statusRepository.CurrentStatus().isHardwareInitialized());
-        assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+        assertTrue(status().isHardwareInitialized());
+        assertTrue(status().isHardwareCrash());
         verify(thetaStepper).Destroy();
         verify(phiStepper).Destroy();
     }
@@ -156,8 +160,8 @@ public class MovementDaemonEventLoopTest {
         daemon.run();
 
         verify(calibrationServiceMock).CalibrateThetaStepper(thetaStepper);
-        assertFalse(statusRepository.CurrentStatus().isCalibrating());
-        assertTrue(statusRepository.CurrentStatus().isCalibrated());
+        assertFalse(status().isCalibrating());
+        assertTrue(status().isCalibrated());
     }
 
     @Test
@@ -168,9 +172,9 @@ public class MovementDaemonEventLoopTest {
 
         daemon.run();
 
-        assertTrue(statusRepository.CurrentStatus().isCalibrating());
-        assertFalse(statusRepository.CurrentStatus().isHardwareInitialized());
-        assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+        assertTrue(status().isCalibrating());
+        assertFalse(status().isHardwareInitialized());
+        assertTrue(status().isHardwareCrash());
         verify(thetaStepper).Destroy();
         verify(phiStepper).Destroy();
     }
@@ -180,8 +184,8 @@ public class MovementDaemonEventLoopTest {
         daemon.run();
 
         verify(calibrationServiceMock).CalibratePhiStepper(phiStepper);
-        assertFalse(statusRepository.CurrentStatus().isCalibrating());
-        assertTrue(statusRepository.CurrentStatus().isCalibrated());
+        assertFalse(status().isCalibrating());
+        assertTrue(status().isCalibrated());
     }
 
     @Test
@@ -192,9 +196,9 @@ public class MovementDaemonEventLoopTest {
 
         daemon.run();
 
-        assertTrue(statusRepository.CurrentStatus().isCalibrating());
-        assertFalse(statusRepository.CurrentStatus().isHardwareInitialized());
-        assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+        assertTrue(status().isCalibrating());
+        assertFalse(status().isHardwareInitialized());
+        assertTrue(status().isHardwareCrash());
         verify(thetaStepper).Destroy();
         verify(phiStepper).Destroy();
     }
@@ -218,7 +222,7 @@ public class MovementDaemonEventLoopTest {
 
         daemon.run();
 
-        assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+        assertTrue(status().isHardwareCrash());
         assertEquals(1, daemon.CurrentIteration);
         verify(thetaStepper).Destroy();
         verify(phiStepper).Destroy();
@@ -243,7 +247,7 @@ public class MovementDaemonEventLoopTest {
 
         daemon.run();
 
-        assertTrue(statusRepository.CurrentStatus().isHardwareCrash());
+        assertTrue(status().isHardwareCrash());
         assertEquals(1, daemon.CurrentIteration);
         verify(thetaStepper).Destroy();
         verify(phiStepper).Destroy();
