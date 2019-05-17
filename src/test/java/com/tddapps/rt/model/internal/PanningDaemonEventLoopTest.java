@@ -119,6 +119,32 @@ public class PanningDaemonEventLoopTest {
     }
 
     @Test
+    public void MapsTheEntireSurfaceEvenWithFractionalIncrements() throws InvalidOperationException {
+        daemon.MaxIterations = 100;
+        status().setPanning(true);
+        when(movementServiceMock.CanMove(any())).thenReturn(true);
+        panningSettings.settings = new PanningSettings(
+                180, 180.5, 0.3,
+                90, 92, 0.5
+        );
+
+        daemon.run();
+
+        assertFalse(status().isPanning());
+        verify(movementServiceMock).Move(new Position(180.0, 90.0));
+        verify(movementServiceMock).Move(new Position(180.0, 90.5));
+        verify(movementServiceMock).Move(new Position(180.0, 91.0));
+        verify(movementServiceMock).Move(new Position(180.0, 91.5));
+        verify(movementServiceMock).Move(new Position(180.0, 92.0));
+
+        verify(movementServiceMock).Move(new Position(180.3, 90.0));
+        verify(movementServiceMock).Move(new Position(180.3, 90.5));
+        verify(movementServiceMock).Move(new Position(180.3, 91.0));
+        verify(movementServiceMock).Move(new Position(180.3, 91.5));
+        verify(movementServiceMock).Move(new Position(180.3, 92.0));
+    }
+
+    @Test
     public void MapsTheEntireSurfaceEvenWhenBoundariesAndIncrementsDoNotAlign() throws InvalidOperationException {
         daemon.MaxIterations = 100;
         status().setPanning(true);
