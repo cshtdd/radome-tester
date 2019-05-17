@@ -172,4 +172,28 @@ public class PanningDaemonEventLoopTest {
         verify(movementServiceMock).Move(new Position(186, 92));
         verify(movementServiceMock).Move(new Position(186, 94));
     }
+
+    @Test
+    public void StopsPanningWhenMovementIsInterrupted() throws InvalidOperationException {
+        daemon.MaxIterations = 100;
+        status().setPanning(true);
+        when(movementServiceMock.CanMove(any())).thenReturn(true);
+        panningSettings.settings = new PanningSettings(
+                180, 190, 1,
+                90, 90, 1
+        );
+        daemon.conditionCallback = () -> {
+            if (daemon.CurrentIteration == 4){
+                status().setPanning(false);
+            }
+        };
+
+        daemon.run();
+
+        assertFalse(status().isPanning());
+        verify(movementServiceMock).Move(new Position(180.0, 90.0));
+        verify(movementServiceMock).Move(new Position(181.0, 90.0));
+        verify(movementServiceMock).Move(new Position(182.0, 90.0));
+        verify(movementServiceMock).Move(new Position(183.0, 90.0));
+    }
 }
