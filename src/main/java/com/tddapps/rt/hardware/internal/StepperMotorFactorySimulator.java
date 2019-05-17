@@ -5,12 +5,12 @@ import com.tddapps.rt.hardware.StepperMotorSimulator;
 
 class StepperMotorFactorySimulator implements StepperMotorFactory {
     @Override
-    public StepperMotor CreateTheta() {
+    public StepperMotor createTheta() {
         return new StepperMotorSimulator("Theta");
     }
 
     @Override
-    public StepperMotor CreatePhi() {
+    public StepperMotor createPhi() {
         return new StepperMotorSimulator("Phi");
     }
 }

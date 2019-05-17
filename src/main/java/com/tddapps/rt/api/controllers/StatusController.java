@@ -34,11 +34,11 @@ public class StatusController {
     }
 
     @GetMapping(value = "/api/status", produces = "application/json")
-    StatusResponse Get() {
-        var mapper = container.Resolve(Mapper.class);
-        var statusRepository = container.Resolve(StatusRepository.class);
+    StatusResponse get() {
+        var mapper = container.resolve(Mapper.class);
+        var statusRepository = container.resolve(StatusRepository.class);
 
-        var currentStatus = statusRepository.CurrentStatus();
+        var currentStatus = statusRepository.read();
         return mapper.map(currentStatus, StatusResponse.class);
     }
 }

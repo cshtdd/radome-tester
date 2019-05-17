@@ -3,9 +3,9 @@ package com.tddapps.rt.hardware;
 import com.tddapps.rt.InvalidOperationException;
 
 public interface StepperMotor {
-    void Init();
-    void Destroy();
+    void init();
+    void destroy();
 
-    boolean MoveCW() throws InvalidOperationException;
-    boolean MoveCCW() throws InvalidOperationException;
+    boolean moveCW() throws InvalidOperationException;
+    boolean moveCCW() throws InvalidOperationException;
 }

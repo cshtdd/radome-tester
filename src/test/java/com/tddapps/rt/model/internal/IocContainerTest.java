@@ -11,15 +11,15 @@ import static org.junit.Assert.assertTrue;
 
 public class IocContainerTest {
     @Test
-    public void RegistersDependencies(){
-        assertTrue(IocContainer.getInstance().Resolve(StatusRepository.class) instanceof StatusRepositoryInMemory);
-        assertTrue(IocContainer.getInstance().Resolve(MovementService.class) instanceof MovementServiceStatusChanger);
-        assertTrue(IocContainer.getInstance().Resolve(PanningDaemon.class) instanceof PanningDaemonEventLoop);
-        assertTrue(IocContainer.getInstance().Resolve(PanningSettingsRepository.class) instanceof PanningSettingsRepositoryFixed);
+    public void registersDependencies(){
+        assertTrue(IocContainer.getInstance().resolve(StatusRepository.class) instanceof StatusRepositoryInMemory);
+        assertTrue(IocContainer.getInstance().resolve(MovementService.class) instanceof MovementServiceStatusChanger);
+        assertTrue(IocContainer.getInstance().resolve(PanningDaemon.class) instanceof PanningDaemonEventLoop);
+        assertTrue(IocContainer.getInstance().resolve(PanningSettingsRepository.class) instanceof PanningSettingsRepositoryFixed);
     }
 
     @Test
-    public void RegisterSingletons(){
+    public void registerSingletons(){
         assertSingleton(StatusRepository.class);
     }
 }

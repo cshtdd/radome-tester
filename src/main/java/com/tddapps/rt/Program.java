@@ -11,8 +11,8 @@ public class Program {
         log.info("Starting");
         try {
             IocContainer.getInstance()
-                    .Resolve(ProgramStartup.class)
-                    .Run(args);
+                    .resolve(ProgramStartup.class)
+                    .run(args);
         } catch (Exception e) {
             log.error("Unhandled Exception", e);
         }

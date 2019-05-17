@@ -30,106 +30,106 @@ public class StepperMotorMoverStatus implements StepperMotorMover {
     }
 
     @Override
-    public void MoveTheta(StepperMotor motor) throws InvalidOperationException {
-        var currentStatus = statusRepository.CurrentStatus();
-        if (!ShouldMove(THETA, currentStatus)) {
+    public void moveTheta(StepperMotor motor) throws InvalidOperationException {
+        var currentStatus = statusRepository.read();
+        if (!shouldMove(THETA, currentStatus)) {
             return;
         }
 
         var src = currentStatus.getCurrentPosition();
         var dest = currentStatus.getCommandedPosition();
-        var precision = stepperPrecisionRepository.ReadTheta();
-        var direction = movementCalculator.CalculateThetaDirection(src, dest);
-        var steps = movementCalculator.CalculateThetaSteps(src, dest, precision);
+        var precision = stepperPrecisionRepository.readTheta();
+        var direction = movementCalculator.calculateThetaDirection(src, dest);
+        var steps = movementCalculator.calculateThetaSteps(src, dest, precision);
 
-        LogMotorMovement(THETA, direction, steps);
+        logMotorMovement(THETA, direction, steps);
 
         for (int i = 0; i < steps; i++) {
-            Move(motor, direction);
+            move(motor, direction);
         }
 
         var updatedPosition = src.toBuilder()
                 .thetaDegrees(dest.getThetaDegrees())
                 .build();
-        CompleteMovement(THETA, updatedPosition, dest);
+        completeMovement(THETA, updatedPosition, dest);
     }
 
     @Override
-    public void MovePhi(StepperMotor motor) throws InvalidOperationException {
-        var currentStatus = statusRepository.CurrentStatus();
-        if (!ShouldMove(PHI, currentStatus)) {
+    public void movePhi(StepperMotor motor) throws InvalidOperationException {
+        var currentStatus = statusRepository.read();
+        if (!shouldMove(PHI, currentStatus)) {
             return;
         }
 
         var src = currentStatus.getCurrentPosition();
         var dest = currentStatus.getCommandedPosition();
-        var precision = stepperPrecisionRepository.ReadPhi();
-        var direction = movementCalculator.CalculatePhiDirection(src, dest);
-        var steps = movementCalculator.CalculatePhiSteps(src, dest, precision);
+        var precision = stepperPrecisionRepository.readPhi();
+        var direction = movementCalculator.calculatePhiDirection(src, dest);
+        var steps = movementCalculator.calculatePhiSteps(src, dest, precision);
 
-        LogMotorMovement(PHI, direction, steps);
+        logMotorMovement(PHI, direction, steps);
 
         for (int i = 0; i < steps; i++) {
-            Move(motor, direction);
+            move(motor, direction);
         }
 
         var updatedPosition = src.toBuilder()
                 .phiDegrees(dest.getPhiDegrees())
                 .build();
-        CompleteMovement(PHI, updatedPosition, dest);
+        completeMovement(PHI, updatedPosition, dest);
     }
 
-    private boolean ShouldMove(String axis, Status currentStatus) {
+    private boolean shouldMove(String axis, Status currentStatus) {
         if (!currentStatus.isMoving()){
             return false;
         }
 
         log.debug(String.format("Movement Started; axis=%s;", axis));
 
-        if (!currentStatus.getCurrentPosition().IsValid()){
-            HaltMovement("Invalid Current Position");
+        if (!currentStatus.getCurrentPosition().isValid()){
+            haltMovement("Invalid Current Position");
             return false;
         }
 
-        if (!currentStatus.getCommandedPosition().IsValid()){
-            HaltMovement("Invalid Commanded Position");
+        if (!currentStatus.getCommandedPosition().isValid()){
+            haltMovement("Invalid Commanded Position");
             return false;
         }
 
         return true;
     }
 
-    private void Move(StepperMotor motor, Direction direction) throws InvalidOperationException {
+    private void move(StepperMotor motor, Direction direction) throws InvalidOperationException {
         try {
             if (direction.equals(Direction.Clockwise)) {
-                motor.MoveCW();
+                motor.moveCW();
             } else {
-                motor.MoveCCW();
+                motor.moveCCW();
             }
         } catch (InvalidOperationException e){
-            HaltMovement("Movement Error");
+            haltMovement("Movement Error");
             throw e;
         }
     }
 
-    private void HaltMovement(String reason) {
+    private void haltMovement(String reason) {
         log.info(String.format("Stop Movement; reason=%s", reason));
-        statusRepository.Update(currentStatus -> currentStatus
+        statusRepository.update(status -> status
                 .toBuilder()
                 .isMoving(false)
                 .build());
     }
 
-    private void LogMotorMovement(String axis, Direction direction, int steps) {
+    private void logMotorMovement(String axis, Direction direction, int steps) {
         log.debug(String.format("Moving motor; axis=%s; direction=%s; steps=%d;", axis, direction, steps));
     }
 
-    private void CompleteMovement(String axis, Position updatedPosition, Position commandedPosition) {
-        var isStillMoving = !updatedPosition.AlmostEquals(commandedPosition);
+    private void completeMovement(String axis, Position updatedPosition, Position commandedPosition) {
+        var isStillMoving = !updatedPosition.almostEquals(commandedPosition);
 
         log.debug(String.format("Movement Completed; axis=%s; isMoving=%s", axis, isStillMoving));
 
-        statusRepository.Update(currentStatus -> currentStatus
+        statusRepository.update(status -> status
                 .toBuilder()
                 .currentPosition(updatedPosition)
                 .isMoving(isStillMoving)

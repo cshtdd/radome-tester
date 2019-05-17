@@ -9,12 +9,12 @@ import static junit.framework.TestCase.assertTrue;
 
 public class IocContainerTest {
     @Test
-    public void RegistersDependencies(){
-        assertTrue(IocContainer.getInstance().Resolve(Mapper.class) instanceof AutoMapper);
+    public void registersDependencies(){
+        assertTrue(IocContainer.getInstance().resolve(Mapper.class) instanceof AutoMapper);
     }
 
     @Test
-    public void RegisterSingletons(){
+    public void registerSingletons(){
         assertSingleton(Mapper.class);
     }
 }

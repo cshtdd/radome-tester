@@ -4,6 +4,6 @@ import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.StepperMotor;
 
 interface StepperMotorFactory {
-    StepperMotor CreateTheta() throws InvalidOperationException;
-    StepperMotor CreatePhi() throws InvalidOperationException;
+    StepperMotor createTheta() throws InvalidOperationException;
+    StepperMotor createPhi() throws InvalidOperationException;
 }

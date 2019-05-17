@@ -14,7 +14,7 @@ public class HardwareInitializer implements StartupService {
     }
 
     @Override
-    public void RunAsync(String[] args) {
+    public void runAsync(String[] args) {
         log.info("Starting");
 
         new Thread(daemon).start();

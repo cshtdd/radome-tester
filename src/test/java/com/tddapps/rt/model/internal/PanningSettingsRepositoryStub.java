@@ -4,7 +4,7 @@ public class PanningSettingsRepositoryStub implements PanningSettingsRepository{
     public PanningSettings settings;
 
     @Override
-    public PanningSettings Read() {
+    public PanningSettings read() {
         return settings;
     }
 }

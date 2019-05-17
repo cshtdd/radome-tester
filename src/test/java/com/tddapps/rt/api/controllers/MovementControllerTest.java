@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.tddapps.rt.mapping.internal.IocContainerAutoMappingHelper.SetupAutoMapping;
+import static com.tddapps.rt.mapping.internal.IocContainerAutoMappingHelper.setupAutoMapping;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,136 +34,136 @@ public class MovementControllerTest {
     private final MovementService movementServiceMock = mock(MovementService.class);
 
     @Before
-    public void Setup(){
-        SetupAutoMapping(containerMock);
-        when(containerMock.Resolve(MovementService.class)).thenReturn(movementServiceMock);
+    public void setup(){
+        setupAutoMapping(containerMock);
+        when(containerMock.resolve(MovementService.class)).thenReturn(movementServiceMock);
     }
 
-    private ResultActions StartMovement(String jsonBody) throws Exception {
+    private ResultActions startMovement(String jsonBody) throws Exception {
         var request = post("/api/movement/start")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonBody);
         return web.perform(request);
     }
 
-    private ResultActions StopMovement() throws Exception {
+    private ResultActions stopMovement() throws Exception {
         var request = post("/api/movement/stop")
                 .contentType(MediaType.APPLICATION_JSON);
         return web.perform(request);
     }
 
-    private ResultActions StartPanning() throws Exception {
+    private ResultActions startPanning() throws Exception {
         var request = post("/api/movement/pan")
                 .contentType(MediaType.APPLICATION_JSON);
         return web.perform(request);
     }
 
     @Test
-    public void Returns400WhenCannotMove() throws Exception {
-        when(movementServiceMock.CanMove(new Position(190, 85)))
+    public void returns400WhenCannotMove() throws Exception {
+        when(movementServiceMock.canMove(new Position(190, 85)))
                 .thenReturn(false);
 
-        StartMovement("{\"theta\": 190, \"phi\": 85}")
+        startMovement("{\"theta\": 190, \"phi\": 85}")
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Cannot Move"));
     }
 
     @Test
-    public void Returns400WhenMovementIsInvalid() throws Exception {
-        when(movementServiceMock.CanMove(any()))
+    public void returns400WhenMovementIsInvalid() throws Exception {
+        when(movementServiceMock.canMove(any()))
                 .thenReturn(true);
         doThrow(new InvalidOperationException())
-                .when(movementServiceMock).Move(any());
+                .when(movementServiceMock).move(any());
 
-        StartMovement("{\"theta\": 190, \"phi\": 86}")
+        startMovement("{\"theta\": 190, \"phi\": 86}")
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Movement Error"));
     }
 
     @Test
-    public void Returns500WhenMovementFails() throws Exception {
-        when(movementServiceMock.CanMove(any()))
+    public void returns500WhenMovementFails() throws Exception {
+        when(movementServiceMock.canMove(any()))
                 .thenReturn(true);
         doAnswer(i -> {
             throw new Exception();
-        }).when(movementServiceMock).Move(any());
+        }).when(movementServiceMock).move(any());
 
-        StartMovement("{\"theta\": 190, \"phi\": 86}")
+        startMovement("{\"theta\": 190, \"phi\": 86}")
                 .andExpect(status().is5xxServerError())
                 .andExpect(content().string("Unexpected Error"));
     }
 
     @Test
-    public void ReturnsOkWhenMovementSucceeds() throws Exception {
-        when(movementServiceMock.CanMove(any()))
+    public void returnsOkWhenMovementSucceeds() throws Exception {
+        when(movementServiceMock.canMove(any()))
                 .thenReturn(true);
 
-        StartMovement("{\"theta\": 191.333333, \"phi\": 84.66666}")
+        startMovement("{\"theta\": 191.333333, \"phi\": 84.66666}")
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
 
-        verify(movementServiceMock).Move(new Position(191.33, 84.67));
+        verify(movementServiceMock).move(new Position(191.33, 84.67));
     }
 
     @Test
-    public void Returns500WhenStopFails() throws Exception {
+    public void returns500WhenStopFails() throws Exception {
         doAnswer(i -> {
             throw new Exception();
-        }).when(movementServiceMock).Stop();
+        }).when(movementServiceMock).stop();
 
-        StopMovement()
+        stopMovement()
                 .andExpect(status().is5xxServerError())
                 .andExpect(content().string("Unexpected Error"));
     }
 
     @Test
-    public void ReturnsOkWhenStopSucceeds() throws Exception {
-        StopMovement()
+    public void returnsOkWhenStopSucceeds() throws Exception {
+        stopMovement()
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
 
-        verify(movementServiceMock).Stop();
+        verify(movementServiceMock).stop();
     }
 
     @Test
-    public void Returns400WhenCannotPan() throws Exception {
-        when(movementServiceMock.CanPan()).thenReturn(false);
+    public void returns400WhenCannotPan() throws Exception {
+        when(movementServiceMock.canPan()).thenReturn(false);
 
-        StartPanning()
+        startPanning()
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Cannot Pan"));
     }
 
     @Test
-    public void Returns400WhenPanningIsInvalid() throws Exception {
-        when(movementServiceMock.CanPan()).thenReturn(true);
-        doThrow(new InvalidOperationException()).when(movementServiceMock).Pan();
+    public void returns400WhenPanningIsInvalid() throws Exception {
+        when(movementServiceMock.canPan()).thenReturn(true);
+        doThrow(new InvalidOperationException()).when(movementServiceMock).pan();
 
-        StartPanning()
+        startPanning()
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Panning Error"));
     }
 
     @Test
-    public void Returns500WhenPanningFails() throws Exception {
-        when(movementServiceMock.CanPan()).thenReturn(true);
+    public void returns500WhenPanningFails() throws Exception {
+        when(movementServiceMock.canPan()).thenReturn(true);
         doAnswer(i -> {
             throw new Exception();
-        }).when(movementServiceMock).Pan();
+        }).when(movementServiceMock).pan();
 
-        StartPanning()
+        startPanning()
                 .andExpect(status().is5xxServerError())
                 .andExpect(content().string("Unexpected Error"));
     }
 
     @Test
-    public void ReturnsOkWhenPanningSucceeds() throws Exception {
-        when(movementServiceMock.CanPan()).thenReturn(true);
+    public void returnsOkWhenPanningSucceeds() throws Exception {
+        when(movementServiceMock.canPan()).thenReturn(true);
 
-        StartPanning()
+        startPanning()
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
 
-        verify(movementServiceMock).Pan();
+        verify(movementServiceMock).pan();
     }
 }

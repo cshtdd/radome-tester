@@ -11,43 +11,43 @@ public class StatusRepositoryInMemoryTest {
     private final StatusRepository repository = new StatusRepositoryInMemory();
 
     @Test
-    public void DefaultStatusIsNull(){
-        assertNull(repository.CurrentStatus());
+    public void defaultStatusIsNull(){
+        assertNull(repository.read());
     }
 
     @Test
-    public void SavesStatus(){
+    public void savesStatus(){
         var seededFirst = Status.builder()
                 .currentPosition(new Position(270, 90))
                 .commandedPosition(new Position(270, 90))
                 .isMoving(false)
                 .build();
-        repository.Save(seededFirst);
+        repository.save(seededFirst);
 
         var seededLast = Status.builder()
                 .currentPosition(new Position(270, 100))
                 .commandedPosition(new Position(270, 90))
                 .isMoving(true)
                 .build();
-        repository.Save(seededLast);
+        repository.save(seededLast);
 
-        var readStatus = repository.CurrentStatus();
+        var readStatus = repository.read();
 
         assertEquals(seededLast, readStatus);
     }
 
     @Test
-    public void UpdatesStatus(){
+    public void updatesStatus(){
         var seededFirst = Status.builder()
                 .currentPosition(new Position(270, 90))
                 .commandedPosition(new Position(270, 90))
                 .isMoving(false)
                 .build();
-        repository.Save(seededFirst);
+        repository.save(seededFirst);
 
-        repository.Update(s -> s.toBuilder().isMoving(true).build());
+        repository.update(s -> s.toBuilder().isMoving(true).build());
 
-        var actual = repository.CurrentStatus();
+        var actual = repository.read();
         var expected = Status.builder()
                 .currentPosition(new Position(270, 90))
                 .commandedPosition(new Position(270, 90))
@@ -57,15 +57,15 @@ public class StatusRepositoryInMemoryTest {
     }
 
     @Test
-    public void ReturnsACloneOfTheStatus(){
+    public void returnsACloneOfTheStatus(){
         var seeded = Status.builder()
                 .currentPosition(new Position(270, 90))
                 .commandedPosition(new Position(270, 90))
                 .isMoving(true)
                 .build();
-        repository.Save(seeded);
+        repository.save(seeded);
 
-        var readStatus = repository.CurrentStatus();
+        var readStatus = repository.read();
 
         assertEquals(seeded, readStatus);
         assertNotSame(seeded, readStatus);

@@ -22,17 +22,17 @@ public class StepperMotorFactorySelectorTest {
     private StepperMotorFactory factory;
 
     @Before
-    public void Setup() throws InvalidOperationException {
+    public void setup() throws InvalidOperationException {
         var configurationReaderMock = mock(ConfigurationReader.class);
-        when(configurationReaderMock.Read()).thenReturn(configuration);
+        when(configurationReaderMock.read()).thenReturn(configuration);
 
         var realFactoryMock = mock(StepperMotorFactory.class);
-        when(realFactoryMock.CreateTheta()).thenReturn(realTheta);
-        when(realFactoryMock.CreatePhi()).thenReturn(realPhi);
+        when(realFactoryMock.createTheta()).thenReturn(realTheta);
+        when(realFactoryMock.createPhi()).thenReturn(realPhi);
 
         var simulatorFactoryMock = mock(StepperMotorFactory.class);
-        when(simulatorFactoryMock.CreateTheta()).thenReturn(simulatorTheta);
-        when(simulatorFactoryMock.CreatePhi()).thenReturn(simulatorPhi);
+        when(simulatorFactoryMock.createTheta()).thenReturn(simulatorTheta);
+        when(simulatorFactoryMock.createPhi()).thenReturn(simulatorPhi);
 
         factory = new StepperMotorFactorySelector(
                 configurationReaderMock, realFactoryMock, simulatorFactoryMock
@@ -40,16 +40,16 @@ public class StepperMotorFactorySelectorTest {
     }
 
     @Test
-    public void InvokesRealFactoryMethods() throws InvalidOperationException {
-        assertEquals(realTheta, factory.CreateTheta());
-        assertEquals(realPhi, factory.CreatePhi());
+    public void invokesRealFactoryMethods() throws InvalidOperationException {
+        assertEquals(realTheta, factory.createTheta());
+        assertEquals(realPhi, factory.createPhi());
     }
 
     @Test
-    public void InvokesSimulatorFactoryMethods() throws InvalidOperationException {
+    public void invokesSimulatorFactoryMethods() throws InvalidOperationException {
         configuration.setSimulation(true);
 
-        assertEquals(simulatorTheta, factory.CreateTheta());
-        assertEquals(simulatorPhi, factory.CreatePhi());
+        assertEquals(simulatorTheta, factory.createTheta());
+        assertEquals(simulatorPhi, factory.createPhi());
     }
 }

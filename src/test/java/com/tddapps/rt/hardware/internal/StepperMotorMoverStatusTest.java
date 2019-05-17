@@ -26,87 +26,87 @@ public class StepperMotorMoverStatusTest {
     private final StepperMotor stepperMotorPhiMock = mock(StepperMotor.class);
 
     private Status status() {
-        return statusRepositoryStub.CurrentStatus();
+        return statusRepositoryStub.read();
     }
 
     private void assertNoMotorMoved() throws InvalidOperationException {
-        verify(stepperMotorThetaMock, times(0)).MoveCW();
-        verify(stepperMotorThetaMock, times(0)).MoveCCW();
-        verify(stepperMotorPhiMock, times(0)).MoveCW();
-        verify(stepperMotorPhiMock, times(0)).MoveCCW();
+        verify(stepperMotorThetaMock, times(0)).moveCW();
+        verify(stepperMotorThetaMock, times(0)).moveCCW();
+        verify(stepperMotorPhiMock, times(0)).moveCW();
+        verify(stepperMotorPhiMock, times(0)).moveCCW();
     }
 
     @Before
-    public void Setup() {
-        statusRepositoryStub.Save(Status.builder().build());
-        when(stepperPrecisionRepositoryMock.ReadTheta()).thenReturn(seededPrecision);
-        when(stepperPrecisionRepositoryMock.ReadPhi()).thenReturn(seededPrecision);
+    public void setup() {
+        statusRepositoryStub.save(Status.builder().build());
+        when(stepperPrecisionRepositoryMock.readTheta()).thenReturn(seededPrecision);
+        when(stepperPrecisionRepositoryMock.readPhi()).thenReturn(seededPrecision);
     }
 
     @Test
-    public void MovesThetaCounterClockwise() throws InvalidOperationException {
+    public void movesThetaCounterClockwise() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(200, 90));
         status().setCommandedPosition(new Position(270, 90));
 
-        motorMover.MoveTheta(stepperMotorThetaMock);
+        motorMover.moveTheta(stepperMotorThetaMock);
 
-        verify(stepperMotorThetaMock, times(70)).MoveCCW();
+        verify(stepperMotorThetaMock, times(70)).moveCCW();
     }
 
     @Test
-    public void MovesThetaClockwise() throws InvalidOperationException {
+    public void movesThetaClockwise() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(220, 90));
         status().setCommandedPosition(new Position(200, 90));
 
-        motorMover.MoveTheta(stepperMotorThetaMock);
+        motorMover.moveTheta(stepperMotorThetaMock);
 
-        verify(stepperMotorThetaMock, times(20)).MoveCW();
+        verify(stepperMotorThetaMock, times(20)).moveCW();
     }
 
     @Test
-    public void MoveThetaUpdatesCurrentPosition() throws InvalidOperationException {
+    public void moveThetaUpdatesCurrentPosition() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(200, 50));
         status().setCommandedPosition(new Position(270, 90));
 
-        motorMover.MoveTheta(stepperMotorThetaMock);
+        motorMover.moveTheta(stepperMotorThetaMock);
 
         assertEquals(new Position(270, 50), status().getCurrentPosition());
     }
 
     @Test
-    public void MoveThetaSetsIsMovingToFalseWhenPositionsMatchAfterMovement() throws InvalidOperationException {
+    public void moveThetaSetsIsMovingToFalseWhenPositionsMatchAfterMovement() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(200, 90));
         status().setCommandedPosition(new Position(270, 90));
 
-        motorMover.MoveTheta(stepperMotorThetaMock);
+        motorMover.moveTheta(stepperMotorThetaMock);
 
         assertFalse(status().isMoving());
     }
 
     @Test
-    public void MoveThetaKeepsIsMovingTrueWhenPositionsDoNotMatchAfterMovement() throws InvalidOperationException {
+    public void moveThetaKeepsIsMovingTrueWhenPositionsDoNotMatchAfterMovement() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(200, 50));
         status().setCommandedPosition(new Position(270, 90));
 
-        motorMover.MoveTheta(stepperMotorThetaMock);
+        motorMover.moveTheta(stepperMotorThetaMock);
 
         assertTrue(status().isMoving());
     }
 
     @Test
-    public void MoveThetaBubblesUpMovementExceptions() throws InvalidOperationException {
+    public void moveThetaBubblesUpMovementExceptions() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(270, 50));
         status().setCommandedPosition(new Position(260, 90));
-        doThrow(new InvalidOperationException()).when(stepperMotorThetaMock).MoveCW();
+        doThrow(new InvalidOperationException()).when(stepperMotorThetaMock).moveCW();
 
         try {
-            motorMover.MoveTheta(stepperMotorThetaMock);
+            motorMover.moveTheta(stepperMotorThetaMock);
             fail("Should have thrown");
         }catch (InvalidOperationException e){
             assertNotNull(e);
@@ -117,69 +117,69 @@ public class StepperMotorMoverStatusTest {
 
 
     @Test
-    public void MovesPhiCounterClockwise() throws InvalidOperationException {
+    public void movesPhiCounterClockwise() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(250, 90));
         status().setCommandedPosition(new Position(250, 20));
 
-        motorMover.MovePhi(stepperMotorPhiMock);
+        motorMover.movePhi(stepperMotorPhiMock);
 
-        verify(stepperMotorPhiMock, times(70)).MoveCCW();
+        verify(stepperMotorPhiMock, times(70)).moveCCW();
     }
 
     @Test
-    public void MovesPhiClockwise() throws InvalidOperationException {
+    public void movesPhiClockwise() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(200, 90));
         status().setCommandedPosition(new Position(200, 110));
 
-        motorMover.MovePhi(stepperMotorPhiMock);
+        motorMover.movePhi(stepperMotorPhiMock);
 
-        verify(stepperMotorPhiMock, times(20)).MoveCW();
+        verify(stepperMotorPhiMock, times(20)).moveCW();
     }
 
     @Test
-    public void MovePhiUpdatesCurrentPosition() throws InvalidOperationException {
+    public void movePhiUpdatesCurrentPosition() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(200, 50));
         status().setCommandedPosition(new Position(250, 90));
 
-        motorMover.MovePhi(stepperMotorPhiMock);
+        motorMover.movePhi(stepperMotorPhiMock);
 
         assertEquals(new Position(200, 90), status().getCurrentPosition());
     }
 
     @Test
-    public void MovePhiSetsIsMovingToFalseWhenPositionsMatchAfterMovement() throws InvalidOperationException {
+    public void movePhiSetsIsMovingToFalseWhenPositionsMatchAfterMovement() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(200, 50));
         status().setCommandedPosition(new Position(200, 90));
 
-        motorMover.MovePhi(stepperMotorPhiMock);
+        motorMover.movePhi(stepperMotorPhiMock);
 
         assertFalse(status().isMoving());
     }
 
     @Test
-    public void MovePhiKeepsIsMovingTrueWhenPositionsDoNotMatchAfterMovement() throws InvalidOperationException {
+    public void movePhiKeepsIsMovingTrueWhenPositionsDoNotMatchAfterMovement() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(200, 50));
         status().setCommandedPosition(new Position(270, 90));
 
-        motorMover.MovePhi(stepperMotorPhiMock);
+        motorMover.movePhi(stepperMotorPhiMock);
 
         assertTrue(status().isMoving());
     }
 
     @Test
-    public void MovePhiBubblesUpMovementExceptions() throws InvalidOperationException {
+    public void movePhiBubblesUpMovementExceptions() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(270, 50));
         status().setCommandedPosition(new Position(260, 90));
-        doThrow(new InvalidOperationException()).when(stepperMotorPhiMock).MoveCW();
+        doThrow(new InvalidOperationException()).when(stepperMotorPhiMock).moveCW();
 
         try {
-            motorMover.MovePhi(stepperMotorPhiMock);
+            motorMover.movePhi(stepperMotorPhiMock);
             fail("Should have thrown");
         }catch (InvalidOperationException e){
             assertNotNull(e);
@@ -190,51 +190,51 @@ public class StepperMotorMoverStatusTest {
 
 
     @Test
-    public void DoesNotMoveWhenStatusIsNotMoving() throws InvalidOperationException {
+    public void doesNotMoveWhenStatusIsNotMoving() throws InvalidOperationException {
         status().setCurrentPosition(new Position(200, 50));
         status().setCommandedPosition(new Position(270, 90));
 
-        motorMover.MoveTheta(stepperMotorThetaMock);
-        motorMover.MovePhi(stepperMotorPhiMock);
+        motorMover.moveTheta(stepperMotorThetaMock);
+        motorMover.movePhi(stepperMotorPhiMock);
 
         assertNoMotorMoved();
         assertFalse(status().isMoving());
     }
 
     @Test
-    public void DoesNotMoveWhenCurrentPositionIsInvalid() throws InvalidOperationException {
+    public void doesNotMoveWhenCurrentPositionIsInvalid() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(720, 50));
         status().setCommandedPosition(new Position(270, 90));
 
-        motorMover.MoveTheta(stepperMotorThetaMock);
-        motorMover.MovePhi(stepperMotorPhiMock);
+        motorMover.moveTheta(stepperMotorThetaMock);
+        motorMover.movePhi(stepperMotorPhiMock);
 
         assertNoMotorMoved();
         assertFalse(status().isMoving());
     }
 
     @Test
-    public void DoesNotMoveWhenCommandedPositionIsInvalid() throws InvalidOperationException {
+    public void doesNotMoveWhenCommandedPositionIsInvalid() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(270, 50));
         status().setCommandedPosition(new Position(-4, 90));
 
-        motorMover.MoveTheta(stepperMotorThetaMock);
-        motorMover.MovePhi(stepperMotorPhiMock);
+        motorMover.moveTheta(stepperMotorThetaMock);
+        motorMover.movePhi(stepperMotorPhiMock);
 
         assertNoMotorMoved();
         assertFalse(status().isMoving());
     }
 
     @Test
-    public void DoesNotMoveWhenPositionsAreAlmostEqual() throws InvalidOperationException {
+    public void doesNotMoveWhenPositionsAreAlmostEqual() throws InvalidOperationException {
         status().setMoving(true);
         status().setCurrentPosition(new Position(270, 50));
         status().setCommandedPosition(new Position(270.01, 50.01));
 
-        motorMover.MoveTheta(stepperMotorThetaMock);
-        motorMover.MovePhi(stepperMotorPhiMock);
+        motorMover.moveTheta(stepperMotorThetaMock);
+        motorMover.movePhi(stepperMotorPhiMock);
 
         assertNoMotorMoved();
         assertFalse(status().isMoving());

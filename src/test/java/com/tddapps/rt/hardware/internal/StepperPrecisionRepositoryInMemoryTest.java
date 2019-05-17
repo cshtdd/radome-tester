@@ -9,30 +9,30 @@ public class StepperPrecisionRepositoryInMemoryTest {
     private final StepperPrecisionRepository repository = new StepperPrecisionRepositoryInMemory();
 
     @Test
-    public void DefaultThetaPrecisionIsNull(){
-        assertNull(repository.ReadTheta());
+    public void defaultThetaPrecisionIsNull(){
+        assertNull(repository.readTheta());
     }
 
     @Test
-    public void DefaultPhiPrecisionIsNull(){
-        assertNull(repository.ReadPhi());
+    public void defaultPhiPrecisionIsNull(){
+        assertNull(repository.readPhi());
     }
 
     @Test
-    public void SavesThetaPrecision(){
+    public void savesThetaPrecision(){
         var seededPrecision = new Precision(25, 0.0001);
 
-        repository.SaveTheta(seededPrecision);
+        repository.saveTheta(seededPrecision);
 
-        assertEquals(seededPrecision, repository.ReadTheta());
+        assertEquals(seededPrecision, repository.readTheta());
     }
 
     @Test
-    public void SavesPhiPrecision(){
+    public void savesPhiPrecision(){
         var seededPrecision = new Precision(15, 0.0001);
 
-        repository.SavePhi(seededPrecision);
+        repository.savePhi(seededPrecision);
 
-        assertEquals(seededPrecision, repository.ReadPhi());
+        assertEquals(seededPrecision, repository.readPhi());
     }
 }

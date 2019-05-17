@@ -22,7 +22,7 @@ class PinConverterPi3BPlus implements PinConverter {
         put(31, RaspiPin.GPIO_11);
     }};
 
-    public Pin BCMToGPIO(int bcmPin) throws IllegalArgumentException {
+    public Pin fromBCMToGPIO(int bcmPin) throws IllegalArgumentException {
         if (!mappings.containsKey(bcmPin)){
             throw new IllegalArgumentException(String.format("BcmPin out of range; bcmPin=%d", bcmPin));
         }

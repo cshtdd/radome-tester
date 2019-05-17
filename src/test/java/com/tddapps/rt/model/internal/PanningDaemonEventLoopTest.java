@@ -29,12 +29,12 @@ public class PanningDaemonEventLoopTest {
     );
 
     private Status status() {
-        return statusRepository.CurrentStatus();
+        return statusRepository.read();
     }
 
     @Before
-    public void Setup() throws InvalidOperationException {
-        statusRepository.Save(Status.builder().build());
+    public void setup() throws InvalidOperationException {
+        statusRepository.save(Status.builder().build());
         panningSettings.settings = new PanningSettings(
                 190, 210, 5,
                 45, 85, 10
@@ -44,12 +44,12 @@ public class PanningDaemonEventLoopTest {
             var p = i.getArgument(0, Position.class);
             movements.add(new double[]{p.getThetaDegrees(), p.getPhiDegrees()});
             return null;
-        }).when(movementServiceMock).Move(any());
+        }).when(movementServiceMock).move(any());
     }
 
     private static class PanningDaemonEventLoopTestable extends PanningDaemonEventLoop {
-        public int MaxIterations = 1;
-        public int CurrentIteration = 0;
+        public int maxIterations = 1;
+        public int currentIteration = 0;
         public RuntimeException seededException;
         public Runnable conditionCallback = null;
 
@@ -63,7 +63,7 @@ public class PanningDaemonEventLoopTest {
         }
 
         @Override
-        protected boolean RunCondition() {
+        protected boolean runCondition() {
             if (conditionCallback != null) {
                 conditionCallback.run();
             }
@@ -72,52 +72,52 @@ public class PanningDaemonEventLoopTest {
                 throw seededException;
             }
 
-            return CurrentIteration++ < MaxIterations;
+            return currentIteration++ < maxIterations;
         }
     }
 
     @Test
-    public void RunFinishesBecauseItEvaluatesCondition() {
-        daemon.MaxIterations = 10;
+    public void runFinishesBecauseItEvaluatesCondition() {
+        daemon.maxIterations = 10;
 
         daemon.run();
 
-        assertEquals(11, daemon.CurrentIteration);
+        assertEquals(11, daemon.currentIteration);
     }
 
     @Test
-    public void DoesNoActionWhenNotPanning() throws InvalidOperationException {
+    public void doesNoActionWhenNotPanning() throws InvalidOperationException {
         daemon.run();
 
-        verify(movementServiceMock, never()).Move(any());
+        verify(movementServiceMock, never()).move(any());
     }
 
     @Test
-    public void DoesNoActionWhenCannotMove() throws InvalidOperationException {
+    public void doesNoActionWhenCannotMove() throws InvalidOperationException {
         status().setPanning(true);
-        when(movementServiceMock.CanMove(any())).thenReturn(false);
+        when(movementServiceMock.canMove(any())).thenReturn(false);
 
         daemon.run();
 
-        verify(movementServiceMock, never()).Move(any());
+        verify(movementServiceMock, never()).move(any());
     }
 
     @Test
-    public void MovesToTheStartPositionWhenPanning() throws InvalidOperationException {
+    public void movesToTheStartPositionWhenPanning() throws InvalidOperationException {
         status().setPanning(true);
-        when(movementServiceMock.CanMove(new Position(190, 45))).thenReturn(true);
+        when(movementServiceMock.canMove(new Position(190, 45))).thenReturn(true);
 
         daemon.run();
 
         assertTrue(status().isPanning());
-        verify(movementServiceMock).Move(new Position(190, 45));
+        verify(movementServiceMock).move(new Position(190, 45));
     }
 
     @Test
-    public void SetsHardwareCrashWhenMovementFails() throws InvalidOperationException {
+    public void setsHardwareCrashWhenMovementFails() throws InvalidOperationException {
         status().setPanning(true);
-        when(movementServiceMock.CanMove(new Position(190, 45))).thenReturn(true);
-        doThrow(new InvalidOperationException()).when(movementServiceMock).Move(any());
+        when(movementServiceMock.canMove(new Position(190, 45))).thenReturn(true);
+        doThrow(new InvalidOperationException()).when(movementServiceMock).move(any());
 
         daemon.run();
 
@@ -125,10 +125,10 @@ public class PanningDaemonEventLoopTest {
     }
 
     @Test
-    public void MapsTheEntireSurface() throws InvalidOperationException {
-        daemon.MaxIterations = 100;
+    public void mapsTheEntireSurface() throws InvalidOperationException {
+        daemon.maxIterations = 100;
         status().setPanning(true);
-        when(movementServiceMock.CanMove(any())).thenReturn(true);
+        when(movementServiceMock.canMove(any())).thenReturn(true);
         panningSettings.settings = new PanningSettings(
                 195, 210, 5,
                 50, 85, 10
@@ -147,10 +147,10 @@ public class PanningDaemonEventLoopTest {
     }
 
     @Test
-    public void MapsTheEntireSurfaceEvenWithFractionalIncrements() throws InvalidOperationException {
-        daemon.MaxIterations = 100;
+    public void mapsTheEntireSurfaceEvenWithFractionalIncrements() throws InvalidOperationException {
+        daemon.maxIterations = 100;
         status().setPanning(true);
-        when(movementServiceMock.CanMove(any())).thenReturn(true);
+        when(movementServiceMock.canMove(any())).thenReturn(true);
         panningSettings.settings = new PanningSettings(
                 180, 180.5, 0.3,
                 90, 92, 0.5
@@ -176,10 +176,10 @@ public class PanningDaemonEventLoopTest {
     }
 
     @Test
-    public void MapsTheEntireSurfaceEvenWhenBoundariesAndIncrementsDoNotAlign() throws InvalidOperationException {
-        daemon.MaxIterations = 100;
+    public void mapsTheEntireSurfaceEvenWhenBoundariesAndIncrementsDoNotAlign() throws InvalidOperationException {
+        daemon.maxIterations = 100;
         status().setPanning(true);
-        when(movementServiceMock.CanMove(any())).thenReturn(true);
+        when(movementServiceMock.canMove(any())).thenReturn(true);
         panningSettings.settings = new PanningSettings(
                 180, 187, 3,
                 90, 95, 2
@@ -203,16 +203,16 @@ public class PanningDaemonEventLoopTest {
     }
 
     @Test
-    public void StopsPanningWhenMovementIsInterrupted() throws InvalidOperationException {
-        daemon.MaxIterations = 100;
+    public void stopsPanningWhenMovementIsInterrupted() throws InvalidOperationException {
+        daemon.maxIterations = 100;
         status().setPanning(true);
-        when(movementServiceMock.CanMove(any())).thenReturn(true);
+        when(movementServiceMock.canMove(any())).thenReturn(true);
         panningSettings.settings = new PanningSettings(
                 180, 190, 1,
                 90, 90, 1
         );
         daemon.conditionCallback = () -> {
-            if (daemon.CurrentIteration == 4) {
+            if (daemon.currentIteration == 4) {
                 status().setPanning(false);
             }
         };
@@ -231,21 +231,21 @@ public class PanningDaemonEventLoopTest {
 
     @Test
     public void RestartsPanningFromTheBeginning() throws InvalidOperationException {
-        daemon.MaxIterations = 100;
+        daemon.maxIterations = 100;
         status().setPanning(true);
-        when(movementServiceMock.CanMove(any())).thenReturn(true);
+        when(movementServiceMock.canMove(any())).thenReturn(true);
         panningSettings.settings = new PanningSettings(
                 180, 190, 1,
                 90, 90, 1
         );
         Runnable resumeCallback = () -> {
-            if (daemon.CurrentIteration == 7) {
+            if (daemon.currentIteration == 7) {
                 status().setPanning(true);
                 daemon.conditionCallback = null;
             }
         };
         Runnable haltCallback = () -> {
-            if (daemon.CurrentIteration == 4) {
+            if (daemon.currentIteration == 4) {
                 status().setPanning(false);
                 daemon.conditionCallback = resumeCallback;
             }

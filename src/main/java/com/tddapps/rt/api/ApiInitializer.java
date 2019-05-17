@@ -8,7 +8,7 @@ import org.springframework.boot.SpringApplication;
 @Log4j2
 public class ApiInitializer implements StartupService {
     @Override
-    public void RunAsync(String[] args) {
+    public void runAsync(String[] args) {
         log.info("Starting");
         SpringApplication.run(Program.class, args);
         log.info("Start Complete");

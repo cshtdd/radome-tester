@@ -13,15 +13,16 @@ public class PanningSettingsRepositoryFixed implements PanningSettingsRepository
     }
 
     @Override
-    public PanningSettings Read() {
+    public PanningSettings read() {
+        var increment = readStepsIncrement();
         return new PanningSettings(
-                Position.MIN_THETA, Position.MAX_THETA, StepsIncrement(),
-                Position.MIN_PHI, Position.MAX_PHI, StepsIncrement()
+                Position.MIN_THETA, Position.MAX_THETA, increment,
+                Position.MIN_PHI, Position.MAX_PHI, increment
         );
     }
 
-    private double StepsIncrement(){
-        var configuration = configurationReader.Read();
+    private double readStepsIncrement(){
+        var configuration = configurationReader.read();
 
         if (configuration.isSimulation()){
             return 5.0;

@@ -16,32 +16,32 @@ public class PanningSettingsRepositoryFixedTest {
     private final PanningSettingsRepository repository = new PanningSettingsRepositoryFixed(configurationReaderMock);
 
     @Before
-    public void Setup(){
-        when(configurationReaderMock.Read()).thenReturn(configuration);
+    public void setup(){
+        when(configurationReaderMock.read()).thenReturn(configuration);
     }
 
     @Test
-    public void ReturnsTheCorrectSettings(){
+    public void returnsTheCorrectSettings(){
         configuration.setPanningPrecision(0.3);
         var expected = new PanningSettings(
                 180, 360, 0.3,
                 0, 180, 0.3
         );
 
-        var actual = repository.Read();
+        var actual = repository.read();
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void ReturnsTheSimulationSettings(){
+    public void returnsTheSimulationSettings(){
         configuration.setSimulation(true);
         var expected = new PanningSettings(
                 180, 360, 5,
                 0, 180, 5
         );
 
-        var actual = repository.Read();
+        var actual = repository.read();
 
         assertEquals(expected, actual);
     }

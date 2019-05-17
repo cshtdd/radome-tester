@@ -10,28 +10,28 @@ public class StepperMotorSimulator implements StepperMotor {
     private final String name;
 
     @Override
-    public void Init() {
-        log.info(ToLog("Init"));
+    public void init() {
+        log.info(toLog("Init"));
     }
 
     @Override
-    public void Destroy() {
-        log.info(ToLog("Destroy"));
+    public void destroy() {
+        log.info(toLog("Destroy"));
     }
 
     @Override
-    public boolean MoveCW() {
-        log.debug(ToLog("MoveCW"));
+    public boolean moveCW() {
+        log.debug(toLog("MoveCW"));
         return true;
     }
 
     @Override
-    public boolean MoveCCW() throws InvalidOperationException {
-        log.debug(ToLog("MoveCCW"));
+    public boolean moveCCW() throws InvalidOperationException {
+        log.debug(toLog("MoveCCW"));
         return true;
     }
 
-    private String ToLog(String message){
+    private String toLog(String message){
         return String.format("%s; motor: %s", message, name);
     }
 }

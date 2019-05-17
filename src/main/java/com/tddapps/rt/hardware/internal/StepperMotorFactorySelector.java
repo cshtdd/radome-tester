@@ -21,17 +21,17 @@ class StepperMotorFactorySelector implements StepperMotorFactory {
     }
 
     @Override
-    public StepperMotor CreateTheta() throws InvalidOperationException {
-        return SelectFactory().CreateTheta();
+    public StepperMotor createTheta() throws InvalidOperationException {
+        return selectFactory().createTheta();
     }
 
     @Override
-    public StepperMotor CreatePhi() throws InvalidOperationException {
-        return SelectFactory().CreatePhi();
+    public StepperMotor createPhi() throws InvalidOperationException {
+        return selectFactory().createPhi();
     }
 
-    private StepperMotorFactory SelectFactory(){
-        if (configurationReader.Read().isSimulation()){
+    private StepperMotorFactory selectFactory(){
+        if (configurationReader.read().isSimulation()){
             return stepperMotorFactorySimulator;
         }
 

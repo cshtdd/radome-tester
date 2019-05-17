@@ -9,26 +9,26 @@ import static com.tddapps.rt.test.IocContainerHelper.assertSingleton;
 
 public class IocContainerTest {
     @Test
-    public void RegistersDependencies(){
-        assertTrue(IocContainer.getInstance().Resolve(PinConverter.class) instanceof PinConverterPi3BPlus);
-        assertTrue(IocContainer.getInstance().Resolve(MovementDaemon.class) instanceof MovementDaemonEventLoop);
-        assertTrue(IocContainer.getInstance().Resolve(StepperMotorFactory.class) instanceof StepperMotorFactorySelector);
-        assertTrue(IocContainer.getInstance().Resolve(Delay.class) instanceof Sleep);
-        assertTrue(IocContainer.getInstance().Resolve(StepperPrecisionRepository.class) instanceof StepperPrecisionRepositoryInMemory);
-        assertTrue(IocContainer.getInstance().Resolve(MovementCalculator.class) instanceof MovementCalculatorDefault);
-        assertTrue(IocContainer.getInstance().Resolve(CalibrationService.class) instanceof CalibrationServiceDummy);
-        assertTrue(IocContainer.getInstance().Resolve(StepperMotorMover.class) instanceof StepperMotorMoverStatus);
+    public void registersDependencies(){
+        assertTrue(IocContainer.getInstance().resolve(PinConverter.class) instanceof PinConverterPi3BPlus);
+        assertTrue(IocContainer.getInstance().resolve(MovementDaemon.class) instanceof MovementDaemonEventLoop);
+        assertTrue(IocContainer.getInstance().resolve(StepperMotorFactory.class) instanceof StepperMotorFactorySelector);
+        assertTrue(IocContainer.getInstance().resolve(Delay.class) instanceof Sleep);
+        assertTrue(IocContainer.getInstance().resolve(StepperPrecisionRepository.class) instanceof StepperPrecisionRepositoryInMemory);
+        assertTrue(IocContainer.getInstance().resolve(MovementCalculator.class) instanceof MovementCalculatorDefault);
+        assertTrue(IocContainer.getInstance().resolve(CalibrationService.class) instanceof CalibrationServiceDummy);
+        assertTrue(IocContainer.getInstance().resolve(StepperMotorMover.class) instanceof StepperMotorMoverStatus);
     }
 
     @Test
-    public void RegisterSingletons() {
+    public void registerSingletons() {
         assertSingleton(StepperMotorFactoryUln.class);
         assertSingleton(StepperPrecisionRepository.class);
     }
 
     @Test
-    public void StepperMotorFactorySelectorGetsConstructedWithTheTwoCorrectFactories(){
-        var factory = (StepperMotorFactorySelector)IocContainer.getInstance().Resolve(StepperMotorFactory.class);
+    public void stepperMotorFactorySelectorGetsConstructedWithTheTwoCorrectFactories(){
+        var factory = (StepperMotorFactorySelector)IocContainer.getInstance().resolve(StepperMotorFactory.class);
 
         assertTrue(factory.stepperMotorFactory instanceof StepperMotorFactoryUln);
         assertTrue(factory.stepperMotorFactorySimulator instanceof StepperMotorFactorySimulator);

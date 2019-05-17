@@ -9,7 +9,7 @@ public class ContainerConfigurationTest {
     private final ContainerConfiguration configuration = new ContainerConfiguration();
 
     @Test
-    public void CanBuildTheIocContainer(){
+    public void canBuildTheIocContainer(){
         assertEquals(IocContainer.getInstance(), configuration.iocContainer());
     }
 }

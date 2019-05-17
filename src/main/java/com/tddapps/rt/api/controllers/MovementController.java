@@ -31,21 +31,21 @@ public class MovementController {
     }
 
     @PostMapping(value = "/api/movement/start")
-    ResponseEntity<String> Start(@RequestBody MovementStartRequest request) {
-        var mapper = container.Resolve(Mapper.class);
-        var movementService = container.Resolve(MovementService.class);
+    ResponseEntity<String> start(@RequestBody MovementStartRequest request) {
+        var mapper = container.resolve(Mapper.class);
+        var movementService = container.resolve(MovementService.class);
 
         log.info(String.format("Movement Start; input: %s;", request));
 
         var position = mapper.map(request, Position.class);
 
-        if (!movementService.CanMove(position)) {
+        if (!movementService.canMove(position)) {
             log.info("Cannot Move");
             return new ResponseEntity<>("Cannot Move", HttpStatus.BAD_REQUEST);
         }
 
         try {
-            movementService.Move(position);
+            movementService.move(position);
         } catch (InvalidOperationException e) {
             log.warn("Movement Start Error; reason: InvalidOperation; details:", e);
             return new ResponseEntity<>("Movement Error", HttpStatus.BAD_REQUEST);
@@ -59,12 +59,12 @@ public class MovementController {
     }
 
     @PostMapping(value = "/api/movement/stop")
-    ResponseEntity<String> Stop() {
-        var movementService = container.Resolve(MovementService.class);
+    ResponseEntity<String> stop() {
+        var movementService = container.resolve(MovementService.class);
 
         log.info("Movement Stop;");
         try {
-            movementService.Stop();
+            movementService.stop();
         } catch (Exception e) {
             log.error("Movement Stop Error; reason: Unexpected; details:", e);
             return new ResponseEntity<>("Unexpected Error", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -75,18 +75,18 @@ public class MovementController {
     }
 
     @PostMapping(value = "/api/movement/pan")
-    ResponseEntity<String> Pan() {
-        var movementService = container.Resolve(MovementService.class);
+    ResponseEntity<String> pan() {
+        var movementService = container.resolve(MovementService.class);
 
         log.info("Panning;");
 
-        if (!movementService.CanPan()){
+        if (!movementService.canPan()){
             log.info("Cannot Pan");
             return new ResponseEntity<>("Cannot Pan", HttpStatus.BAD_REQUEST);
         }
 
         try {
-            movementService.Pan();
+            movementService.pan();
         } catch (InvalidOperationException e) {
             log.warn("Panning Error; reason: InvalidOperation; details:", e);
             return new ResponseEntity<>("Panning Error", HttpStatus.BAD_REQUEST);

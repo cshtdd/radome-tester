@@ -27,222 +27,222 @@ public class MovementServiceStatusChangerTest {
             .build();
 
     private Status status(){
-        return statusRepositoryStub.CurrentStatus();
+        return statusRepositoryStub.read();
     }
 
     @Before
-    public void Setup(){
-        statusRepositoryStub.Save(DEFAULT_STATUS.toBuilder().build());
+    public void setup(){
+        statusRepositoryStub.save(DEFAULT_STATUS.toBuilder().build());
     }
 
     @Test
-    public void DefaultStatusValidation(){
+    public void defaultStatusValidation(){
         assertEquals(DEFAULT_STATUS, status());
         assertNotSame(DEFAULT_STATUS, status());
     }
 
     @Test
-    public void CanMoveWhenPanning(){
+    public void canMoveWhenPanning(){
         status().setPanning(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        assertTrue(service.CanMove(new Position(270, 90)));
+        assertTrue(service.canMove(new Position(270, 90)));
     }
 
     @Test
-    public void CannotMoveWhenIsAlreadyMoving(){
+    public void cannotMoveWhenIsAlreadyMoving(){
         status().setMoving(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        assertFalse(service.CanMove(new Position(270, 90)));
+        assertFalse(service.canMove(new Position(270, 90)));
     }
 
     @Test
-    public void CannotMoveWhenCalibrating(){
+    public void cannotMoveWhenCalibrating(){
         status().setCalibrating(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        assertFalse(service.CanMove(new Position(270, 90)));
+        assertFalse(service.canMove(new Position(270, 90)));
     }
 
     @Test
-    public void CannotMoveWhenHardwareCrashed(){
+    public void cannotMoveWhenHardwareCrashed(){
         status().setHardwareCrash(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        assertFalse(service.CanMove(new Position(270, 90)));
+        assertFalse(service.canMove(new Position(270, 90)));
     }
 
     @Test
-    public void CannotMoveWhenNotCalibrated(){
+    public void cannotMoveWhenNotCalibrated(){
         status().setHardwareInitialized(true);
 
-        assertFalse(service.CanMove(new Position(270, 90)));
+        assertFalse(service.canMove(new Position(270, 90)));
     }
 
     @Test
-    public void CannotMoveWhenHardwareNotInitialized(){
+    public void cannotMoveWhenHardwareNotInitialized(){
         status().setCalibrated(true);
 
-        assertFalse(service.CanMove(new Position(270, 90)));
+        assertFalse(service.canMove(new Position(270, 90)));
     }
 
     @Test
-    public void CannotMoveWhenPositionIsInvalid(){
-        status().setCalibrated(true);
-        status().setHardwareInitialized(true);
-
-        assertFalse(service.CanMove(new Position(270, -90)));
-    }
-
-    @Test
-    public void CanMoveWhenPositionIsValidAndNoMovementIsInProgress(){
+    public void cannotMoveWhenPositionIsInvalid(){
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        assertTrue(service.CanMove(new Position(270, 90)));
+        assertFalse(service.canMove(new Position(270, -90)));
     }
 
     @Test
-    public void CannotPanWhenIsAlreadyPanning(){
+    public void canMoveWhenPositionIsValidAndNoMovementIsInProgress(){
+        status().setCalibrated(true);
+        status().setHardwareInitialized(true);
+
+        assertTrue(service.canMove(new Position(270, 90)));
+    }
+
+    @Test
+    public void cannotPanWhenIsAlreadyPanning(){
         status().setPanning(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        assertFalse(service.CanPan());
+        assertFalse(service.canPan());
     }
 
     @Test
-    public void CannotPanWhenIsAlreadyMoving(){
+    public void cannotPanWhenIsAlreadyMoving(){
         status().setMoving(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        assertFalse(service.CanPan());
+        assertFalse(service.canPan());
     }
 
     @Test
-    public void CannotPanWhenCalibrating(){
+    public void cannotPanWhenCalibrating(){
         status().setCalibrating(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        assertFalse(service.CanPan());
+        assertFalse(service.canPan());
     }
 
     @Test
-    public void CannotPanWhenHardwareCrashed(){
+    public void cannotPanWhenHardwareCrashed(){
         status().setHardwareCrash(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        assertFalse(service.CanPan());
+        assertFalse(service.canPan());
     }
 
     @Test
-    public void CannotPanWhenNotCalibrated(){
+    public void cannotPanWhenNotCalibrated(){
         status().setHardwareInitialized(true);
 
-        assertFalse(service.CanPan());
+        assertFalse(service.canPan());
     }
 
     @Test
-    public void CannotPanWhenHardwareNotInitialized(){
+    public void cannotPanWhenHardwareNotInitialized(){
         status().setCalibrated(true);
 
-        assertFalse(service.CanPan());
+        assertFalse(service.canPan());
     }
 
     @Test
-    public void CanPanWhenProperlyInitializedAndNoMovementIsInProgress(){
+    public void canPanWhenProperlyInitializedAndNoMovementIsInProgress(){
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        assertTrue(service.CanPan());
+        assertTrue(service.canPan());
     }
 
     @Test
-    public void StopChangesIsMovingToFalse(){
+    public void stopChangesIsMovingToFalse(){
         status().setMoving(true);
 
-        service.Stop();
+        service.stop();
 
         assertFalse(status().isMoving());
     }
 
     @Test
-    public void StopChangesIsPanningToFalse(){
+    public void stopChangesIsPanningToFalse(){
         status().setPanning(true);
 
-        service.Stop();
+        service.stop();
 
         assertFalse(status().isPanning());
     }
 
     @Test
-    public void MoveDoesNotThrowWhenAlreadyPanning() throws InvalidOperationException {
+    public void moveDoesNotThrowWhenAlreadyPanning() throws InvalidOperationException {
         status().setPanning(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        service.Move(new Position(270, 90));
+        service.move(new Position(270, 90));
     }
 
     @Test(expected = InvalidOperationException.class)
-    public void MoveThrowsWhenAlreadyMoving() throws InvalidOperationException {
+    public void moveThrowsWhenAlreadyMoving() throws InvalidOperationException {
         status().setMoving(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        service.Move(new Position(270, 90));
+        service.move(new Position(270, 90));
     }
 
     @Test(expected = InvalidOperationException.class)
-    public void MoveThrowsWhenCalibrating() throws InvalidOperationException {
+    public void moveThrowsWhenCalibrating() throws InvalidOperationException {
         status().setCalibrating(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        service.Move(new Position(270, 90));
+        service.move(new Position(270, 90));
     }
 
     @Test(expected = InvalidOperationException.class)
-    public void MoveThrowsWhenHardwareCrashed() throws InvalidOperationException {
+    public void moveThrowsWhenHardwareCrashed() throws InvalidOperationException {
         status().setHardwareCrash(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        service.Move(new Position(270, 90));
+        service.move(new Position(270, 90));
     }
 
     @Test(expected = InvalidOperationException.class)
-    public void MoveThrowsWhenNotCalibrated() throws InvalidOperationException {
+    public void moveThrowsWhenNotCalibrated() throws InvalidOperationException {
         status().setHardwareInitialized(true);
 
-        service.Move(new Position(270, 90));
+        service.move(new Position(270, 90));
     }
 
     @Test(expected = InvalidOperationException.class)
-    public void MoveThrowsWhenHardwareNotInitialized() throws InvalidOperationException {
+    public void moveThrowsWhenHardwareNotInitialized() throws InvalidOperationException {
         status().setCalibrated(true);
 
-        service.Move(new Position(270, 90));
+        service.move(new Position(270, 90));
     }
 
     @Test(expected = InvalidOperationException.class)
-    public void MoveThrowsWhenPositionIsInvalid() throws InvalidOperationException {
+    public void moveThrowsWhenPositionIsInvalid() throws InvalidOperationException {
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        service.Move(new Position(-270, 90));
+        service.move(new Position(-270, 90));
     }
 
     @Test
-    public void MoveChangesStatus() throws InvalidOperationException {
+    public void moveChangesStatus() throws InvalidOperationException {
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
@@ -253,63 +253,63 @@ public class MovementServiceStatusChangerTest {
                 .commandedPosition(new Position(270, 90))
                 .build();
 
-        service.Move(new Position(270, 90));
+        service.move(new Position(270, 90));
 
         assertEquals(expected, status());
     }
 
     @Test(expected = InvalidOperationException.class)
-    public void PanThrowsWhenAlreadyPanning() throws InvalidOperationException {
+    public void panThrowsWhenAlreadyPanning() throws InvalidOperationException {
         status().setPanning(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        service.Pan();
+        service.pan();
     }
 
     @Test(expected = InvalidOperationException.class)
-    public void PanThrowsWhenAlreadyMoving() throws InvalidOperationException {
+    public void panThrowsWhenAlreadyMoving() throws InvalidOperationException {
         status().setMoving(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        service.Pan();
+        service.pan();
     }
 
     @Test(expected = InvalidOperationException.class)
-    public void PanThrowsWhenCalibrating() throws InvalidOperationException {
+    public void panThrowsWhenCalibrating() throws InvalidOperationException {
         status().setCalibrating(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        service.Pan();
+        service.pan();
     }
 
     @Test(expected = InvalidOperationException.class)
-    public void PanThrowsWhenHardwareCrashed() throws InvalidOperationException {
+    public void panThrowsWhenHardwareCrashed() throws InvalidOperationException {
         status().setHardwareCrash(true);
         status().setCalibrated(true);
         status().setHardwareInitialized(true);
 
-        service.Pan();
+        service.pan();
     }
 
     @Test(expected = InvalidOperationException.class)
-    public void PanThrowsWhenNotCalibrated() throws InvalidOperationException {
+    public void panThrowsWhenNotCalibrated() throws InvalidOperationException {
         status().setHardwareInitialized(true);
 
-        service.Pan();
+        service.pan();
     }
 
     @Test(expected = InvalidOperationException.class)
-    public void PanThrowsWhenHardwareNotInitialized() throws InvalidOperationException {
+    public void panThrowsWhenHardwareNotInitialized() throws InvalidOperationException {
         status().setCalibrated(true);
 
-        service.Pan();
+        service.pan();
     }
 
     @Test
-    public void PanChangesStatus() throws InvalidOperationException {
+    public void panChangesStatus() throws InvalidOperationException {
         status().setHardwareInitialized(true);
         status().setCalibrated(true);
 
@@ -319,7 +319,7 @@ public class MovementServiceStatusChangerTest {
                 .isPanning(true)
                 .build();
 
-        service.Pan();
+        service.pan();
 
         assertEquals(expected, status());
     }

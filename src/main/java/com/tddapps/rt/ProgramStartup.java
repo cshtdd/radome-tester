@@ -11,8 +11,8 @@ public class ProgramStartup {
         this.services = services;
     }
 
-    public void Run(String[] args) {
+    public void run(String[] args) {
         Arrays.stream(services)
-                .forEach(s -> s.RunAsync(args));
+                .forEach(s -> s.runAsync(args));
     }
 }

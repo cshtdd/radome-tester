@@ -33,66 +33,66 @@ class MovementDaemonEventLoop implements MovementDaemon {
     @Override
     public void run() {
         try {
-            RunInternal();
+            runInternal();
         } catch (Exception e) {
-            SetHardwareCrashed(e);
+            setHardwareCrashed(e);
         }
     }
 
-    private void RunInternal() throws InvalidOperationException {
+    private void runInternal() throws InvalidOperationException {
         log.info("Initialization Start");
 
-        if (statusRepository.CurrentStatus().isHardwareInitialized()) {
+        if (statusRepository.read().isHardwareInitialized()) {
             log.warn("Hardware already initialized");
             return;
         }
 
-        var motorTheta = CreateThetaMotor();
-        var motorPhi = CreatePhiMotor();
+        var motorTheta = createThetaMotor();
+        var motorPhi = createPhiMotor();
 
         try {
-            motorTheta.Init();
-            motorPhi.Init();
+            motorTheta.init();
+            motorPhi.init();
 
-            BeginCalibration();
-            calibrationService.CalibrateThetaStepper(motorTheta);
-            calibrationService.CalibratePhiStepper(motorPhi);
-            CompleteCalibration();
+            beginCalibration();
+            calibrationService.calibrateThetaStepper(motorTheta);
+            calibrationService.calibratePhiStepper(motorPhi);
+            completeCalibration();
 
-            while (RunCondition()) {
-                stepperMotorMover.MoveTheta(motorTheta);
-                stepperMotorMover.MovePhi(motorPhi);
-                delay.Yield();
+            while (runCondition()) {
+                stepperMotorMover.moveTheta(motorTheta);
+                stepperMotorMover.movePhi(motorPhi);
+                delay.yield();
             }
         } finally {
-            motorPhi.Destroy();
-            motorTheta.Destroy();
+            motorPhi.destroy();
+            motorTheta.destroy();
         }
     }
 
-    private StepperMotor CreatePhiMotor() throws InvalidOperationException {
+    private StepperMotor createPhiMotor() throws InvalidOperationException {
         log.info("Create Phi Motor");
-        return stepperMotorFactory.CreatePhi();
+        return stepperMotorFactory.createPhi();
     }
 
-    private StepperMotor CreateThetaMotor() throws InvalidOperationException {
+    private StepperMotor createThetaMotor() throws InvalidOperationException {
         log.info("Create Theta Motor");
-        return stepperMotorFactory.CreateTheta();
+        return stepperMotorFactory.createTheta();
     }
 
-    private void BeginCalibration() {
+    private void beginCalibration() {
         log.info("Start Calibration");
-        statusRepository.Update(currentStatus -> currentStatus
+        statusRepository.update(status -> status
             .toBuilder()
             .isCalibrating(true)
             .isCalibrated(false)
             .build());
     }
 
-    private void CompleteCalibration() {
+    private void completeCalibration() {
         log.info("Calibration Completed");
 
-        statusRepository.Update(currentStatus -> currentStatus
+        statusRepository.update(status -> status
                 .toBuilder()
                 .isCalibrating(false)
                 .isCalibrated(true)
@@ -102,8 +102,8 @@ class MovementDaemonEventLoop implements MovementDaemon {
         log.info("Hardware Initialized");
     }
 
-    private void SetHardwareCrashed(Exception e) {
-        statusRepository.Update(currentStatus -> currentStatus
+    private void setHardwareCrashed(Exception e) {
+        statusRepository.update(status -> status
                 .toBuilder()
                 .isHardwareCrash(true)
                 .build());
@@ -113,7 +113,7 @@ class MovementDaemonEventLoop implements MovementDaemon {
 
     // this method is here for testing purposes
     // it cannot be removed
-    protected boolean RunCondition() {
+    protected boolean runCondition() {
         return true;
     }
 }

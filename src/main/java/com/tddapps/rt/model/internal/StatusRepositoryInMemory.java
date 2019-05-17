@@ -10,21 +10,21 @@ class StatusRepositoryInMemory implements StatusRepository {
     private Status status = null;
 
     @Override
-    public Status CurrentStatus() {
+    public Status read() {
         synchronized (criticalSection){
             return status;
         }
     }
 
     @Override
-    public void Save(Status currentStatus) {
+    public void save(Status status) {
         synchronized (criticalSection){
-            status = currentStatus.toBuilder().build();
+            this.status = status.toBuilder().build();
         }
     }
 
     @Override
-    public void Update(Function<Status, Status> statusUpdater) {
+    public void update(Function<Status, Status> statusUpdater) {
         synchronized (criticalSection){
             status = statusUpdater.apply(status);
         }

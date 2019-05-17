@@ -15,18 +15,18 @@ public class ConfigurationReaderSettingsTest {
     );
 
     @Test
-    public void ReturnsJsonConfigurationByDefault() {
+    public void returnsJsonConfigurationByDefault() {
         var expected = new Configuration();
         expected.setSimulation(true);
         expected.setThetaBcmPins(new int[]{1, 2, 3, 4});
         expected.setPhiBcmPins(new int[]{5, 6, 7, 8});
         expected.setPanningPrecision(0.5);
 
-        assertEquals(expected, reader.Read());
+        assertEquals(expected, reader.read());
     }
 
     @Test
-    public void OverridesThetaBcmPinsWithSettingsValue(){
+    public void overridesThetaBcmPinsWithSettingsValue(){
         settingsReaderStub.Settings.put(Settings.THETA_BCM_PINS, "11,21, 31, 41 ");
 
         var expected = new Configuration();
@@ -35,11 +35,11 @@ public class ConfigurationReaderSettingsTest {
         expected.setPhiBcmPins(new int[]{5, 6, 7, 8});
         expected.setPanningPrecision(0.5);
 
-        assertEquals(expected, reader.Read());
+        assertEquals(expected, reader.read());
     }
 
     @Test
-    public void OverridesPhiBcmPinsWithSettingsValue(){
+    public void overridesPhiBcmPinsWithSettingsValue(){
         settingsReaderStub.Settings.put(Settings.PHI_BCM_PINS, "55,56, 57, 58 ");
 
         var expected = new Configuration();
@@ -48,11 +48,11 @@ public class ConfigurationReaderSettingsTest {
         expected.setPhiBcmPins(new int[]{55, 56, 57, 58});
         expected.setPanningPrecision(0.5);
 
-        assertEquals(expected, reader.Read());
+        assertEquals(expected, reader.read());
     }
 
     @Test
-    public void OverridesIsSimulationWithSettingsValue(){
+    public void overridesIsSimulationWithSettingsValue(){
         settingsReaderStub.Settings.put(Settings.IS_SIMULATION, "false");
 
         var expected = new Configuration();
@@ -61,11 +61,11 @@ public class ConfigurationReaderSettingsTest {
         expected.setPhiBcmPins(new int[]{5, 6, 7, 8});
         expected.setPanningPrecision(0.5);
 
-        assertEquals(expected, reader.Read());
+        assertEquals(expected, reader.read());
     }
 
     @Test
-    public void OverridesPanningPrecisionWithSettingsValue(){
+    public void overridesPanningPrecisionWithSettingsValue(){
         settingsReaderStub.Settings.put(Settings.PANNING_PRECISION, "0.75666");
 
         var expected = new Configuration();
@@ -74,6 +74,6 @@ public class ConfigurationReaderSettingsTest {
         expected.setPhiBcmPins(new int[]{5, 6, 7, 8});
         expected.setPanningPrecision(0.76);
 
-        assertEquals(expected, reader.Read());
+        assertEquals(expected, reader.read());
     }
 }

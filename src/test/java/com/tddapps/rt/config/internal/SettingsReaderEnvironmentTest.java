@@ -1,7 +1,5 @@
 package com.tddapps.rt.config.internal;
 
-import com.tddapps.rt.config.internal.SettingsReader;
-import com.tddapps.rt.config.internal.SettingsReaderEnvironment;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
@@ -10,17 +8,17 @@ public class SettingsReaderEnvironmentTest {
     private final SettingsReader reader = new SettingsReaderEnvironment();
 
     @Test
-    public void ReadsExistingEnvironmentSetting(){
+    public void readsExistingEnvironmentSetting(){
         var expected = System.getenv("PATH");
 
-        var actual = reader.Read("PATH", "");
+        var actual = reader.read("PATH", "");
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void ReturnsDefaultValueWhenSettingNotFound(){
-        var actual = reader.Read("SUPERCALIFRAGILISTIC", "mary");
+    public void returnsDefaultValueWhenSettingNotFound(){
+        var actual = reader.read("SUPERCALIFRAGILISTIC", "mary");
 
         assertEquals("mary", actual);
     }

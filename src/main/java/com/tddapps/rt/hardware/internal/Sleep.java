@@ -6,7 +6,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 class Sleep implements Delay {
     @Override
-    public void Wait(int ms) {
+    public void waitMs(int ms) {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {

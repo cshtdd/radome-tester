@@ -4,9 +4,9 @@ import com.tddapps.rt.hardware.Direction;
 import com.tddapps.rt.model.Position;
 
 interface MovementCalculator {
-    int CalculateThetaSteps(Position src, Position dest, Precision precision);
-    Direction CalculateThetaDirection(Position src, Position dest);
+    int calculateThetaSteps(Position src, Position dest, Precision precision);
+    Direction calculateThetaDirection(Position src, Position dest);
 
-    int CalculatePhiSteps(Position src, Position dest, Precision precision);
-    Direction CalculatePhiDirection(Position src, Position dest);
+    int calculatePhiSteps(Position src, Position dest, Precision precision);
+    Direction calculatePhiDirection(Position src, Position dest);
 }

@@ -15,47 +15,47 @@ class MovementServiceStatusChanger implements MovementService {
         this.statusRepository = statusRepository;
     }
 
-    private Status CurrentStatus() {
-        return statusRepository.CurrentStatus();
+    private Status currentStatus() {
+        return statusRepository.read();
     }
 
     @Override
-    public boolean CanPan() {
-        return CurrentStatus().CanPan();
+    public boolean canPan() {
+        return currentStatus().canPan();
     }
 
     @Override
-    public boolean CanMove(Position position) {
-        if (!position.IsValid()){
+    public boolean canMove(Position position) {
+        if (!position.isValid()){
             return false;
         }
 
-        return CurrentStatus().CanMove();
+        return currentStatus().canMove();
     }
 
     @Override
-    public void Pan() throws InvalidOperationException{
-        if (!CanPan()){
+    public void pan() throws InvalidOperationException{
+        if (!canPan()){
             throw new InvalidOperationException("Cannot Pan");
         }
 
-        statusRepository.Update(currentStatus -> currentStatus
+        statusRepository.update(status -> status
                 .toBuilder()
                 .isPanning(true)
                 .build());
     }
 
     @Override
-    public void Move(Position position) throws InvalidOperationException {
-        if (!position.IsValid()){
+    public void move(Position position) throws InvalidOperationException {
+        if (!position.isValid()){
             throw new InvalidOperationException("Cannot Move to position");
         }
 
-        if (!CurrentStatus().CanMove()){
+        if (!currentStatus().canMove()){
             throw new InvalidOperationException("Cannot Move");
         }
 
-        statusRepository.Update(currentStatus -> currentStatus
+        statusRepository.update(status -> status
                 .toBuilder()
                 .isMoving(true)
                 .commandedPosition(position)
@@ -63,8 +63,8 @@ class MovementServiceStatusChanger implements MovementService {
     }
 
     @Override
-    public void Stop() {
-        statusRepository.Update(currentStatus -> currentStatus
+    public void stop() {
+        statusRepository.update(status -> status
                 .toBuilder()
                 .isPanning(false)
                 .isMoving(false)

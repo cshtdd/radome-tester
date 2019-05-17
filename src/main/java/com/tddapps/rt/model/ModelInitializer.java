@@ -16,10 +16,10 @@ public class ModelInitializer implements StartupService {
     }
 
     @Override
-    public void RunAsync(String[] args) {
+    public void runAsync(String[] args) {
         log.info("Starting");
 
-        statusRepository.Save(buildDefaultStatus());
+        statusRepository.save(buildDefaultStatus());
 
         new Thread(daemon).start();
 

@@ -13,7 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.tddapps.rt.mapping.internal.IocContainerAutoMappingHelper.SetupAutoMapping;
+import static com.tddapps.rt.mapping.internal.IocContainerAutoMappingHelper.setupAutoMapping;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,18 +30,18 @@ public class StatusControllerTest {
 
     private void SeedStatus(Status seededStatus) {
         var statusRepositoryMock = mock(StatusRepository.class);
-        when(statusRepositoryMock.CurrentStatus()).thenReturn(seededStatus);
-        when(containerMock.Resolve(StatusRepository.class))
+        when(statusRepositoryMock.read()).thenReturn(seededStatus);
+        when(containerMock.resolve(StatusRepository.class))
                 .thenReturn(statusRepositoryMock);
     }
 
     @Before
-    public void Setup(){
-        SetupAutoMapping(containerMock);
+    public void setup(){
+        setupAutoMapping(containerMock);
     }
 
     @Test
-    public void ReturnsTheMappedStatus() throws Exception {
+    public void returnsTheMappedStatus() throws Exception {
         var seededStatus = Status.builder()
                 .currentPosition(new Position(34.6333333, 12.253))
                 .commandedPosition(new Position(134.6333333, 112.2544))

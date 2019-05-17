@@ -12,28 +12,28 @@ import java.nio.charset.StandardCharsets;
 @Log4j2
 class ConfigurationReaderJson implements ConfigurationReader {
     @Override
-    public Configuration Read() {
-        var result = ReadInternal();
+    public Configuration read() {
+        var result = readInternal();
         log.info(result);
         return result;
     }
 
-    private Configuration ReadInternal() {
-        try(var reader = CreateResourceReader("/config.json")){
-            return ParseJson(reader);
+    private Configuration readInternal() {
+        try(var reader = createResourceReader("/config.json")){
+            return parseJson(reader);
         } catch (IOException e) {
             log.warn("Error Reading Configuration", e);
             return new Configuration();
         }
     }
 
-    private Configuration ParseJson(InputStreamReader reader) {
+    private Configuration parseJson(InputStreamReader reader) {
         return new GsonBuilder()
                 .create()
                 .fromJson(reader, Configuration.class);
     }
 
-    private InputStreamReader CreateResourceReader(String resourceName) {
+    private InputStreamReader createResourceReader(String resourceName) {
         var inputStream = this.getClass().getResourceAsStream(resourceName);
         return new InputStreamReader(inputStream, StandardCharsets.UTF_8);
     }

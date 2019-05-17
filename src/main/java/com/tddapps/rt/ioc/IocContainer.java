@@ -17,14 +17,14 @@ public class IocContainer {
     }
 
     private IocContainer() {
-        resolver = RegisterBindings();
+        resolver = registerBindings();
     }
 
-    public <T> T Resolve(Class<T> type) {
+    public <T> T resolve(Class<T> type) {
         return resolver.getInstance(type);
     }
 
-    private Injector RegisterBindings() {
+    private Injector registerBindings() {
         return Guice.createInjector(
                 new com.tddapps.rt.config.internal.IocModule(),
                 new com.tddapps.rt.hardware.internal.IocModule(),

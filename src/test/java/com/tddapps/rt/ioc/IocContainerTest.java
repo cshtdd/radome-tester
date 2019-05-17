@@ -11,8 +11,8 @@ import static org.junit.Assert.assertTrue;
 
 public class IocContainerTest {
     @Test
-    public void RegistersStartupServices(){
-        var program = IocContainer.getInstance().Resolve(ProgramStartup.class);
+    public void registersStartupServices(){
+        var program = IocContainer.getInstance().resolve(ProgramStartup.class);
 
         assertEquals(3, program.services.length);
         assertTrue(program.services[0] instanceof ApiInitializer);

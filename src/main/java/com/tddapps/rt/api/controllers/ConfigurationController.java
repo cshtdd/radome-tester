@@ -17,9 +17,9 @@ public class ConfigurationController {
     }
 
     @GetMapping(value = "/api/config", produces = "application/json")
-    Configuration Get(){
-        var configurationReader = container.Resolve(ConfigurationReader.class);
+    Configuration get(){
+        var configurationReader = container.resolve(ConfigurationReader.class);
 
-        return configurationReader.Read();
+        return configurationReader.read();
     }
 }

@@ -10,10 +10,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class MappingTest {
-    private final Mapper mapper = IocContainer.getInstance().Resolve(Mapper.class);
+    private final Mapper mapper = IocContainer.getInstance().resolve(Mapper.class);
 
     @Test
-    public void StatusToStatusControllerStatusResponse(){
+    public void statusToStatusControllerStatusResponse(){
         var expected = new StatusController.StatusResponse();
         expected.setIsCalibrating(true);
         expected.setIsCalibrated(true);
@@ -43,7 +43,7 @@ public class MappingTest {
     }
 
     @Test
-    public void MovementControllerMovementRequestToPosition(){
+    public void movementControllerMovementRequestToPosition(){
         var expected = new Position(193.45, 45.33);
 
         var request = new MovementController.MovementStartRequest(193.446, 45.33333);

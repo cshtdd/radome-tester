@@ -15,10 +15,10 @@ public class CalibrationServiceDummy implements CalibrationService {
     }
 
     @Override
-    public void CalibrateThetaStepper(StepperMotor motor) {
-        stepperPrecisionRepository.SaveTheta(new Precision(1, 0.02));
+    public void calibrateThetaStepper(StepperMotor motor) {
+        stepperPrecisionRepository.saveTheta(new Precision(1, 0.02));
 
-        statusRepository.Update(currentStatus -> {
+        statusRepository.update(currentStatus -> {
             var updatedPosition = currentStatus.getCurrentPosition()
                     .toBuilder()
                     .thetaDegrees(270)
@@ -31,10 +31,10 @@ public class CalibrationServiceDummy implements CalibrationService {
     }
 
     @Override
-    public void CalibratePhiStepper(StepperMotor motor) {
-        stepperPrecisionRepository.SavePhi(new Precision(1, 0.05));
+    public void calibratePhiStepper(StepperMotor motor) {
+        stepperPrecisionRepository.savePhi(new Precision(1, 0.05));
 
-        statusRepository.Update(currentStatus -> {
+        statusRepository.update(currentStatus -> {
             var updatedPosition = currentStatus.getCurrentPosition()
                     .toBuilder()
                     .phiDegrees(90)

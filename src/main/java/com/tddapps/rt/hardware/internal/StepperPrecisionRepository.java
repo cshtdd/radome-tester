@@ -1,9 +1,9 @@
 package com.tddapps.rt.hardware.internal;
 
 interface StepperPrecisionRepository {
-    Precision ReadTheta();
-    void SaveTheta(Precision precision);
+    Precision readTheta();
+    void saveTheta(Precision precision);
 
-    Precision ReadPhi();
-    void SavePhi(Precision precision);
+    Precision readPhi();
+    void savePhi(Precision precision);
 }

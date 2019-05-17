@@ -12,7 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.tddapps.rt.mapping.internal.IocContainerAutoMappingHelper.SetupAutoMapping;
+import static com.tddapps.rt.mapping.internal.IocContainerAutoMappingHelper.setupAutoMapping;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,19 +31,19 @@ public class ConfigurationControllerTest {
     private Configuration seededConfig = new Configuration();
 
     @Before
-    public void Setup(){
-        SetupAutoMapping(containerMock);
+    public void setup(){
+        setupAutoMapping(containerMock);
 
         var configurationReaderMock = mock(ConfigurationReader.class);
-        when(configurationReaderMock.Read())
+        when(configurationReaderMock.read())
                 .thenReturn(seededConfig);
 
-        when(containerMock.Resolve(ConfigurationReader.class))
+        when(containerMock.resolve(ConfigurationReader.class))
                 .thenReturn(configurationReaderMock);
     }
 
     @Test
-    public void ReturnsTheConfiguration() throws Exception {
+    public void returnsTheConfiguration() throws Exception {
         seededConfig.setThetaBcmPins(new int[]{20, 23, 25, 27});
         seededConfig.setPhiBcmPins(new int[]{120, 123, 125, 127});
 

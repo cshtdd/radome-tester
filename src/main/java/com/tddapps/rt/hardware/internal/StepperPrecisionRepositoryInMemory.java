@@ -8,28 +8,28 @@ class StepperPrecisionRepositoryInMemory implements StepperPrecisionRepository {
     private Precision precisionPhi = null;
 
     @Override
-    public Precision ReadTheta() {
+    public Precision readTheta() {
         synchronized (criticalSectionTheta){
             return precisionTheta;
         }
     }
 
     @Override
-    public void SaveTheta(Precision precision) {
+    public void saveTheta(Precision precision) {
         synchronized (criticalSectionTheta){
             precisionTheta = precision;
         }
     }
 
     @Override
-    public Precision ReadPhi() {
+    public Precision readPhi() {
         synchronized (criticalSectionPhi){
             return precisionPhi;
         }
     }
 
     @Override
-    public void SavePhi(Precision precision) {
+    public void savePhi(Precision precision) {
         synchronized (criticalSectionPhi){
             precisionPhi = precision;
         }

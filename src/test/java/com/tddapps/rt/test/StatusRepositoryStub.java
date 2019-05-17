@@ -9,17 +9,17 @@ public class StatusRepositoryStub implements StatusRepository {
     private Status currentStatus = null;
 
     @Override
-    public Status CurrentStatus() {
+    public Status read() {
         return currentStatus;
     }
 
     @Override
-    public void Save(Status currentStatus) {
-        this.currentStatus = currentStatus;
+    public void save(Status status) {
+        this.currentStatus = status;
     }
 
     @Override
-    public void Update(Function<Status, Status> statusUpdater) {
+    public void update(Function<Status, Status> statusUpdater) {
         currentStatus = statusUpdater.apply(currentStatus);
     }
 }

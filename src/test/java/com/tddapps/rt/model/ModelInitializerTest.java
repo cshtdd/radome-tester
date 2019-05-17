@@ -1,10 +1,11 @@
 package com.tddapps.rt.model;
 
 import com.tddapps.rt.StartupService;
+import com.tddapps.rt.test.ConditionAwaiter;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.tddapps.rt.test.ConditionAwaiter.Await;
+import static com.tddapps.rt.test.ConditionAwaiter.await;
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -19,7 +20,7 @@ public class ModelInitializerTest {
     }
 
     @Before
-    public void Setup(){
+    public void setup(){
         doAnswer(i -> {
             runWasInvoked = true;
             return null;
@@ -27,7 +28,7 @@ public class ModelInitializerTest {
     }
 
     @Test
-    public void InitializesAStatus(){
+    public void initializesAStatus(){
         var defaultStatus = Status.builder()
                 .isPanning(false)
                 .isMoving(false)
@@ -38,15 +39,15 @@ public class ModelInitializerTest {
                 .commandedPosition(new Position(0, 0))
                 .build();
 
-        service.RunAsync(new String[0]);
+        service.runAsync(new String[0]);
 
-        verify(statusRepositoryMock).Save(defaultStatus);
+        verify(statusRepositoryMock).save(defaultStatus);
     }
 
     @Test
-    public void RunsThePanningDaemon(){
-        service.RunAsync(new String[]{});
+    public void runsThePanningDaemon(){
+        service.runAsync(new String[]{});
 
-        assertTrue(Await(this::RunWasCalled));
+        assertTrue(ConditionAwaiter.await(this::RunWasCalled));
     }
 }

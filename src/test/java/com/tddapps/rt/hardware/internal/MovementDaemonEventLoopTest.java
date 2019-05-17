@@ -31,20 +31,20 @@ public class MovementDaemonEventLoopTest {
     );
 
     private Status status() {
-        return statusRepository.CurrentStatus();
+        return statusRepository.read();
     }
 
     @Before
-    public void Setup() throws InvalidOperationException {
-        statusRepository.Save(Status.builder().build());
+    public void setup() throws InvalidOperationException {
+        statusRepository.save(Status.builder().build());
 
-        when(stepperMotorFactoryMock.CreateTheta()).thenReturn(thetaStepper);
-        when(stepperMotorFactoryMock.CreatePhi()).thenReturn(phiStepper);
+        when(stepperMotorFactoryMock.createTheta()).thenReturn(thetaStepper);
+        when(stepperMotorFactoryMock.createPhi()).thenReturn(phiStepper);
     }
 
     private static class MovementDaemonEventLoopTestable extends MovementDaemonEventLoop {
-        public int MaxIterations = 1;
-        public int CurrentIteration = 0;
+        public int maxIterations = 1;
+        public int currentIteration = 0;
         public RuntimeException seededException;
 
         public MovementDaemonEventLoopTestable(
@@ -57,199 +57,199 @@ public class MovementDaemonEventLoopTest {
         }
 
         @Override
-        protected boolean RunCondition() {
+        protected boolean runCondition() {
             if (seededException!=null){
                 throw seededException;
             }
 
-            return CurrentIteration++ < MaxIterations;
+            return currentIteration++ < maxIterations;
         }
     }
 
     @Test
-    public void RunFinishesBecauseItEvaluatesCondition() {
-        daemon.MaxIterations = 10;
+    public void runFinishesBecauseItEvaluatesCondition() {
+        daemon.maxIterations = 10;
 
         daemon.run();
 
-        assertEquals(11, daemon.CurrentIteration);
+        assertEquals(11, daemon.currentIteration);
     }
 
     @Test
-    public void RunWillNotDoAnythingIfHardwareHasAlreadyBeenInitialized() {
+    public void runWillNotDoAnythingIfHardwareHasAlreadyBeenInitialized() {
         status().setHardwareInitialized(true);
 
         daemon.run();
 
-        assertEquals(0, daemon.CurrentIteration);
+        assertEquals(0, daemon.currentIteration);
     }
 
     @Test
-    public void CreatesThetaMotor() throws InvalidOperationException {
+    public void createsThetaMotor() throws InvalidOperationException {
         daemon.run();
 
-        verify(stepperMotorFactoryMock).CreateTheta();
+        verify(stepperMotorFactoryMock).createTheta();
     }
 
     @Test
-    public void InitializesThetaMotor() throws InvalidOperationException {
+    public void initializesThetaMotor() throws InvalidOperationException {
         daemon.run();
 
-        verify(thetaStepper).Init();
+        verify(thetaStepper).init();
     }
 
     @Test
-    public void ThetaMotorCreationFailureChangesStatus() throws InvalidOperationException {
-        when(stepperMotorFactoryMock.CreateTheta()).thenThrow(new InvalidOperationException());
+    public void thetaMotorCreationFailureChangesStatus() throws InvalidOperationException {
+        when(stepperMotorFactoryMock.createTheta()).thenThrow(new InvalidOperationException());
 
         daemon.run();
 
-        assertEquals(0, daemon.CurrentIteration);
+        assertEquals(0, daemon.currentIteration);
         assertFalse(status().isHardwareInitialized());
         assertTrue(status().isHardwareCrash());
     }
 
     @Test
-    public void CreatesPhiMotor() throws InvalidOperationException {
+    public void createsPhiMotor() throws InvalidOperationException {
         daemon.run();
 
-        verify(stepperMotorFactoryMock).CreatePhi();
+        verify(stepperMotorFactoryMock).createPhi();
     }
 
     @Test
-    public void InitializesPhiMotor() throws InvalidOperationException {
+    public void initializesPhiMotor() throws InvalidOperationException {
         daemon.run();
 
-        verify(phiStepper).Init();
+        verify(phiStepper).init();
     }
 
     @Test
-    public void PhiMotorCreationFailureChangesStatus() throws InvalidOperationException {
-        when(stepperMotorFactoryMock.CreatePhi()).thenThrow(new InvalidOperationException());
+    public void phiMotorCreationFailureChangesStatus() throws InvalidOperationException {
+        when(stepperMotorFactoryMock.createPhi()).thenThrow(new InvalidOperationException());
 
         daemon.run();
 
-        assertEquals(0, daemon.CurrentIteration);
+        assertEquals(0, daemon.currentIteration);
         assertFalse(status().isHardwareInitialized());
         assertTrue(status().isHardwareCrash());
     }
 
     @Test
-    public void SetsHardwareInitializedStatus(){
+    public void setsHardwareInitializedStatus(){
         daemon.run();
 
-        assertTrue(daemon.CurrentIteration > 0);
+        assertTrue(daemon.currentIteration > 0);
         assertTrue(status().isHardwareInitialized());
         assertFalse(status().isHardwareCrash());
     }
 
     @Test
-    public void SetsHardwareCrashWhenUnexpectedErrorOccurs(){
+    public void setsHardwareCrashWhenUnexpectedErrorOccurs(){
         daemon.seededException = new RuntimeException();
 
         daemon.run();
 
         assertTrue(status().isHardwareInitialized());
         assertTrue(status().isHardwareCrash());
-        verify(thetaStepper).Destroy();
-        verify(phiStepper).Destroy();
+        verify(thetaStepper).destroy();
+        verify(phiStepper).destroy();
     }
 
     @Test
-    public void CalibratesTheta() throws InvalidOperationException {
+    public void calibratesTheta() throws InvalidOperationException {
         daemon.run();
 
-        verify(calibrationServiceMock).CalibrateThetaStepper(thetaStepper);
+        verify(calibrationServiceMock).calibrateThetaStepper(thetaStepper);
         assertFalse(status().isCalibrating());
         assertTrue(status().isCalibrated());
     }
 
     @Test
-    public void SetsHardwareCrashWhenThetaCalibrationFails() throws InvalidOperationException {
+    public void setsHardwareCrashWhenThetaCalibrationFails() throws InvalidOperationException {
         doThrow(new InvalidOperationException())
                 .when(calibrationServiceMock)
-                .CalibrateThetaStepper(any());
+                .calibrateThetaStepper(any());
 
         daemon.run();
 
         assertTrue(status().isCalibrating());
         assertFalse(status().isHardwareInitialized());
         assertTrue(status().isHardwareCrash());
-        verify(thetaStepper).Destroy();
-        verify(phiStepper).Destroy();
+        verify(thetaStepper).destroy();
+        verify(phiStepper).destroy();
     }
 
     @Test
-    public void CalibratesPhi() throws InvalidOperationException {
+    public void calibratesPhi() throws InvalidOperationException {
         daemon.run();
 
-        verify(calibrationServiceMock).CalibratePhiStepper(phiStepper);
+        verify(calibrationServiceMock).calibratePhiStepper(phiStepper);
         assertFalse(status().isCalibrating());
         assertTrue(status().isCalibrated());
     }
 
     @Test
-    public void SetsHardwareCrashWhenPhiCalibrationFails() throws InvalidOperationException {
+    public void setsHardwareCrashWhenPhiCalibrationFails() throws InvalidOperationException {
         doThrow(new InvalidOperationException())
                 .when(calibrationServiceMock)
-                .CalibratePhiStepper(any());
+                .calibratePhiStepper(any());
 
         daemon.run();
 
         assertTrue(status().isCalibrating());
         assertFalse(status().isHardwareInitialized());
         assertTrue(status().isHardwareCrash());
-        verify(thetaStepper).Destroy();
-        verify(phiStepper).Destroy();
+        verify(thetaStepper).destroy();
+        verify(phiStepper).destroy();
     }
 
     @Test
-    public void MovesThetaOnTheLoop() throws InvalidOperationException {
-        daemon.MaxIterations = 10;
+    public void movesThetaOnTheLoop() throws InvalidOperationException {
+        daemon.maxIterations = 10;
 
         daemon.run();
 
-        verify(stepperMotorMoverMock, times(10)).MoveTheta(thetaStepper);
+        verify(stepperMotorMoverMock, times(10)).moveTheta(thetaStepper);
     }
 
     @Test
-    public void SetsHardwareCrashWhenThetaMovementFails() throws InvalidOperationException {
-        daemon.MaxIterations = 10;
+    public void setsHardwareCrashWhenThetaMovementFails() throws InvalidOperationException {
+        daemon.maxIterations = 10;
 
         doThrow(new InvalidOperationException())
                 .when(stepperMotorMoverMock)
-                .MoveTheta(any());
+                .moveTheta(any());
 
         daemon.run();
 
         assertTrue(status().isHardwareCrash());
-        assertEquals(1, daemon.CurrentIteration);
-        verify(thetaStepper).Destroy();
-        verify(phiStepper).Destroy();
+        assertEquals(1, daemon.currentIteration);
+        verify(thetaStepper).destroy();
+        verify(phiStepper).destroy();
     }
 
     @Test
-    public void MovesPhiOnTheLoop() throws InvalidOperationException {
-        daemon.MaxIterations = 10;
+    public void movesPhiOnTheLoop() throws InvalidOperationException {
+        daemon.maxIterations = 10;
 
         daemon.run();
 
-        verify(stepperMotorMoverMock, times(10)).MovePhi(phiStepper);
+        verify(stepperMotorMoverMock, times(10)).movePhi(phiStepper);
     }
 
     @Test
-    public void SetsHardwareCrashWhenPhiMovementFails() throws InvalidOperationException {
-        daemon.MaxIterations = 10;
+    public void setsHardwareCrashWhenPhiMovementFails() throws InvalidOperationException {
+        daemon.maxIterations = 10;
 
         doThrow(new InvalidOperationException())
                 .when(stepperMotorMoverMock)
-                .MovePhi(any());
+                .movePhi(any());
 
         daemon.run();
 
         assertTrue(status().isHardwareCrash());
-        assertEquals(1, daemon.CurrentIteration);
-        verify(thetaStepper).Destroy();
-        verify(phiStepper).Destroy();
+        assertEquals(1, daemon.currentIteration);
+        verify(thetaStepper).destroy();
+        verify(phiStepper).destroy();
     }
 }

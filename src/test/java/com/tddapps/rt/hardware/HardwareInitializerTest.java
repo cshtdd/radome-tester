@@ -1,10 +1,11 @@
 package com.tddapps.rt.hardware;
 
 import com.tddapps.rt.StartupService;
+import com.tddapps.rt.test.ConditionAwaiter;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.tddapps.rt.test.ConditionAwaiter.Await;
+import static com.tddapps.rt.test.ConditionAwaiter.await;
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -14,12 +15,12 @@ public class HardwareInitializerTest {
 
     private final StartupService service = new HardwareInitializer(movementDaemonMock);
 
-    private boolean RunWasCalled(){
+    private boolean runWasCalled(){
         return runWasInvoked;
     }
 
     @Before
-    public void Setup(){
+    public void setup(){
         doAnswer(i -> {
             runWasInvoked = true;
             return null;
@@ -27,9 +28,9 @@ public class HardwareInitializerTest {
     }
 
     @Test
-    public void RunsTheMovementDaemon() {
-        service.RunAsync(new String[]{});
+    public void runsTheMovementDaemon() {
+        service.runAsync(new String[]{});
 
-        assertTrue(Await(this::RunWasCalled));
+        assertTrue(ConditionAwaiter.await(this::runWasCalled));
     }
 }

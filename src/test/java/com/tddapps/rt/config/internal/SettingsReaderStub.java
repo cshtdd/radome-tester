@@ -7,7 +7,7 @@ public class SettingsReaderStub implements SettingsReader {
     public final Map<String, String> Settings = new HashMap<>();
 
     @Override
-    public String Read(String name, String defaultValue) {
+    public String read(String name, String defaultValue) {
         return Settings.getOrDefault(name, defaultValue);
     }
 }

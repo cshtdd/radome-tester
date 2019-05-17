@@ -4,7 +4,7 @@ import com.tddapps.rt.utils.Round;
 import lombok.Builder;
 import lombok.Data;
 
-import static com.tddapps.rt.utils.Round.AllowedError;
+import static com.tddapps.rt.utils.Round.allowedError;
 
 @Data
 @Builder(toBuilder = true)
@@ -22,26 +22,26 @@ public class Position {
     private final double phiDegrees;
 
     public Position(double thetaDegrees, double phiDegrees){
-        this.thetaDegrees = Round(thetaDegrees);
-        this.phiDegrees = Round(phiDegrees);
+        this.thetaDegrees = round(thetaDegrees);
+        this.phiDegrees = round(phiDegrees);
     }
 
-    public boolean IsValid() {
+    public boolean isValid() {
         var thetaIsValid = thetaDegrees >= MIN_THETA && thetaDegrees <= MAX_THETA;
         var phiIsValid = phiDegrees >= MIN_PHI && phiDegrees <= MAX_PHI;
         return thetaIsValid && phiIsValid;
     }
 
-    public boolean AlmostEquals(Position that) {
-        return IsWithinBounds(this.thetaDegrees - that.thetaDegrees) &&
-                IsWithinBounds(this.phiDegrees - that.phiDegrees);
+    public boolean almostEquals(Position that) {
+        return isWithinBounds(this.thetaDegrees - that.thetaDegrees) &&
+                isWithinBounds(this.phiDegrees - that.phiDegrees);
     }
 
-    private boolean IsWithinBounds(double delta) {
-        return Round(Math.abs(delta)) <= AllowedError(DECIMAL_PLACES);
+    private boolean isWithinBounds(double delta) {
+        return round(Math.abs(delta)) <= allowedError(DECIMAL_PLACES);
     }
 
-    private static double Round(double value){
-        return Round.ToPrecision(value, DECIMAL_PLACES);
+    private static double round(double value){
+        return Round.toPrecision(value, DECIMAL_PLACES);
     }
 }

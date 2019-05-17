@@ -45,15 +45,15 @@ class StepperMotorUln implements StepperMotor {
         this.delay = delay;
     }
 
-    private String ToLog(String msg){
+    private String toLog(String msg){
         return String.format("%s; stepper: %s;", msg, name);
     }
 
     @Override
-    public void Init() {
+    public void init() {
         synchronized (statusCriticalSection){
             if (isInitialized){
-                log.warn(ToLog("Already Initialized"));
+                log.warn(toLog("Already Initialized"));
                 return;
             }
 
@@ -71,15 +71,15 @@ class StepperMotorUln implements StepperMotor {
             isInitialized = true;
             isDestroyed = false;
 
-            log.info(ToLog("Initialize"));
+            log.info(toLog("Initialize"));
         }
     }
 
     @Override
-    public void Destroy() {
+    public void destroy() {
         synchronized (statusCriticalSection){
             if (isDestroyed){
-                log.warn(ToLog("Already Destroyed"));
+                log.warn(toLog("Already Destroyed"));
                 return;
             }
 
@@ -88,51 +88,51 @@ class StepperMotorUln implements StepperMotor {
             isInitialized = false;
             isDestroyed = true;
 
-            log.info(ToLog("Destroy"));
+            log.info(toLog("Destroy"));
         }
     }
 
     @Override
-    public boolean MoveCW() throws InvalidOperationException {
+    public boolean moveCW() throws InvalidOperationException {
         synchronized (statusCriticalSection){
-            ValidateStatusSupportsMovement();
+            validateStatusSupportsMovement();
 
             stepIndex += 1;
             if (stepIndex >= stepCount){
                 stepIndex = 0;
             }
 
-            Move();
+            move();
         }
         return true;
     }
 
     @Override
-    public boolean MoveCCW() throws InvalidOperationException {
+    public boolean moveCCW() throws InvalidOperationException {
         synchronized (statusCriticalSection){
-            ValidateStatusSupportsMovement();
+            validateStatusSupportsMovement();
 
             stepIndex -= 1;
             if (stepIndex < 0){
                 stepIndex = stepCount - 1;
             }
 
-            Move();
+            move();
         }
         return true;
     }
 
-    private void ValidateStatusSupportsMovement() throws InvalidOperationException {
+    private void validateStatusSupportsMovement() throws InvalidOperationException {
         if (isDestroyed) {
-            throw new InvalidOperationException(ToLog("Cannot Move a Destroyed Motor"));
+            throw new InvalidOperationException(toLog("Cannot Move a Destroyed Motor"));
         }
 
         if (!isInitialized) {
-            throw new InvalidOperationException(ToLog("Cannot Move a Motor that has not been initialized"));
+            throw new InvalidOperationException(toLog("Cannot Move a Motor that has not been initialized"));
         }
     }
 
-    private void Move(){
+    private void move(){
         var currentStep = movementSequence[stepIndex];
 
         for (int i = 0; i < pinCount; i++) {
@@ -145,6 +145,6 @@ class StepperMotorUln implements StepperMotor {
             }
         }
 
-        delay.Wait(1);
+        delay.waitMs(1);
     }
 }

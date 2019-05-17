@@ -36,14 +36,14 @@ class PanningDaemonEventLoop implements PanningDaemon {
     @Override
     public void run() {
         try {
-            RunInternal();
+            runInternal();
         } catch (Exception e) {
-            SetHardwareCrashed(e);
+            setHardwareCrashed(e);
         }
     }
 
-    private void SetHardwareCrashed(Exception e) {
-        statusRepository.Update(currentStatus -> currentStatus
+    private void setHardwareCrashed(Exception e) {
+        statusRepository.update(status -> status
                 .toBuilder()
                 .isHardwareCrash(true)
                 .build());
@@ -51,46 +51,46 @@ class PanningDaemonEventLoop implements PanningDaemon {
         log.error(e.getMessage(), e);
     }
 
-    private void RunInternal() throws InvalidOperationException {
-        InitializeInternalState();
+    private void runInternal() throws InvalidOperationException {
+        initializeInternalState();
 
-        while (RunCondition()){
-            var status = statusRepository.CurrentStatus();
-            PrepareInternalState(status);
-            if (ShouldMove(status)){
-                Move();
+        while (runCondition()){
+            var status = statusRepository.read();
+            prepareInternalState(status);
+            if (shouldMove(status)){
+                move();
             }
-            delay.Yield();
+            delay.yield();
         }
     }
 
-    private boolean ShouldMove(Status status) {
+    private boolean shouldMove(Status status) {
         return status.isPanning();
     }
 
-    private void Move() throws InvalidOperationException {
-        var position = ReadCurrentPosition();
-        if (!movementService.CanMove(position)) {
+    private void move() throws InvalidOperationException {
+        var position = readCurrentPosition();
+        if (!movementService.canMove(position)) {
             return;
         }
 
-        LogMovement(position);
-        movementService.Move(position);
+        logMovement(position);
+        movementService.move(position);
 
-        IncrementPositionIndex();
+        incrementPositionIndex();
     }
 
-    private void InitializeInternalState() {
+    private void initializeInternalState() {
         log.info("Initialization Start");
 
-        settings = settingsRepository.Read();
+        settings = settingsRepository.read();
         currentPositionIndex = 0;
-        allPositions = ReadPanningPositions();
+        allPositions = readPanningPositions();
 
         log.info("Panning Initialized");
     }
 
-    private void LogMovement(Position position) {
+    private void logMovement(Position position) {
         log.info(String.format(
                 "Move; current: %d; total: %d; theta: %.2f; phi: %.2f;",
                 currentPositionIndex,
@@ -100,62 +100,62 @@ class PanningDaemonEventLoop implements PanningDaemon {
         ));
     }
 
-    private Position ReadCurrentPosition() {
+    private Position readCurrentPosition() {
         return allPositions[currentPositionIndex];
     }
 
-    private void IncrementPositionIndex() {
+    private void incrementPositionIndex() {
         currentPositionIndex++;
 
         if (currentPositionIndex == allPositions.length){
             currentPositionIndex = 0;
-            CompletePanning();
+            completePanning();
         }
     }
 
-    private void PrepareInternalState(Status status) {
+    private void prepareInternalState(Status status) {
         if (!status.isPanning()){
             currentPositionIndex = 0;
         }
     }
 
-    private void CompletePanning() {
-        statusRepository.Update(currentStatus -> currentStatus
+    private void completePanning() {
+        statusRepository.update(status -> status
                 .toBuilder()
                 .isPanning(false)
                 .build());
     }
 
-    private Position[] ReadPanningPositions(){
-        return IntStream.rangeClosed(0, ThetaStepsCount())
-                .mapToDouble(this::StepToTheta)
-                .mapToObj(theta -> IntStream.rangeClosed(0, PhiStepsCount())
-                        .mapToDouble(this::StepToPhi)
+    private Position[] readPanningPositions(){
+        return IntStream.rangeClosed(0, thetaStepsCount())
+                .mapToDouble(this::stepToTheta)
+                .mapToObj(theta -> IntStream.rangeClosed(0, phiStepsCount())
+                        .mapToDouble(this::stepToPhi)
                         .mapToObj(phi -> new Position(theta, phi))
                         .collect(Collectors.toList()))
                 .flatMap(List::stream)
                 .toArray(Position[]::new);
     }
 
-    private int PhiStepsCount() {
+    private int phiStepsCount() {
         return (int)((settings.getMaxPhi() - settings.getMinPhi()) / settings.getIncrementPhi());
     }
 
-    private int ThetaStepsCount() {
+    private int thetaStepsCount() {
         return (int)((settings.getMaxTheta() - settings.getMinTheta()) / settings.getIncrementTheta());
     }
 
-    private double StepToTheta(int i){
+    private double stepToTheta(int i){
         return (i * settings.getIncrementTheta()) + settings.getMinTheta();
     }
 
-    private double StepToPhi(int i){
+    private double stepToPhi(int i){
         return (i * settings.getIncrementPhi()) + settings.getMinPhi();
     }
 
     // this method is here for testing purposes
     // it cannot be removed
-    protected boolean RunCondition() {
+    protected boolean runCondition() {
         return true;
     }
 }
