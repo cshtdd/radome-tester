@@ -11,11 +11,11 @@ import static com.tddapps.rt.utils.Round.AllowedError;
 public class Position {
     private static final int DECIMAL_PLACES = 2;
 
-    private static final double MIN_THETA = 180.0;
-    private static final double MAX_THETA = 360.0;
+    public static final double MIN_THETA = 180.0;
+    public static final double MAX_THETA = 360.0;
 
-    private static final double MIN_PHI = 0.0;
-    private static final double MAX_PHI = 180.0;
+    public static final double MIN_PHI = 0.0;
+    public static final double MAX_PHI = 180.0;
 
 
     private final double thetaDegrees;
