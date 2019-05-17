@@ -22,9 +22,10 @@ public class PanningSettingsRepositoryFixedTest {
 
     @Test
     public void ReturnsTheCorrectSettings(){
+        configuration.setPanningPrecision(0.3);
         var expected = new PanningSettings(
-                180, 360, 0.1,
-                0, 180, 0.1
+                180, 360, 0.3,
+                0, 180, 0.3
         );
 
         var actual = repository.Read();
