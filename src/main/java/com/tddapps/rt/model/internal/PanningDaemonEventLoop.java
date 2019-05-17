@@ -86,6 +86,8 @@ class PanningDaemonEventLoop implements PanningDaemon {
         settings = settingsRepository.Read();
         currentPositionIndex = 0;
         allPositions = ReadPanningPositions();
+
+        log.info("Panning Initialized");
     }
 
     private void LogMovement(Position position) {
