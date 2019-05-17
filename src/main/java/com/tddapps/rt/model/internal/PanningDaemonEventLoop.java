@@ -19,14 +19,17 @@ class PanningDaemonEventLoop implements PanningDaemon {
     public void run() {
         while (RunCondition()){
             var status = statusRepository.CurrentStatus();
-            if (status.isPanning() && !status.isMoving() && !status.isHardwareCrash()){
-                // TODO finish this
+            if (status.isPanning()){
+                var start = new Position(180, 0);
+                if (movementService.CanMove(start)){
+                    try {
+                        movementService.Move(start);
+                    } catch (InvalidOperationException e) {
 
-                try {
-                    movementService.Move(new Position(180, 0));
-                } catch (InvalidOperationException e) {
-
+                    }
                 }
+
+                // TODO finish this
             }
 
             delay.Yield();
