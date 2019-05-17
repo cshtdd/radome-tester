@@ -8,21 +8,29 @@ import com.tddapps.rt.model.*;
 class PanningDaemonEventLoop implements PanningDaemon {
     private final StatusRepository statusRepository;
     private final MovementService movementService;
+    private final PanningSettingsRepository settingsRepository;
     private final Delay delay;
 
     @Inject
-    PanningDaemonEventLoop(StatusRepository statusRepository, MovementService movementService, Delay delay) {
+    PanningDaemonEventLoop(
+            StatusRepository statusRepository,
+            MovementService movementService,
+            PanningSettingsRepository settingsRepository,
+            Delay delay) {
         this.statusRepository = statusRepository;
         this.movementService = movementService;
+        this.settingsRepository = settingsRepository;
         this.delay = delay;
     }
 
     @Override
     public void run() {
+        var settings = settingsRepository.Read();
+        var start = new Position(settings.getMinTheta(), settings.getMinPhi());
+
         while (RunCondition()){
             var status = statusRepository.CurrentStatus();
             if (status.isPanning()){
-                var start = new Position(180, 0);
                 if (movementService.CanMove(start)){
                     try {
                         movementService.Move(start);

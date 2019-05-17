@@ -16,10 +16,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class PanningDaemonEventLoopTest {
+    private static final PanningSettings PANNING_SETTINGS = new PanningSettings(
+            190, 210, 5,
+            45, 85, 10
+    );
+
     private final StatusRepository statusRepository = new StatusRepositoryStub();
+    private final PanningSettingsRepositoryStub panningSettings = new PanningSettingsRepositoryStub();
     private final MovementService movementServiceMock = mock(MovementService.class);
     private final PanningDaemonEventLoopTestable daemon = new PanningDaemonEventLoopTestable(
-            statusRepository, movementServiceMock, new DelaySimulator()
+            statusRepository, movementServiceMock, panningSettings, new DelaySimulator()
     );
 
     private Status status() {
@@ -29,6 +35,7 @@ public class PanningDaemonEventLoopTest {
     @Before
     public void Setup() {
         statusRepository.Save(Status.builder().build());
+        panningSettings.settings = PANNING_SETTINGS;
     }
 
     private static class PanningDaemonEventLoopTestable extends PanningDaemonEventLoop{
@@ -39,9 +46,10 @@ public class PanningDaemonEventLoopTest {
         private PanningDaemonEventLoopTestable(
                 StatusRepository statusRepository,
                 MovementService movementService,
+                PanningSettingsRepository settingsRepository,
                 Delay delay
         ) {
-            super(statusRepository, movementService, delay);
+            super(statusRepository, movementService, settingsRepository, delay);
         }
 
         @Override
@@ -83,11 +91,13 @@ public class PanningDaemonEventLoopTest {
     @Test
     public void MovesToTheStartPositionWhenPanning() throws InvalidOperationException {
         status().setPanning(true);
-        when(movementServiceMock.CanMove(any())).thenReturn(true);
+        when(movementServiceMock.CanMove(new Position(190, 45))).thenReturn(true);
 
         daemon.run();
 
         assertTrue(status().isPanning());
-        verify(movementServiceMock).Move(new Position(180, 0));
+        verify(movementServiceMock).Move(new Position(190, 45));
+    }
+
     }
 }
