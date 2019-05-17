@@ -2,10 +2,7 @@ package com.tddapps.rt.model.internal;
 
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Delay;
-import com.tddapps.rt.model.MovementService;
-import com.tddapps.rt.model.PanningDaemon;
-import com.tddapps.rt.model.Position;
-import com.tddapps.rt.model.StatusRepository;
+import com.tddapps.rt.model.*;
 
 class PanningDaemonEventLoop implements PanningDaemon {
     private final StatusRepository statusRepository;
@@ -21,7 +18,8 @@ class PanningDaemonEventLoop implements PanningDaemon {
     @Override
     public void run() {
         while (RunCondition()){
-            if (statusRepository.CurrentStatus().isPanning()){
+            var status = statusRepository.CurrentStatus();
+            if (status.isPanning() && !status.isMoving()){
                 // TODO finish this
 
                 try {
