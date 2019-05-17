@@ -15,6 +15,7 @@ public class IocContainerTest {
         assertTrue(IocContainer.getInstance().Resolve(StatusRepository.class) instanceof StatusRepositoryInMemory);
         assertTrue(IocContainer.getInstance().Resolve(MovementService.class) instanceof MovementServiceStatusChanger);
         assertTrue(IocContainer.getInstance().Resolve(PanningDaemon.class) instanceof PanningDaemonEventLoop);
+        assertTrue(IocContainer.getInstance().Resolve(PanningSettingsRepository.class) instanceof PanningSettingsRepositoryFixed);
     }
 
     @Test

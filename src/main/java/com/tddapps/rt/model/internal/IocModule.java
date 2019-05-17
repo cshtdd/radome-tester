@@ -10,6 +10,7 @@ public class IocModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(MovementService.class).to(MovementServiceStatusChanger.class);
+        bind(PanningSettingsRepository.class).to(PanningSettingsRepositoryFixed.class);
         bind(PanningDaemon.class).to(PanningDaemonEventLoop.class);
 
         bind(StatusRepository.class).to(StatusRepositoryInMemory.class).in(Singleton.class);
