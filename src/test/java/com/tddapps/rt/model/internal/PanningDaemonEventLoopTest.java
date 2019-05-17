@@ -11,11 +11,15 @@ import com.tddapps.rt.test.StatusRepositoryStub;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class PanningDaemonEventLoopTest {
+    private final List<double[]> movements = new ArrayList<>();
 
     private final StatusRepository statusRepository = new StatusRepositoryStub();
     private final PanningSettingsRepositoryStub panningSettings = new PanningSettingsRepositoryStub();
@@ -29,15 +33,21 @@ public class PanningDaemonEventLoopTest {
     }
 
     @Before
-    public void Setup() {
+    public void Setup() throws InvalidOperationException {
         statusRepository.Save(Status.builder().build());
         panningSettings.settings = new PanningSettings(
                 190, 210, 5,
                 45, 85, 10
         );
+
+        doAnswer(i -> {
+            var p = i.getArgument(0, Position.class);
+            movements.add(new double[]{p.getThetaDegrees(), p.getPhiDegrees()});
+            return null;
+        }).when(movementServiceMock).Move(any());
     }
 
-    private static class PanningDaemonEventLoopTestable extends PanningDaemonEventLoop{
+    private static class PanningDaemonEventLoopTestable extends PanningDaemonEventLoop {
         public int MaxIterations = 1;
         public int CurrentIteration = 0;
         public RuntimeException seededException;
@@ -54,11 +64,11 @@ public class PanningDaemonEventLoopTest {
 
         @Override
         protected boolean RunCondition() {
-            if (conditionCallback != null){
+            if (conditionCallback != null) {
                 conditionCallback.run();
             }
 
-            if (seededException!=null){
+            if (seededException != null) {
                 throw seededException;
             }
 
@@ -116,11 +126,13 @@ public class PanningDaemonEventLoopTest {
         daemon.run();
 
         assertFalse(status().isPanning());
-        for (double theta = 195; theta <= 210; theta += 5){
+        var expected = new ArrayList<double[]>();
+        for (double theta = 195; theta <= 210; theta += 5) {
             for (double phi = 50; phi <= 85; phi += 10) {
-                verify(movementServiceMock).Move(new Position(theta, phi));
+                expected.add(new double[]{ theta, phi });
             }
         }
+        assertArrayEquals(expected.toArray(), movements.toArray());
     }
 
     @Test
@@ -136,17 +148,20 @@ public class PanningDaemonEventLoopTest {
         daemon.run();
 
         assertFalse(status().isPanning());
-        verify(movementServiceMock).Move(new Position(180.0, 90.0));
-        verify(movementServiceMock).Move(new Position(180.0, 90.5));
-        verify(movementServiceMock).Move(new Position(180.0, 91.0));
-        verify(movementServiceMock).Move(new Position(180.0, 91.5));
-        verify(movementServiceMock).Move(new Position(180.0, 92.0));
+        var expected = new double[][]{
+            new double[] { 180.0, 90.0 },
+            new double[] { 180.0, 90.5 },
+            new double[] { 180.0, 91.0 },
+            new double[] { 180.0, 91.5 },
+            new double[] { 180.0, 92.0 },
 
-        verify(movementServiceMock).Move(new Position(180.3, 90.0));
-        verify(movementServiceMock).Move(new Position(180.3, 90.5));
-        verify(movementServiceMock).Move(new Position(180.3, 91.0));
-        verify(movementServiceMock).Move(new Position(180.3, 91.5));
-        verify(movementServiceMock).Move(new Position(180.3, 92.0));
+            new double[] { 180.3, 90.0 },
+            new double[] { 180.3, 90.5 },
+            new double[] { 180.3, 91.0 },
+            new double[] { 180.3, 91.5 },
+            new double[] { 180.3, 92.0 },
+        };
+        assertArrayEquals(expected, movements.toArray());
     }
 
     @Test
@@ -162,15 +177,18 @@ public class PanningDaemonEventLoopTest {
         daemon.run();
 
         assertFalse(status().isPanning());
-        verify(movementServiceMock).Move(new Position(180, 90));
-        verify(movementServiceMock).Move(new Position(180, 92));
-        verify(movementServiceMock).Move(new Position(180, 94));
-        verify(movementServiceMock).Move(new Position(183, 90));
-        verify(movementServiceMock).Move(new Position(183, 92));
-        verify(movementServiceMock).Move(new Position(183, 94));
-        verify(movementServiceMock).Move(new Position(186, 90));
-        verify(movementServiceMock).Move(new Position(186, 92));
-        verify(movementServiceMock).Move(new Position(186, 94));
+        var expected = new double[][]{
+                new double[] { 180, 90 },
+                new double[] { 180, 92 },
+                new double[] { 180, 94 },
+                new double[] { 183, 90 },
+                new double[] { 183, 92 },
+                new double[] { 183, 94 },
+                new double[] { 186, 90 },
+                new double[] { 186, 92 },
+                new double[] { 186, 94 },
+        };
+        assertArrayEquals(expected, movements.toArray());
     }
 
     @Test
@@ -183,7 +201,7 @@ public class PanningDaemonEventLoopTest {
                 90, 90, 1
         );
         daemon.conditionCallback = () -> {
-            if (daemon.CurrentIteration == 4){
+            if (daemon.CurrentIteration == 4) {
                 status().setPanning(false);
             }
         };
@@ -191,9 +209,12 @@ public class PanningDaemonEventLoopTest {
         daemon.run();
 
         assertFalse(status().isPanning());
-        verify(movementServiceMock).Move(new Position(180.0, 90.0));
-        verify(movementServiceMock).Move(new Position(181.0, 90.0));
-        verify(movementServiceMock).Move(new Position(182.0, 90.0));
-        verify(movementServiceMock).Move(new Position(183.0, 90.0));
+        var expected = new double[][]{
+            new double[] { 180.0, 90.0 },
+            new double[] { 181.0, 90.0 },
+            new double[] { 182.0, 90.0 },
+            new double[] { 183.0, 90.0 },
+        };
+        assertArrayEquals(expected, movements.toArray());
     }
 }
