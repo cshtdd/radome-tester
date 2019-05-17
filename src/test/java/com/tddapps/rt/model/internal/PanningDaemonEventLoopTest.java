@@ -99,5 +99,25 @@ public class PanningDaemonEventLoopTest {
         verify(movementServiceMock).Move(new Position(190, 45));
     }
 
+    @Test
+    public void MovesToMultiplePositionsThatMapTheEntireSurface() throws InvalidOperationException {
+        daemon.MaxIterations = 100;
+        status().setPanning(true);
+        when(movementServiceMock.CanMove(any())).thenReturn(true);
+
+        daemon.run();
+
+        assertFalse(status().isPanning());
+        double minTheta = PANNING_SETTINGS.getMinTheta();
+        double maxTheta = PANNING_SETTINGS.getMaxTheta();
+        double incrementTheta = PANNING_SETTINGS.getIncrementTheta();
+        double minPhi = PANNING_SETTINGS.getMinPhi();
+        double maxPhi = PANNING_SETTINGS.getMaxPhi();
+        double incrementPhi = PANNING_SETTINGS.getIncrementPhi();
+        for (double theta = minTheta; theta <= maxTheta; theta += incrementTheta){
+            for (double phi = minPhi; phi <= maxPhi; phi += incrementPhi) {
+                verify(movementServiceMock).Move(new Position(theta, phi));
+            }
+        }
     }
 }

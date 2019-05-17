@@ -5,6 +5,9 @@ import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.model.*;
 
+import java.util.ArrayList;
+import java.util.stream.IntStream;
+
 class PanningDaemonEventLoop implements PanningDaemon {
     private final StatusRepository statusRepository;
     private final MovementService movementService;
@@ -25,15 +28,23 @@ class PanningDaemonEventLoop implements PanningDaemon {
 
     @Override
     public void run() {
-        var settings = settingsRepository.Read();
-        var start = new Position(settings.getMinTheta(), settings.getMinPhi());
+        var positions = ReadPanningPositions();
+        var index = 0;
 
         while (RunCondition()){
             var status = statusRepository.CurrentStatus();
+            var position = positions[index];
             if (status.isPanning()){
-                if (movementService.CanMove(start)){
+                if (movementService.CanMove(position)){
                     try {
-                        movementService.Move(start);
+                        index++;
+
+                        if (index == positions.length){
+                            index = 0;
+                            CompletePanning();
+                        }
+
+                        movementService.Move(position);
                     } catch (InvalidOperationException e) {
 
                     }
@@ -44,6 +55,27 @@ class PanningDaemonEventLoop implements PanningDaemon {
 
             delay.Yield();
         }
+    }
+
+    private void CompletePanning() {
+        statusRepository.Update(currentStatus -> currentStatus
+                .toBuilder()
+                .isPanning(false)
+                .build());
+    }
+
+    private Position[] ReadPanningPositions(){
+        var settings = settingsRepository.Read();
+
+        var result = new ArrayList<Position>();
+
+        for (double theta = settings.getMinTheta(); theta <= settings.getMaxTheta(); theta += settings.getIncrementTheta()){
+            for (double phi = settings.getMinPhi(); phi <= settings.getMaxPhi(); phi += settings.getIncrementPhi()){
+                result.add(new Position(theta, phi));
+            }
+        }
+
+        return result.toArray(new Position[0]);
     }
 
     // this method is here for testing purposes
