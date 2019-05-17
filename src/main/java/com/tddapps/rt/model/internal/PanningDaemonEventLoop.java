@@ -19,7 +19,7 @@ class PanningDaemonEventLoop implements PanningDaemon {
     public void run() {
         while (RunCondition()){
             var status = statusRepository.CurrentStatus();
-            if (status.isPanning() && !status.isMoving()){
+            if (status.isPanning() && !status.isMoving() && !status.isHardwareCrash()){
                 // TODO finish this
 
                 try {

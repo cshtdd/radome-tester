@@ -65,11 +65,8 @@ public class PanningDaemonEventLoopTest {
 
     @Test
     public void DoesNoActionWhenNotPanning() throws InvalidOperationException {
-        status().setPanning(false);
-
         daemon.run();
 
-        assertFalse(status().isPanning());
         verify(movementServiceMock, never()).Move(any());
     }
 
@@ -80,8 +77,16 @@ public class PanningDaemonEventLoopTest {
 
         daemon.run();
 
-        assertTrue(status().isPanning());
-        assertTrue(status().isMoving());
+        verify(movementServiceMock, never()).Move(any());
+    }
+
+    @Test
+    public void DoesNoActionWhenHardwareCrash() throws InvalidOperationException {
+        status().setPanning(true);
+        status().setHardwareCrash(true);
+
+        daemon.run();
+
         verify(movementServiceMock, never()).Move(any());
     }
 
