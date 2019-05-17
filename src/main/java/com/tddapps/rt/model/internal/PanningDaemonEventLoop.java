@@ -1,5 +1,6 @@
 package com.tddapps.rt.model.internal;
 
+import com.google.inject.Inject;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.model.*;
@@ -9,6 +10,7 @@ class PanningDaemonEventLoop implements PanningDaemon {
     private final MovementService movementService;
     private final Delay delay;
 
+    @Inject
     PanningDaemonEventLoop(StatusRepository statusRepository, MovementService movementService, Delay delay) {
         this.statusRepository = statusRepository;
         this.movementService = movementService;
