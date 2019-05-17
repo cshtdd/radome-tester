@@ -6,13 +6,11 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.tddapps.rt.config.ConfigurationReader;
 import com.tddapps.rt.hardware.Delay;
-import com.tddapps.rt.hardware.DelaySimulator;
 import com.tddapps.rt.hardware.MovementDaemon;
 
 public class IocModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(DelaySimulator.class);
         bind(Delay.class).to(Sleep.class);
         bind(PinConverter.class).to(PinConverterPi3BPlus.class);
         bind(MovementDaemon.class).to(MovementDaemonEventLoop.class);
