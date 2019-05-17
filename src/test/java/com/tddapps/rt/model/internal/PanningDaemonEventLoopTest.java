@@ -16,10 +16,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class PanningDaemonEventLoopTest {
-    private static final PanningSettings PANNING_SETTINGS = new PanningSettings(
-            190, 210, 5,
-            45, 85, 10
-    );
 
     private final StatusRepository statusRepository = new StatusRepositoryStub();
     private final PanningSettingsRepositoryStub panningSettings = new PanningSettingsRepositoryStub();
@@ -35,7 +31,10 @@ public class PanningDaemonEventLoopTest {
     @Before
     public void Setup() {
         statusRepository.Save(Status.builder().build());
-        panningSettings.settings = PANNING_SETTINGS;
+        panningSettings.settings = new PanningSettings(
+                190, 210, 5,
+                45, 85, 10
+        );
     }
 
     private static class PanningDaemonEventLoopTestable extends PanningDaemonEventLoop{
@@ -104,18 +103,16 @@ public class PanningDaemonEventLoopTest {
         daemon.MaxIterations = 100;
         status().setPanning(true);
         when(movementServiceMock.CanMove(any())).thenReturn(true);
+        panningSettings.settings = new PanningSettings(
+                195, 210, 5,
+                50, 85, 10
+        );
 
         daemon.run();
 
         assertFalse(status().isPanning());
-        double minTheta = PANNING_SETTINGS.getMinTheta();
-        double maxTheta = PANNING_SETTINGS.getMaxTheta();
-        double incrementTheta = PANNING_SETTINGS.getIncrementTheta();
-        double minPhi = PANNING_SETTINGS.getMinPhi();
-        double maxPhi = PANNING_SETTINGS.getMaxPhi();
-        double incrementPhi = PANNING_SETTINGS.getIncrementPhi();
-        for (double theta = minTheta; theta <= maxTheta; theta += incrementTheta){
-            for (double phi = minPhi; phi <= maxPhi; phi += incrementPhi) {
+        for (double theta = 195; theta <= 210; theta += 5){
+            for (double phi = 50; phi <= 85; phi += 10) {
                 verify(movementServiceMock).Move(new Position(theta, phi));
             }
         }
