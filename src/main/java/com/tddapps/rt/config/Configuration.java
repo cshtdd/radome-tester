@@ -7,4 +7,5 @@ public class Configuration {
     private boolean isSimulation;
     private int[] thetaBcmPins;
     private int[] phiBcmPins;
+    private double panningPrecision;
 }

@@ -20,6 +20,7 @@ public class ConfigurationReaderSettingsTest {
         expected.setSimulation(true);
         expected.setThetaBcmPins(new int[]{1, 2, 3, 4});
         expected.setPhiBcmPins(new int[]{5, 6, 7, 8});
+        expected.setPanningPrecision(0.5);
 
         assertEquals(expected, reader.Read());
     }
@@ -32,6 +33,7 @@ public class ConfigurationReaderSettingsTest {
         expected.setSimulation(true);
         expected.setThetaBcmPins(new int[]{11, 21, 31, 41});
         expected.setPhiBcmPins(new int[]{5, 6, 7, 8});
+        expected.setPanningPrecision(0.5);
 
         assertEquals(expected, reader.Read());
     }
@@ -44,6 +46,7 @@ public class ConfigurationReaderSettingsTest {
         expected.setSimulation(true);
         expected.setThetaBcmPins(new int[]{1, 2, 3, 4});
         expected.setPhiBcmPins(new int[]{55, 56, 57, 58});
+        expected.setPanningPrecision(0.5);
 
         assertEquals(expected, reader.Read());
     }
@@ -56,6 +59,7 @@ public class ConfigurationReaderSettingsTest {
         expected.setSimulation(false);
         expected.setThetaBcmPins(new int[]{1, 2, 3, 4});
         expected.setPhiBcmPins(new int[]{5, 6, 7, 8});
+        expected.setPanningPrecision(0.5);
 
         assertEquals(expected, reader.Read());
     }
