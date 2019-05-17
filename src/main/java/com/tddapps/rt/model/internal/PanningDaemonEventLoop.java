@@ -37,8 +37,13 @@ class PanningDaemonEventLoop implements PanningDaemon {
 
         while (RunCondition()){
             var status = statusRepository.CurrentStatus();
-            var position = positions[index];
+
+            if (!status.isPanning() && index != 0){
+                index = 0;
+            }
+
             if (status.isPanning()){
+                var position = positions[index];
                 if (movementService.CanMove(position)){
                     try {
                         index++;

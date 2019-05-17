@@ -217,4 +217,51 @@ public class PanningDaemonEventLoopTest {
         };
         assertArrayEquals(expected, movements.toArray());
     }
+
+    @Test
+    public void RestartsPanningFromTheBeginning() throws InvalidOperationException {
+        daemon.MaxIterations = 100;
+        status().setPanning(true);
+        when(movementServiceMock.CanMove(any())).thenReturn(true);
+        panningSettings.settings = new PanningSettings(
+                180, 190, 1,
+                90, 90, 1
+        );
+        Runnable resumeCallback = () -> {
+            if (daemon.CurrentIteration == 7) {
+                status().setPanning(true);
+                daemon.conditionCallback = null;
+            }
+        };
+        Runnable haltCallback = () -> {
+            if (daemon.CurrentIteration == 4) {
+                status().setPanning(false);
+                daemon.conditionCallback = resumeCallback;
+            }
+        };
+        daemon.conditionCallback = haltCallback;
+
+        daemon.run();
+
+        assertFalse(status().isPanning());
+        var expected = new double[][]{
+                new double[] { 180.0, 90.0 },
+                new double[] { 181.0, 90.0 },
+                new double[] { 182.0, 90.0 },
+                new double[] { 183.0, 90.0 },
+
+                new double[] { 180.0, 90.0 },
+                new double[] { 181.0, 90.0 },
+                new double[] { 182.0, 90.0 },
+                new double[] { 183.0, 90.0 },
+                new double[] { 184.0, 90.0 },
+                new double[] { 185.0, 90.0 },
+                new double[] { 186.0, 90.0 },
+                new double[] { 187.0, 90.0 },
+                new double[] { 188.0, 90.0 },
+                new double[] { 189.0, 90.0 },
+                new double[] { 190.0, 90.0 },
+        };
+        assertArrayEquals(expected, movements.toArray());
+    }
 }
