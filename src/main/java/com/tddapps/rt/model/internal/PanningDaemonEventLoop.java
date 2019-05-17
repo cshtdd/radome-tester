@@ -4,11 +4,13 @@ import com.google.inject.Inject;
 import com.tddapps.rt.InvalidOperationException;
 import com.tddapps.rt.hardware.Delay;
 import com.tddapps.rt.model.*;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Log4j2
 class PanningDaemonEventLoop implements PanningDaemon {
     private final StatusRepository statusRepository;
     private final MovementService movementService;
@@ -34,6 +36,23 @@ class PanningDaemonEventLoop implements PanningDaemon {
 
     @Override
     public void run() {
+        try {
+            RunInternal();
+        } catch (Exception e) {
+            SetHardwareCrashed(e);
+        }
+    }
+
+    private void SetHardwareCrashed(Exception e) {
+        statusRepository.Update(currentStatus -> currentStatus
+                .toBuilder()
+                .isHardwareCrash(true)
+                .build());
+
+        log.error(e.getMessage(), e);
+    }
+
+    private void RunInternal() throws InvalidOperationException {
         InitializeInternalState();
 
         while (RunCondition()){
@@ -50,17 +69,13 @@ class PanningDaemonEventLoop implements PanningDaemon {
         return status.isPanning();
     }
 
-    private void Move() {
+    private void Move() throws InvalidOperationException {
         var position = ReadCurrentPosition();
         if (!movementService.CanMove(position)) {
             return;
         }
 
-        try {
-            movementService.Move(position);
-        } catch (InvalidOperationException e) {
-
-        }
+        movementService.Move(position);
 
         IncrementPositionIndex();
     }

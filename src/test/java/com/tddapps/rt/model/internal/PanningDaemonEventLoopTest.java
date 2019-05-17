@@ -114,6 +114,17 @@ public class PanningDaemonEventLoopTest {
     }
 
     @Test
+    public void SetsHardwareCrashWhenMovementFails() throws InvalidOperationException {
+        status().setPanning(true);
+        when(movementServiceMock.CanMove(new Position(190, 45))).thenReturn(true);
+        doThrow(new InvalidOperationException()).when(movementServiceMock).Move(any());
+
+        daemon.run();
+
+        assertTrue(status().isHardwareCrash());
+    }
+
+    @Test
     public void MapsTheEntireSurface() throws InvalidOperationException {
         daemon.MaxIterations = 100;
         status().setPanning(true);
