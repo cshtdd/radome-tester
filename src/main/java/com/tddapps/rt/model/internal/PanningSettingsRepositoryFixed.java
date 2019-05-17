@@ -22,7 +22,7 @@ public class PanningSettingsRepositoryFixed implements PanningSettingsRepository
 
     private double StepsIncrement(){
         if (configurationReader.Read().isSimulation()){
-            return 1.0;
+            return 5.0;
         }
 
         return 0.1;

@@ -36,8 +36,8 @@ public class PanningSettingsRepositoryFixedTest {
     public void ReturnsTheSimulationSettings(){
         configuration.setSimulation(true);
         var expected = new PanningSettings(
-                180, 360, 1,
-                0, 180, 1
+                180, 360, 5,
+                0, 180, 5
         );
 
         var actual = repository.Read();
