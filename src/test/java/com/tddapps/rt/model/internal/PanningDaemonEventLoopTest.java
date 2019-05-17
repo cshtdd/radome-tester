@@ -41,6 +41,7 @@ public class PanningDaemonEventLoopTest {
         public int MaxIterations = 1;
         public int CurrentIteration = 0;
         public RuntimeException seededException;
+        public Runnable conditionCallback = null;
 
         private PanningDaemonEventLoopTestable(
                 StatusRepository statusRepository,
@@ -53,6 +54,10 @@ public class PanningDaemonEventLoopTest {
 
         @Override
         protected boolean RunCondition() {
+            if (conditionCallback != null){
+                conditionCallback.run();
+            }
+
             if (seededException!=null){
                 throw seededException;
             }
